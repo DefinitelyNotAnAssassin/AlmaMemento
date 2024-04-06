@@ -52,29 +52,30 @@
   const router = useRouter()
   
   const signin = async () => {
-  try {
-    console.log("Trying to sign in...")
-
-    const q = collection(db, "users")
-    const querySnapshot = await getDocs(q)
-    const user = querySnapshot.docs.find(doc => doc.data().id === alumniID.value && doc.data().password === password.value)
-
-    if (user) {
-      console.log("User found:", user.data())
-
-      await updateDoc(doc(db, 'users', user.id), {
-        loggedIn: true
-      });
-
-      router.push({ name: 'dashboard' })
-      console.log("Current URL:", window.location.href);
-    } else {
-      errMsg.value = "No account with that alumni number and password was found"
+    try {
+      console.log("Trying to sign in...")
+  
+      const q = collection(db, "users")
+      const querySnapshot = await getDocs(q)
+      const user = querySnapshot.docs.find(doc => doc.data().id === alumniID.value && doc.data().password === password.value)
+  
+      if (user) {
+        console.log("User found:", user.data())
+  
+        await updateDoc(doc(db, 'users', user.id), {
+          loggedIn: true
+        });
+  
+        router.push({ name: 'dashboard', query: { userId: user.id } })
+        console.log("Current URL:", window.location.href);
+      } else {
+        errMsg.value = "No account with that alumni number and password was found"
+      }
+    } catch (error) {
+      console.error("Error:", error.message)
+      errMsg.value = "An error occurred"
     }
-  } catch (error) {
-    console.error("Error:", error.message)
-    errMsg.value = "An error occurred"
   }
-}
   </script>
+  
   
