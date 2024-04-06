@@ -14,7 +14,23 @@
           </div>
         </form>
         <div>
-          <a class="login-footer">Copyright</a>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <a class="login-footer">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
         </div>
       </div>
       <div class="logo-container">
