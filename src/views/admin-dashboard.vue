@@ -90,9 +90,4 @@
   };
 </script>
 
-
-  
-  <style>
-  /* Add your styles here */
-  </style>
   
