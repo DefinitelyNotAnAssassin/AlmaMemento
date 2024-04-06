@@ -3,7 +3,6 @@
       <nav class="navbar">
         <div class="navbar-brand">
           <a class="navbar-item" href="#">
-            <img src="../assets/images/logo.png" alt="Logo">
           </a>
         </div>
         <div class="navbar-end">
@@ -19,18 +18,53 @@
           </a>
         </div>
       </nav>
-      <aside class="sidebar">
-        <ul>
-          <li v-for="(item, index) in sidebarItems" :key="index">
-            <a @click="selectItem(index)">{{ item }}</a>
-          </li>
-        </ul>
-        <button @click="logout" class="logout-button">Logout</button>
-      </aside>
-      <main>
-        <p>Hi Admin!</p>
-      </main>
+      <div class="main">
+        <aside class="sidebar">
+          <img src="../assets/images/logo.png" alt="Logo">
+            <ul>
+              <li v-for="(item, index) in sidebarItems" :key="index">
+                <a @click="selectItem(index)">{{ item }}</a>
+              </li>
+            </ul>
+          <button @click="logout" class="logout-button"><i class="fas fa-power-off"></i>  Logout</button>
+        </aside>
+        <div class="cards-container">
+          <h1>Welcome Admin!</h1>
+          <div class="card-one">
+            <div class="top-content">
+              <img width="100" height="100" src="https://img.icons8.com/dusk/100/students.png" alt="students"/>
+              <h1>13</h1>
+            </div>
+            <div class="bottom-content">
+              <h3>Total Alumni</h3>
+              <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="card-two">
+            <div class="top-content">
+              <img width="100" height="100" src="https://img.icons8.com/dusk/64/contact-card.png" alt="contact-card"/>
+              <h1>4</h1>
+            </div>
+            <div class="bottom-content">
+              <h3>Contact Support</h3>
+              <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="card-three">
+            <div class="top-content">
+              <img width="100" height="100" src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/100/external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2.png" alt="external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2"/>
+              <h1>7</h1>
+            </div>
+            <div class="bottom-content">
+              <h3>Courses</h3>
+              <i class="fas fa-circle-right"></i>
+              <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <div></div>
   </template>
   
   <script>

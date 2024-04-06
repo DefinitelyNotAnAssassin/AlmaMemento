@@ -34,15 +34,22 @@ body{
 }
 
 .login-container form label,
-.login-container form input,
 .login-container form button {
   margin-bottom: 10px;
 }
 
-.login-container form input,
+.login-container form input {
+  outline: none;
+  padding: 10px;
+  width: 90%;
+}
+
 .login-container form button {
+  margin-top: 10px;
+  background-color: #861b23;
+  padding: 10px;
+  color: #ffffff;
   width: 100%;
-  max-width: 600px;
 }
 
 .logo-container {
@@ -107,12 +114,8 @@ body{
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #333;
+  background-color: #861b23;
   color: white;
-}
-
-.navbar-brand img {
-  max-height: 2rem;
 }
 
 .navbar-end {
@@ -129,14 +132,22 @@ body{
 .sidebar {
   width: 250px;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #861b23;
   padding: 1rem;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar img {
+  width: 100%;
 }
 
 .sidebar ul {
   list-style-type: none;
   padding: 0;
+}
+
+.sidebar a {
+  color: #fff;
 }
 
 .sidebar ul li {
@@ -149,16 +160,76 @@ main {
 }
 
 /* Logout button */
+
 .logout-button {
-  width: 100%;
-  padding: 0.5rem 1rem;
+  position: absolute;
+  bottom: 10px;
+  padding: 1rem 1rem;
   background-color: #333;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1rem;
 }
 
 .logout-button:hover {
   background-color: #555;
+}
+
+.login-footer {
+  margin-top: 150px;
+}
+
+.main {
+  display: flex;
+}
+
+/* cards */
+.cards-container {
+  width: 100%;
+}
+
+.cards-container h1 {
+  margin: 1rem;
+}
+
+.card-one, .card-two, .card-three {
+  height: 200px;
+  width: 45%;
+  display: inline-block;
+  margin: 1rem;
+}
+
+.card-one {
+  background-color: #44546a;
+}
+
+.card-two {
+  background-color: #44546a;
+}
+
+.card-three {
+  background-color: #44546a;
+}
+
+.top-content {
+  height: 80%;
+  display: flex;
+}
+
+.top-content img, .top-content h1 {
+  margin: auto;
+}
+
+.bottom-content {
+  height: 20%;
+  background-color: #fff2cc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom-content h3, .bottom-content i {
+  margin: 10px;
 }
