@@ -3,7 +3,7 @@
       <div class="login-container">
         <form @submit.prevent="signin">
           <div class="login-logo">
-            <img src="@/assets/images/logo.png" alt="Logo" style="width: 250px; height: 250px;">
+            <img src="@/assets/images/logo2.png" alt="Logo" style="width: 250px; height: 250px;">
           </div>
           <input type="text" id="alumniID" name="alumniID" v-model="alumniID" required placeholder="Alumni ID">
           <input type="password" id="password" name="password" v-model="password" required placeholder="Password">
@@ -43,38 +43,35 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { db } from '../firebase/index.js'
-  import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
-  
+  import { collection, getDocs, updateDoc, doc, query, where } from 'firebase/firestore'
+
   const alumniID = ref("")
   const password = ref("")
   const errMsg = ref("")
-  
+
   const router = useRouter()
-  
+
   const signin = async () => {
-  try {
-    console.log("Trying to sign in...")
+    try {
+      console.log("Trying to sign in...")
 
-    const q = collection(db, "users")
-    const querySnapshot = await getDocs(q)
-    const user = querySnapshot.docs.find(doc => doc.data().id === alumniID.value && doc.data().password === password.value)
+      const q = query(collection(db, "users"), where("id", "==", alumniID.value), where("password", "==", password.value));
+      const querySnapshot = await getDocs(q);
+      const user = querySnapshot.docs[0];
 
-    if (user) {
-      console.log("User found:", user.data())
+      if (user) {
+        console.log("User found:", user.data())
 
-      await updateDoc(doc(db, 'users', user.id), {
-        loggedIn: true
-      });
+        await updateDoc(doc(db, 'users', user.id), { loggedIn: true });
 
-      router.push({ name: 'dashboard' })
-      console.log("Current URL:", window.location.href);
-    } else {
-      errMsg.value = "No account with that alumni number and password was found"
+        router.push({ name: 'dashboard', query: { userId: user.id } })
+        console.log("Current URL:", window.location.href);
+      } else {
+        errMsg.value = "No account with that alumni number and password was found"
+      }
+    } catch (error) {
+      console.error("Error:", error.message)
+      errMsg.value = "An error occurred"
     }
-  } catch (error) {
-    console.error("Error:", error.message)
-    errMsg.value = "An error occurred"
   }
-}
-  </script>
-  
+</script>

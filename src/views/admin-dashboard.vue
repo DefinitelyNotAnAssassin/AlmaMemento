@@ -21,19 +21,19 @@
       <div class="main">
         <aside class="sidebar">
           <img src="../assets/images/logo.png" alt="Logo">
-    <ul>
-      <li v-for="(item, index) in sidebarItems" :key="index">
-        <a @click="selectItem(index)">
-          {{ item }}
-          <span v-if="item === 'Item 3' || item === 'Item 4' || item === 'Item 5'" class="dropdown-arrow">▼</span>
-        </a>
-        <ul v-if="dropdownItemsVisible[item]">
-          <li v-for="(dropdownItem, dropdownIndex) in dropdownItems" :key="dropdownIndex">
-            <button @click="handleDropdownClick(dropdownItem)">{{ dropdownItem }}</button>
-          </li>
-        </ul>
-      </li>
-    </ul>
+          <ul>
+            <li v-for="(item, index) in sidebarItems" :key="index">
+              <a @click="selectItem(index)">
+                {{ item }}
+                <span v-if="item === 'Item 3' || item === 'Item 4' || item === 'Item 5'" class="dropdown-arrow">▼</span>
+              </a>
+              <ul v-if="dropdownItemsVisible[item]">
+                <li v-for="(dropdownItem, dropdownIndex) in dropdownItems" :key="dropdownIndex">
+                  <button @click="handleDropdownClick(dropdownItem)">{{ dropdownItem }}</button>
+                </li>
+              </ul>
+            </li>
+          </ul>
           <button @click="logout" class="logout-button"><i class="fas fa-power-off"></i>  Logout</button>
         </aside>
         <div class="cards-container">
@@ -72,90 +72,98 @@
         </div>
       </div>
     </div>
-    <div></div>
   </template>
   
-  <script>
+  <script setup>
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { db } from '../firebase/index.js'
   import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
-
+  
   const errMsg = ref("")
+  const notificationsVisible = ref(false)
+  const profileVisible = ref(false)
+  const sidebarItems = ['Dashboard', 'Profile', 'Manage Users', 'Manage Content', 'Yearbook']
+  const dropdownItems = ['Alumni', 'Moderator', 'Admin']
+  const dropdownItemsVisible = {
+    'Item 3': false,
+    'Item 4': false,
+    'Item 5': false
+  }
+  
   const router = useRouter()
-
-  export default {
-    data() {
-      return {
-        notificationsVisible: false,
-        profileVisible: false,
-        sidebarItems: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'],
-        dropdownItems: ['Dropdown Item 1', 'Dropdown Item 2', 'Dropdown Item 3'],
-        dropdownItemsVisible: {
-        'Item 3': false,
-        'Item 4': false,
-        'Item 5': false
-        }   
-      };
-    },
-    methods: {
-      toggleNotifications() {
-        this.notificationsVisible = !this.notificationsVisible;
-      },
-      toggleProfile() {
-        this.profileVisible = !this.profileVisible;
-      },
-      selectItem(index) {
-        const selectedItem = this.sidebarItems[index];
-        switch (selectedItem) {
-            case 'Item 1':
-                this.$router.push('/item1');
-                break;
-            case 'Item 2':
-                this.$router.push('/item2');
-                break;
-            case 'Item 3':
-            case 'Item 4':
-            case 'Item 5':
-                this.toggleDropdown(selectedItem);
-                break;
-            default:
-                break;
-        }
-      },
-      toggleDropdown(item) {
-        this.dropdownItemsVisible[item] = !this.dropdownItemsVisible[item];
-        },
-        handleDropdownClick(dropdownItem) {
-    console.log('Clicked dropdown item:', dropdownItem);
-        },
-      async logout() {
-        try {
-          console.log("Logging out...")
-
-          const q = collection(db, "users")
-          const querySnapshot = await getDocs(q)
-          const user = querySnapshot.docs.find(doc => doc.data().loggedIn === true)
-
-          if (user) {
-            console.log("User found:", user.data())
-
-            await updateDoc(doc(db, 'users', user.id), {
-              loggedIn: false
-            });
-
-            router.push({ name: 'login' })
-            console.log("Current URL:", window.location.href);
-          } else {
-            errMsg.value = "No logged in user found"
-          }
-        } catch (error) {
-          console.error("Error:", error.message)
-          errMsg.value = "An error occurred"
-        }
-      }
+  
+  const toggleNotifications = () => {
+    notificationsVisible.value = !notificationsVisible.value
+  }
+  
+  const toggleProfile = () => {
+    profileVisible.value = !profileVisible.value
+  }
+  
+  const selectItem = (index) => {
+    const selectedItem = sidebarItems[index]
+    switch (selectedItem) {
+      case 'Dashboard':
+        // Handle Dashboard click
+        break
+      case 'Profile':
+        // Handle Profile click
+        break
+      case 'Manage Users':
+        // Handle Manage Users click
+        break
+      case 'Manage Content':
+        // Handle Manage Content click
+        break
+      case 'Yearbook':
+        // Handle Yearbook click
+        break
+      default:
+        break
     }
-  };
-</script>
+  }
+  
+  const toggleDropdown = (item) => {
+    dropdownItemsVisible[item] = !dropdownItemsVisible[item]
+  }
+  
+  const handleDropdownClick = (dropdownItem) => {
+    console.log('Clicked dropdown item:', dropdownItem)
+  }
+  
+  const logout = async () => {
+  try {
+    console.log("Logging out...")
 
+    const q = collection(db, "users")
+    const querySnapshot = await getDocs(q)
+    const userId = router.currentRoute.value.query.userId
+    console.log("UserID:", userId)
+
+    const user = querySnapshot.docs.find(doc => doc.id === userId && doc.data().loggedIn === true)
+
+    if (user) {
+      console.log("User found:", user.data())
+
+      await updateDoc(doc(db, 'users', user.id), {
+        loggedIn: false
+      });
+
+      router.push({ name: 'login' })
+      console.log("Logout successful. Redirecting to login page...");
+      console.log("Current URL:", window.location.href);
+    } else {
+      console.log("No logged in user found")
+      errMsg.value = "No logged in user found"
+    }
+  } catch (error) {
+    console.error("Error:", error.message)
+    errMsg.value = "An error occurred"
+  }
+}
+
+
+  </script>
+  
   
