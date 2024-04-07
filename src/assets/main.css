@@ -238,3 +238,7 @@ main {
 .text-white {
   color: white !important;
 }
+
+.dashboard-bottom-title {
+  font-weight: 400 !important;
+}

@@ -44,7 +44,7 @@
               <h1 class="text-white">13</h1>
             </div>
             <div class="bottom-content">
-              <h3>Total Alumni</h3>
+              <h3 class="dashboard-bottom-title">Total Alumni</h3>
               <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </div>
           </div>
@@ -54,7 +54,7 @@
               <h1 class="text-white">4</h1>
             </div>
             <div class="bottom-content">
-              <h3>Contact Support</h3>
+              <h3 class="dashboard-bottom-title">Contact Support</h3>
               <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </div>
           </div>
@@ -64,7 +64,7 @@
               <h1 class="text-white">7</h1>
             </div>
             <div class="bottom-content">
-              <h3>Courses</h3>
+              <h3 class="dashboard-bottom-title">Courses</h3>
               <i class="fas fa-circle-right"></i>
               <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </div>
