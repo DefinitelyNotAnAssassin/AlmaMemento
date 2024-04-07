@@ -41,7 +41,7 @@
           <div class="card-one">
             <div class="top-content">
               <img width="100" height="100" src="https://img.icons8.com/dusk/100/students.png" alt="students"/>
-              <h1>13</h1>
+              <h1 class="text-white">13</h1>
             </div>
             <div class="bottom-content">
               <h3>Total Alumni</h3>
@@ -51,7 +51,7 @@
           <div class="card-two">
             <div class="top-content">
               <img width="100" height="100" src="https://img.icons8.com/dusk/64/contact-card.png" alt="contact-card"/>
-              <h1>4</h1>
+              <h1 class="text-white">4</h1>
             </div>
             <div class="bottom-content">
               <h3>Contact Support</h3>
@@ -61,7 +61,7 @@
           <div class="card-three">
             <div class="top-content">
               <img width="100" height="100" src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/100/external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2.png" alt="external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2"/>
-              <h1>7</h1>
+              <h1 class="text-white">7</h1>
             </div>
             <div class="bottom-content">
               <h3>Courses</h3>
