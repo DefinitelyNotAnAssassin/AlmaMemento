@@ -3,7 +3,7 @@
       <div class="login-container">
         <form @submit.prevent="signin">
           <div class="login-logo">
-            <img src="@/assets/images/logo.png" alt="Logo" style="width: 250px; height: 250px;">
+            <img src="@/assets/images/logo2.png" alt="Logo" style="width: 250px; height: 250px;">
           </div>
           <input type="text" id="alumniID" name="alumniID" v-model="alumniID" required placeholder="Alumni ID">
           <input type="password" id="password" name="password" v-model="password" required placeholder="Password">
