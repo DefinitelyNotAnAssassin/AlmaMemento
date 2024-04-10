@@ -195,7 +195,7 @@ main {
   margin: 1rem;
 }
 
-.card-one, .card-two, .card-three {
+.card-one, .card-two, .card-three, .card-four {
   height: 200px;
   width: 45%;
   display: inline-block;
@@ -211,6 +211,10 @@ main {
 }
 
 .card-three {
+  background-color: #44546a;
+}
+
+.card-four {
   background-color: #44546a;
 }
 
