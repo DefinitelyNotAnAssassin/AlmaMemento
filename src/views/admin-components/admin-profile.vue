@@ -109,7 +109,6 @@ const isModalOpen = ref(false);
 const isImageModalOpen = ref(false);
 let fileToUpload = null;
 
-// Import the user image directly
 import userImage from '@/assets/images/user.png';
 
 onMounted(async () => {
@@ -152,6 +151,14 @@ const closeImageModal = () => {
 
 const handleFileUpload = (event) => {
   fileToUpload = event.target.files[0];
+};
+
+const showModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
 };
 
 const uploadPhoto = async () => {
