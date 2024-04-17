@@ -13,19 +13,19 @@
       <table>
         <tr>
           <td>ID number:</td>
-          <td>0000</td>
+          <td class="td-padding-left">0000</td>
         </tr>
         <tr>
           <td>Course:</td>
-          <td>BSIT</td>
+          <td class="td-padding-left">BSIT</td>
         </tr>
         <tr>
           <td>Class Year:</td>
-          <td>2023-2024</td>
+          <td class="td-padding-left">2023-2024</td>
         </tr>
         <tr>
           <td>Phone:</td>
-          <td>09123456789</td>
+          <td class="td-padding-left">09123456789</td>
         </tr>
       </table>
     </div>
@@ -47,7 +47,7 @@ aside img {
   widows: 100px;
 }
 
-.margin-left {
-  margin-left: 20px;
+.td-padding-left {
+    padding-left: 20px;
 }
 </style>
