@@ -1,6 +1,8 @@
 <template>
   <div class="main">
-    <NavBar />
+    <div>
+      <NavBar />
+    </div>
     <div>
       <SideBar />
     </div>
