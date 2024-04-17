@@ -67,7 +67,7 @@ nav img {
 
 .right-container .search-container input {
   height: 100px;
-  widows: 40px;
+  width: 40px;
 }
 
 .right-container .search-container input,
