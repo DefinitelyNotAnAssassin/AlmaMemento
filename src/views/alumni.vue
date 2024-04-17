@@ -2,7 +2,7 @@
   <div class="main">
     <h1>Alumni</h1>
     <div>
-        <NavBar />
+        <Navbar />
     </div>
   </div>
 </template>
