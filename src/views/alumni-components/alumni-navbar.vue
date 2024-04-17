@@ -67,14 +67,13 @@ nav img {
 .right-container .search-container {
   position: relative;
   width: 150px !important;
-  height: 60px !important;
   background-color: red;
 }
 
 .right-container .search-container input {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100% !important; 
+  height: 100px !important;
 }
 
 .right-container .search-container input,
