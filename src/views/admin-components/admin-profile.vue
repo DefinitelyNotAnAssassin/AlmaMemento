@@ -88,7 +88,7 @@ import { useRoute } from 'vue-router';
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, deleteObject } from 'firebase/storage';
 
-const storage = getStorage(); // Initialize storage
+const storage = getStorage();
 
 const route = useRoute();
 const userId = route.query.userId;
@@ -170,17 +170,13 @@ const uploadPhoto = async () => {
     const storageReference = storageRef(storage, `users/${userId}/profilePicture.jpg`);
     const snapshot = await uploadBytes(storageReference, fileToUpload);
 
-    // Get the download URL after the upload is complete
     const downloadURL = await storageRef(storage, snapshot.ref.fullPath).getDownloadURL();
 
-    // Update the user's profile picture URL in Firestore
     const docRef = doc(db, 'users', userId);
     await updateDoc(docRef, { profilePicture: downloadURL });
     
-    // Update the local userData object
     userData.value.profilePicture = downloadURL;
 
-    // Reset fileToUpload and close the modal
     fileToUpload = null;
     closeImageModal();
   } catch (error) {
