@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar-container bg-secondary">
     <img
-      src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nationalgeographic.com%2Fanimals%2Fmammals%2Ffacts%2Fdomestic-dog&psig=AOvVaw0nhSJRnBGSbX55CgyUlaYQ&ust=1713451358115000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDhw-69yYUDFQAAAAAdAAAAABAE"
+      src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t39.30808-6/362681859_833846268097031_774316903881338625_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHybu1WboC1y_yed82N84fp01fI_da8ksXTV8j91rySxXf65cUC0wq7qeoTuGVHZoA7wWJE_7z3FS0NZzVf5bJJ&_nc_ohc=8WQTYxhl5nQAb5u3wwK&_nc_ht=scontent.fmnl25-1.fna&oh=00_AfBm__PVH81knV7GG_RFs3itnIRxD5TSyT79WZ3tDsMZaw&oe=6625BCA4"
       alt="profile"
     />
     <h3>Emmanuel Ugaban</h3>
