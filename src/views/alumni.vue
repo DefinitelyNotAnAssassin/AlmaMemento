@@ -6,6 +6,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 import Navbar from './alumni-components/alumni-navbar.vue';
+
 </script>
