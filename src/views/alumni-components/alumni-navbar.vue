@@ -33,6 +33,7 @@ nav {
   align-items: center;
   background-color: #861b23;
   width: 100%;
+  height: 60px;
   padding: 0px 20px;
 }
 
