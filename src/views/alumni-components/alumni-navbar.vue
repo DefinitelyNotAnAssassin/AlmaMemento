@@ -7,11 +7,11 @@
     </div>
     <div class="right-container">
       <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-solid fa-magnifying-glass">S</i>
         <input type="search" placeholder="Search..." />
       </div>
-      <button class="btn-notification"><i class="fa-solid fa-bell"></i></button>
-      <button class="btn-profile"><i class="fa-solid fa-user"></i></button>
+      <button class="btn-notification">N<i class="fa-solid fa-bell"></i></button>
+      <button class="btn-profile">P<i class="fa-solid fa-user"></i></button>
     </div>
   </nav>
 </template>
