@@ -10,22 +10,24 @@
     <p>emman@gmail.com</p>
     <div class="mt-2">
       <h4>Profile</h4>
-      <div>
-        <span>ID number: </span>
-        <span class="margin-left">00000</span>
-      </div>
-      <div>
-        <span>Course: </span>
-        <span class="margin-left">BSIT</span>
-      </div>
-      <div>
-        <span>Class Year: </span>
-        <span class="margin-left">2023-2024</span>
-      </div>
-      <div>
-        <span>Phone </span>
-        <span class="margin-left">09123456789</span>
-      </div>
+      <table>
+        <tr>
+          <td>ID number:</td>
+          <td>0000</td>
+        </tr>
+        <tr>
+          <td>Course:</td>
+          <td>BSIT</td>
+        </tr>
+        <tr>
+          <td>Class Year:</td>
+          <td>2023-2024</td>
+        </tr>
+        <tr>
+          <td>Phone:</td>
+          <td>09123456789</td>
+        </tr>
+      </table>
     </div>
   </aside>
 </template>
