@@ -7,7 +7,7 @@
     />
     <h4 class="mt-2">Emmanuel Ugaban</h4>
     <p>emman@gmail.com</p>
-    <div class="mt-5 bg-secondary profile-table-container">
+    <div class="mt-5 profile-table-container">
       <h4>Profile</h4>
       <table>
         <tr>
