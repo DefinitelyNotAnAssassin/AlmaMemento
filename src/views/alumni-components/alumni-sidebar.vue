@@ -37,4 +37,9 @@ aside {
   height: calc(100vh - 60px);
   width: 400px;
 }
+
+aside img {
+    height: 100px;
+    widows: 100px;
+}
 </style>
