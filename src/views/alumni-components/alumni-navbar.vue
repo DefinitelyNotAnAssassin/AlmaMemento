@@ -42,6 +42,7 @@ nav img {
   border: none;
   color: white;
   margin: 10px;
+  padding: 0px 10px;
   border-radius: 5px;
 }
 
@@ -53,8 +54,6 @@ nav img {
 
 .right-container {
   display: flex;
-  justify-content: space-between;
-  width: 300px;
   background-color: blue;
 }
 
