@@ -5,7 +5,9 @@
       <button type="button" class="btn-home">Home</button>
       <button type="button" class="btn-yearbook">Yearbook</button>
     </div>
-    <div class="right-container d-flex align-items-center justify-content-center">
+    <div
+      class="right-container d-flex align-items-center justify-content-center"
+    >
       <div class="search-container mt-0">
         <!-- <i class="fa-solid fa-magnifying-glass">S</i> -->
         <input type="search" placeholder="Search..." />
@@ -63,7 +65,7 @@ nav img {
 }
 
 .search-container input {
-    
+  width: 150px;
 }
 
 .right-container button {
