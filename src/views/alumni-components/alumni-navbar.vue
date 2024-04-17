@@ -25,6 +25,7 @@ nav {
   display: flex;
   justify-content: space-between;
   background-color: #861b23;
+  width: 100%;
 }
 
 nav img {

@@ -1,9 +1,6 @@
 <template>
   <div class="main">
-    <h1>Alumni</h1>
-    <div>
-        <NavBar />
-    </div>
+    <NavBar />
   </div>
 </template>
 
