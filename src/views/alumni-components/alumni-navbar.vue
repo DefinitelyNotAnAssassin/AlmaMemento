@@ -2,16 +2,20 @@
   <nav class="navbar-container">
     <img class="logo" src="../../assets/images/logo.png" alt="Logo" />
     <div class="navbar-buttons">
-      <button class="btn-home">Home</button>
-      <button class="btn-yearbook">Yearbook</button>
+      <button type="button" class="btn-home">Home</button>
+      <button type="button" class="btn-yearbook">Yearbook</button>
     </div>
     <div class="right-container">
       <div class="search-container">
         <i class="fa-solid fa-magnifying-glass">S</i>
         <input type="search" placeholder="Search..." />
       </div>
-      <button class="btn-notification">N<i class="fa-solid fa-bell"></i></button>
-      <button class="btn-profile">P<i class="fa-solid fa-user"></i></button>
+      <button type="button" class="btn-notification">
+        N<i class="fa-solid fa-bell"></i>
+      </button>
+      <button type="button" class="btn-profile">
+        P<i class="fa-solid fa-user"></i>
+      </button>
     </div>
   </nav>
 </template>
