@@ -24,8 +24,10 @@ import { ref } from "vue";
 nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #861b23;
   width: 100%;
+  padding: 0px 20px;
 }
 
 nav img {
@@ -33,8 +35,17 @@ nav img {
 }
 
 .btn-home, .btn-yearbook {
-    background-color: none !important;
-    border: none !important;
+    height: 30px;
+    widows: 80px;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    color: white;
+    margin: 10px;
+}
+
+.btn-home, .btn-yearbook:hover {
+    background-color: rgba(255, 255, 255, 0.697);
+    color: black;
 }
 
 .right-container {
@@ -42,4 +53,12 @@ nav img {
     justify-content: space-between;
     width: 300px;
 }
+
+.right-container button {
+    height: 30px;
+    widows: 30px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0);
+}
+
 </style>
