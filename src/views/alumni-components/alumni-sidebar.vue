@@ -55,4 +55,9 @@ aside img {
 .td-padding-left {
   padding-left: 30px;
 }
+
+table tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 </style>
