@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="container-fluid bg-dark p-0">
+    <div class="container-fluid p-0">
       <NavBar />
       <div class="container-fluid d-flex">
         <SideBar />

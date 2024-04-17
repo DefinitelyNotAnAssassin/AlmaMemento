@@ -1,5 +1,5 @@
 <template>
-    <aside class="sidebar-container">
+    <aside class="sidebar-container bg-secondary">
         <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nationalgeographic.com%2Fanimals%2Fmammals%2Ffacts%2Fdomestic-dog&psig=AOvVaw0nhSJRnBGSbX55CgyUlaYQ&ust=1713451358115000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDhw-69yYUDFQAAAAAdAAAAABAE" alt="profile">
         <h3>Emmanuel Ugaban</h3>
         <p>emman@gmail.com</p>
