@@ -7,7 +7,7 @@
     </div>
     <div class="right-container d-flex align-items-center justify-content-center">
       <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass">S</i>
+        <!-- <i class="fa-solid fa-magnifying-glass">S</i> -->
         <input type="search" placeholder="Search..." />
       </div>
       <button type="button" class="btn-notification">
