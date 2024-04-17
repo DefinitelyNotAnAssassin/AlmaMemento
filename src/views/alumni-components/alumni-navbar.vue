@@ -59,7 +59,7 @@ nav img {
 .right-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center !important;
   background-color: blue;
   /* width: 250px; */
 }
