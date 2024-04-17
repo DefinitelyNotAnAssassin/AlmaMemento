@@ -74,7 +74,7 @@ nav img {
 .right-container .search-container input {
   position: absolute !important;
   width: 100% !important;
-  height: 100px !important;
+  /* height: 100px !important; */
 }
 
 .right-container .search-container i {
