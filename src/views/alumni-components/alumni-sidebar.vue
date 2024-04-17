@@ -49,7 +49,7 @@ aside img {
 }
 
 .profile-table-container {
-  widows: 350px;
+  widows: 350px !important; 
 }
 
 .td-padding-left {
