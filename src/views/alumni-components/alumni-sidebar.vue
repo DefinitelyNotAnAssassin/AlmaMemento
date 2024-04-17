@@ -37,7 +37,7 @@ import { ref } from "vue";
 
 <style scoped>
 aside {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 70px);
   width: 400px;
   border-right: 10px solid #861b23;
 }
