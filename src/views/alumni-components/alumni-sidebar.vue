@@ -7,7 +7,7 @@
     />
     <h4 class="mt-2">Emmanuel Ugaban</h4>
     <p>emman@gmail.com</p>
-    <div class="mt-5">
+    <div class="mt-5 bg-secondary profile-table-container">
       <h4>Profile</h4>
       <table>
         <tr>
@@ -46,6 +46,10 @@ aside img {
   height: 120px;
   widows: 120px;
   border-radius: 50%;
+}
+
+.profile-table-container {
+  widows: 350px;
 }
 
 .td-padding-left {
