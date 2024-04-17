@@ -56,32 +56,14 @@ nav img {
   color: black;
 }
 
-.right-container {
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center !important;
-  background-color: blue; */
-  /* width: 250px; */
-}
-
 .search-container {
-  background-color: red !important;
+  background-color: rgb(24, 14, 132) !important;
   position: relative;
   width: 150px !important;
 }
 
-.right-container .search-container input {
-  position: absolute !important;
-  width: 100% !important;
-  /* height: 100px !important; */
-}
-
-.right-container .search-container i {
-  position: absolute !important;
-}
-
-.right-container .search-container i {
-  left: 10px;
+.search-container input {
+    
 }
 
 .right-container button {
