@@ -71,14 +71,13 @@ nav img {
 }
 
 .right-container .search-container input {
-  position: absolute;
-  width: 100% !important; 
+  position: absolute !important;
+  width: 100% !important;
   height: 100px !important;
 }
 
-.right-container .search-container input,
 .right-container .search-container i {
-  position: absolute;
+  position: absolute !important;
 }
 
 .right-container .search-container i {
