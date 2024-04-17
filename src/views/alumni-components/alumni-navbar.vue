@@ -65,10 +65,10 @@ nav img {
 }
 
 .right-container .search-container {
+  background-color: red !important;
   position: relative;
   width: 150px !important;
   margin: 0 !important;
-  background-color: red;
 }
 
 .right-container .search-container input {
