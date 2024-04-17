@@ -2,13 +2,13 @@
   <div class="main">
     <h1>Alumni</h1>
     <div>
-        <Navbar />
+        <NavBar />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import Navbar from './alumni-components/alumni-navbar.vue';
+import NavBar from './alumni-components/alumni-navbar.vue';
 
 </script>
