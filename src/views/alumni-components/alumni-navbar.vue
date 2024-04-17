@@ -31,50 +31,56 @@ nav {
 }
 
 nav img {
-    width: 200px;
+  width: 200px;
 }
 
-.btn-home, .btn-yearbook {
-    height: 30px;
-    widows: 80px;
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
-    color: white;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
+.btn-home,
+.btn-yearbook {
+  height: 40px;
+  widows: 80px;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  color: white;
+  margin: 10px;
+  border-radius: 5px;
 }
 
-.btn-home:hover, .btn-yearbook:hover {
-    background-color: rgba(255, 255, 255, 0.697);
-    color: black;
+.btn-home:hover,
+.btn-yearbook:hover {
+  background-color: rgba(255, 255, 255, 0.697);
+  color: black;
 }
 
 .right-container {
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  background-color: blue;
 }
 
 .right-container .search-container {
-    position: relative;
-    background-color: blue
+  position: relative;
 }
 
-.right-container .search-container input, .right-container .search-container i {
-    position: absolute;
+.right-container .search-container input {
+  height: 100px;
+  widows: 40px;
+}
+
+.right-container .search-container input,
+.right-container .search-container i {
+  position: absolute;
 }
 
 .right-container .search-container i {
-    left: 10px;
+  left: 10px;
 }
 
 .right-container button {
-    height: 30px;
-    widows: 30px;
-    color: white;
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
+  height: 40px;
+  width: 40px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
 }
-
 </style>
