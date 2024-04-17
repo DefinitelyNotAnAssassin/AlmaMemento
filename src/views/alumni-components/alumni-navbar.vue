@@ -5,7 +5,7 @@
       <button class="btn-home">Home</button>
       <button class="btn-yearbook">Yearbook</button>
     </div>
-    <div>
+    <div class="right-container">
       <div class="search-container">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="search" placeholder="Search..." />
@@ -19,3 +19,26 @@
 <script setup>
 import { ref } from "vue";
 </script>
+
+<style scoped>
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: #861b23;
+}
+
+nav img {
+    width: 200px;
+}
+
+.btn-home, .btn-yearbook {
+    background-color: none !important;
+    border: none !important;
+}
+
+.right-container {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+}
+</style>
