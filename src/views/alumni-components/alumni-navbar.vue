@@ -59,14 +59,15 @@ nav img {
 .right-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: blue;
-  width: 250;
+  /* width: 250px; */
 }
 
 .right-container .search-container {
   position: relative;
   width: 150px !important;
-  height: 40px !important;
+  height: 60px !important;
 }
 
 .right-container .search-container input {
