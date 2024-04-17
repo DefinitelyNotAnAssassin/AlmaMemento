@@ -58,16 +58,21 @@ nav img {
 
 .right-container {
   display: flex;
+  justify-content: space-between;
   background-color: blue;
+  width: 250;
 }
 
 .right-container .search-container {
   position: relative;
+  width: 150px !important;
+  height: 40px !important;
 }
 
 .right-container .search-container input {
-  width: 100px;
-  height: 40px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .right-container .search-container input,
