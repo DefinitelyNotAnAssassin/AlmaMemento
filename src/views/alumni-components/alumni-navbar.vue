@@ -41,9 +41,11 @@ nav img {
     border: none;
     color: white;
     margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.btn-home, .btn-yearbook:hover {
+.btn-home:hover, .btn-yearbook:hover {
     background-color: rgba(255, 255, 255, 0.697);
     color: black;
 }
@@ -54,11 +56,25 @@ nav img {
     width: 300px;
 }
 
+.right-container .search-container {
+    position: relative;
+    background-color: blue
+}
+
+.right-container .search-container input, .right-container .search-container i {
+    position: absolute;
+}
+
+.right-container .search-container i {
+    left: 10px;
+}
+
 .right-container button {
     height: 30px;
     widows: 30px;
     color: white;
     background-color: rgba(255, 255, 255, 0);
+    border: none;
 }
 
 </style>
