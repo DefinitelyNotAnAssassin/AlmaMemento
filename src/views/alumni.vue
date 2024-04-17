@@ -1,9 +1,7 @@
 <template>
   <div class="main">
-    <div>
+    <div class="container bg-dark">
       <NavBar />
-    </div>
-    <div>
       <SideBar />
     </div>
   </div>
