@@ -49,10 +49,10 @@ aside img {
 }
 
 .profile-table-container {
-  width: 350px !important;
+  width: 280px !important;
 }
 
 .td-padding-left {
-  padding-left: 20px;
+  padding-left: 30px;
 }
 </style>
