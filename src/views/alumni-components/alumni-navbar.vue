@@ -66,8 +66,8 @@ nav img {
 }
 
 .right-container .search-container input {
-  height: 100px;
-  width: 40px;
+  width: 100px;
+  height: 40px;
 }
 
 .right-container .search-container input,
