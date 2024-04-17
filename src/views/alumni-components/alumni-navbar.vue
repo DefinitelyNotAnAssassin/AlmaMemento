@@ -68,6 +68,7 @@ nav img {
   position: relative;
   width: 150px !important;
   height: 60px !important;
+  background-color: red;
 }
 
 .right-container .search-container input {
