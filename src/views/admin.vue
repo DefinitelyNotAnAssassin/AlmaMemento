@@ -18,6 +18,9 @@
       <div v-else-if="currentPage === 'Admin'">
         <ManageUserAdmin />
       </div>
+      <div v-else-if="currentPage === 'Manage Content'">
+        <ManageContent />
+      </div>
     </div>
   </div>
 </template>
@@ -31,6 +34,7 @@ import ProfileContent from './admin-components/admin-profile.vue'
 import ManageUserAlumni from './admin-components/manage-users-alumni.vue'
 import ManageUserAdmin from './admin-components/manage-users-admin.vue'
 import ManageUserModerator from './admin-components/manage-users-moderator.vue'
+import ManageContent from './admin-components/manage-content.vue'
 
 const currentPage = ref('Dashboard')
 
