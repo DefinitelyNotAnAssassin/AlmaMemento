@@ -28,11 +28,48 @@
         </tr>
       </table>
     </div>
+    <button @click="logout" class="logout-button"><i class="fas fa-power-off"></i>  Logout</button>
   </aside>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from 'vue-router'
+import { db } from '../../firebase/index.js'
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
+
+const router = useRouter()
+
+const logout = async () => {
+    try {
+      console.log("Logging out...")
+  
+      const q = collection(db, "users")
+      const querySnapshot = await getDocs(q)
+      const userId = router.currentRoute.value.query.userId
+      console.log("UserID:", userId)
+  
+      const user = querySnapshot.docs.find(doc => doc.id === userId && doc.data().loggedIn === true)
+  
+      if (user) {
+        console.log("User found:", user.data())
+  
+        await updateDoc(doc(db, 'users', user.id), {
+          loggedIn: false
+        });
+  
+        router.push({ name: 'login' })
+        console.log("Logout successful. Redirecting to login page...");
+        console.log("Current URL:", window.location.href);
+      } else {
+        console.log("No logged in user found")
+        errMsg.value = "No logged in user found"
+      }
+    } catch (error) {
+      console.error("Error:", error.message)
+      errMsg.value = "An error occurred"
+    }
+  }
 </script>
 
 <style scoped>
