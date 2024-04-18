@@ -55,7 +55,7 @@ const signin = async () => {
   try {
     console.log("Trying to sign in...")
 
-    const q = query(collection(db, "users"), where("alumnaID", "==", alumniID.value), where("alumna_password", "==", password.value));
+    const q = query(collection(db, "users"), where("alumnaID", "==", alumnaID.value), where("alumna_password", "==", password.value));
     const querySnapshot = await getDocs(q);
     const user = querySnapshot.docs[0];
 
