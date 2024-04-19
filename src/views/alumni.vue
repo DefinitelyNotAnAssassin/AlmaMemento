@@ -200,6 +200,7 @@ onMounted(async () => {
 }
 
 .posts-container {
-  height: calc(100vh - 70px);
+  height: calc(90vh - 70px);
+  overflow-y: auto;
 }
 </style>
