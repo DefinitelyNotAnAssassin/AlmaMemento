@@ -38,7 +38,7 @@
           </div>
 
           <div class="card-container container p-3">
-            <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown">
+            <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light">
               <h3>{{ post.caption }}</h3>
               <img :src="post.imageUrl" alt="Post Image" />
               <hr class="pt-1">
