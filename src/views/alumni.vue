@@ -37,10 +37,11 @@
             </div>
           </div>
 
-          <div class="card-container container">
+          <div class="card-container container p-3">
             <div v-for="post in approvedPosts" :key="post.id" class="container card">
               <h3>{{ post.caption }}</h3>
               <img :src="post.imageUrl" alt="Post Image" />
+              <hr class="pt-1">
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
             </div>
           </div>
