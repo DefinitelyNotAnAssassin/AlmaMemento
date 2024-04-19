@@ -76,6 +76,7 @@ const imageUrl = ref("");
 const status = ref("");
 const router = useRouter()
 const userId = computed(() => router.currentRoute.value.query.userId);
+const isImageSelected = computed(() => !!imageUrl.value);
 
 const posts = ref([]);
 const approvedPosts = ref([]);
@@ -124,25 +125,6 @@ async function savePost() {
     return;
   }
 
-  const userSnapshot = await getDocs(collection(db, 'users'));
-  const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
-  const userName = `${userData.lName}, ${userData.fName}`;
-
-  const post = {
-    userId: userId.value,
-    name: userName,
-    schoolYear: selectedSchoolYear.value,
-    event: selectedEvent.value,
-    caption: caption.value,
-    imageUrl: imageUrl.value,
-    status: ""
-  };
-  await addDoc(collection(db, 'posts'), post);
-  closeImageModal();
-}
-
-
-async function savePost() {
   const userSnapshot = await getDocs(collection(db, 'users'));
   const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
   const userName = `${userData.lName}, ${userData.fName}`;
