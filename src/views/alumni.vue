@@ -39,10 +39,11 @@
 
           <div class="posts-container card-container container p-3">
             <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
-              <h3>{{ post.caption }}</h3>
+              <h3>{{ post.name }}</h3>
+              <h5>{{ post.caption }}</h5>
               <img :src="post.imageUrl" alt="Post Image" />
               <hr class="pt-1">
-              <p>{{ post.schoolYear }} - {{ post.event }}</p>
+              <p>{{ getSchoolYearName(post.schoolYear) }} - {{ getEventName(post.event) }}</p>
             </div>
           </div>
         </div>
@@ -52,11 +53,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
 import { db, storage} from '../firebase/index.js';
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore'
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'vue-router'
 
@@ -70,7 +71,7 @@ const caption = ref("");
 const imageUrl = ref("");
 const status = ref("");
 const router = useRouter()
-const userId = router.currentRoute.value.query.userId
+const userId = computed(() => router.currentRoute.value.query.userId);
 
 const posts = ref([]);
 const approvedPosts = ref([]);
@@ -96,6 +97,9 @@ function closeImageModal() {
   imageUrl.value = "";
 }
 
+const getSchoolYearName = id => computed(() => schoolYears.value.find(year => year.id === id)?.name).value;
+const getEventName = id => computed(() => events.value.find(event => event.id === id)?.name).value;
+
 function uploadImage(event) {
   const file = event.target.files[0];
   const storageReference = storageRef(storage, `images/${file.name}`);
@@ -111,8 +115,13 @@ function uploadImage(event) {
 }
 
 async function savePost() {
+  const userSnapshot = await getDocs(collection(db, 'users'));
+  const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
+  const userName = `${userData.lName}, ${userData.fName}`;
+
   const post = {
-    userId: userId,
+    userId: userId.value,
+    name: userName,
     schoolYear: selectedSchoolYear.value,
     event: selectedEvent.value,
     caption: caption.value,
@@ -123,6 +132,10 @@ async function savePost() {
   closeImageModal();
 }
 
+watch(approvedPosts, (newPosts, oldPosts) => {
+  console.log("New approved posts:", newPosts);
+});
+
 onMounted(async () => {
   const coursesSnapshot = await getDocs(collection(db, 'classYears'));
   schoolYears.value = coursesSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
@@ -130,12 +143,13 @@ onMounted(async () => {
   const classYearsSnapshot = await getDocs(collection(db, 'events'));
   events.value = classYearsSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
 
-  const postsSnapshot = await getDocs(collection(db, 'posts'));
-  posts.value = postsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-  approvedPosts.value = posts.value.filter(post => post.status === 'approved');
+  onSnapshot(collection(db, 'posts'), (snapshot) => {
+    posts.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    approvedPosts.value = posts.value.filter(post => post.status === 'approved');
+  });
 });
 </script>
+
 
 <style>
 .modal {

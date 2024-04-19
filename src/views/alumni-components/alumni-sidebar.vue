@@ -2,29 +2,29 @@
   <aside class="sidebar-container d-flex flex-column align-items-center">
     <img
       class="mt-5"
-      src="https://scontent.fmnl25-1.fna.fbcdn.net/v/t39.30808-6/362681859_833846268097031_774316903881338625_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHybu1WboC1y_yed82N84fp01fI_da8ksXTV8j91rySxXf65cUC0wq7qeoTuGVHZoA7wWJE_7z3FS0NZzVf5bJJ&_nc_ohc=8WQTYxhl5nQAb5u3wwK&_nc_ht=scontent.fmnl25-1.fna&oh=00_AfBm__PVH81knV7GG_RFs3itnIRxD5TSyT79WZ3tDsMZaw&oe=6625BCA4"
+      :src="userData.photoURL"
       alt="profile"
     />
-    <h4 class="mt-2">Emmanuel Ugaban</h4>
-    <p>emman@gmail.com</p>
+    <h4 class="mt-2">{{ userData.name }}</h4>
+    <p>{{ userData.alumna_email }}</p>
     <div class="mt-5 profile-table-container">
       <h4>Profile</h4>
       <table>
         <tr>
           <td>ID number:</td>
-          <td class="td-padding-left">0000</td>
+          <td class="td-padding-left">{{ userData.alumnaID }}</td>
         </tr>
         <tr>
           <td>Course:</td>
-          <td class="td-padding-left">BSIT</td>
+          <td class="td-padding-left">{{ userData.course }}</td>
         </tr>
         <tr>
           <td>Class Year:</td>
-          <td class="td-padding-left">2023-2024</td>
+          <td class="td-padding-left">{{ userData.classYear }}</td>
         </tr>
         <tr>
           <td>Phone:</td>
-          <td class="td-padding-left">09123456789</td>
+          <td class="td-padding-left">{{ userData.phone }}</td>
         </tr>
       </table>
     </div>
@@ -36,9 +36,19 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router'
 import { db } from '../../firebase/index.js'
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
+import { collection, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore'
 
 const router = useRouter()
+
+const userData = ref({
+  name: '',
+  email: '',
+  idNumber: '',
+  course: '',
+  classYear: '',
+  phone: '',
+  photoURL: ''
+})
 
 const logout = async () => {
     try {
@@ -70,6 +80,38 @@ const logout = async () => {
       errMsg.value = "An error occurred"
     }
   }
+
+  const fetchUserData = async () => {
+  const userId = router.currentRoute.value.query.userId
+  const userDocRef = doc(db, 'users', userId)
+  const userDocSnap = await getDoc(userDocRef)
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data()
+    const name = `${user.fName} ${user.mInitial} ${user.lName}`
+    
+    const courseDocRef = doc(db, 'courses', user.course)
+    const courseDocSnap = await getDoc(courseDocRef)
+    const courseName = courseDocSnap.exists() ? courseDocSnap.data().name : ''
+
+    const classYearDocRef = doc(db, 'classYears', user.classYear)
+    const classYearDocSnap = await getDoc(classYearDocRef)
+    const classYearName = classYearDocSnap.exists() ? classYearDocSnap.data().name : ''
+
+    userData.value = {
+      ...user,
+      name: name.trim(), 
+      course: courseName,
+      classYear: classYearName,
+      photoURL: user.profilePicture
+    }
+  } else {
+    console.log('User not found')
+  }
+}
+
+
+fetchUserData()
+
 </script>
 
 <style scoped>

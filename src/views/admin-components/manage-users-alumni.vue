@@ -37,7 +37,7 @@
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
         <div v-if="isAdding">
-            <input type="number" id="alumnaID" name="alumnaID" v-model="alumnaID">
+            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
             <select v-model="selectedClassYear">
                 <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.id">{{ classYear.name }}</option>
             </select>
