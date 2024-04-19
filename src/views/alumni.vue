@@ -13,7 +13,7 @@
             <div class="modal-content">
               <span class="close" @click="closeModal">&times;</span>
               <div class="input-container">
-                <label for="schoolYear">Select School Year:</label>
+                <label for="schoolYear">Select School Years:</label>
                 <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
                   <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
                 </select>
