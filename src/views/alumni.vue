@@ -12,16 +12,20 @@
           <div v-if="showModal" class="modal">
             <div class="modal-content">
               <span class="close" @click="closeModal">&times;</span>
-              <label for="schoolYear">Select School Year:</label>
-              <select id="schoolYear" v-model="selectedSchoolYear">
-                <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
-              </select>
-              <label for="event">Select Event:</label>
-              <select id="event" v-model="selectedEvent">
-                <option v-for="event in events" :key="event.id" :value="event.id">{{ event.name }}</option>
-              </select>
-              <button @click="continueModal">Continue</button>
-              <button @click="closeModal">Cancel</button>
+              <div class="input-container">
+                <label for="schoolYear">Select School Year:</label>
+                <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
+                  <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
+                </select>
+              </div>
+              <div class="input-container">
+                <label for="event">Select Event:</label>
+                <select id="event" v-model="selectedEvent" class="form-control">
+                  <option v-for="event in events" :key="event.id" :value="event.id">{{ event.name }}</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" @click="continueModal">Continue</button>
+              <button class="btn btn-secondary" @click="closeModal">Cancel</button>
             </div>
           </div>
           
