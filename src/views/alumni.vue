@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <div class="card-container container p-3">
+          <div class="posts-container card-container container p-3 bg-dark">
             <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
               <h3>{{ post.caption }}</h3>
               <img :src="post.imageUrl" alt="Post Image" />
@@ -197,5 +197,9 @@ onMounted(async () => {
   max-width: 100%;
   max-height: 300px; /* Limit the height of the image */
   margin-top: 10px; /* Add some space between the image and other elements */
+}
+
+.posts-container {
+  height: calc(100vh - 70px);
 }
 </style>
