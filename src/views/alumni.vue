@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <div class="posts-container card-container container p-3 bg-dark">
+          <div class="posts-container card-container container p-3">
             <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
               <h3>{{ post.caption }}</h3>
               <img :src="post.imageUrl" alt="Post Image" />
