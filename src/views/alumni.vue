@@ -6,7 +6,7 @@
         <SideBar />
         <div class="main-content">
           <p>
-            <button @click="showPostModal">Add Post</button>
+            <button @click="showPostModal" class="btn">Add Post</button>
           </p>
           
           <div v-if="showModal" class="modal">
@@ -37,8 +37,8 @@
             </div>
           </div>
 
-          <div class="card-container">
-            <div v-for="post in approvedPosts" :key="post.id" class="card">
+          <div class="card-container container">
+            <div v-for="post in approvedPosts" :key="post.id" class="container card">
               <h3>{{ post.caption }}</h3>
               <img :src="post.imageUrl" alt="Post Image" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
