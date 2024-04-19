@@ -115,6 +115,30 @@ function uploadImage(event) {
 }
 
 async function savePost() {
+  if (!isImageSelected.value) {
+    console.log("Please select an image before saving the post.");
+    return;
+  }
+
+  const userSnapshot = await getDocs(collection(db, 'users'));
+  const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
+  const userName = `${userData.lName}, ${userData.fName}`;
+
+  const post = {
+    userId: userId.value,
+    name: userName,
+    schoolYear: selectedSchoolYear.value,
+    event: selectedEvent.value,
+    caption: caption.value,
+    imageUrl: imageUrl.value,
+    status: ""
+  };
+  await addDoc(collection(db, 'posts'), post);
+  closeImageModal();
+}
+
+
+async function savePost() {
   const userSnapshot = await getDocs(collection(db, 'users'));
   const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
   const userName = `${userData.lName}, ${userData.fName}`;
