@@ -3,6 +3,7 @@
   margin: 0;
   font-family: "Poppins", sans-serif;
 }
+
 body{
   overflow: hidden;
 }
@@ -245,4 +246,8 @@ main {
 
 .dashboard-bottom-title {
   font-weight: 400 !important;
+}
+
+.background-color-brown {
+  background-color: #400;
 }
