@@ -40,10 +40,12 @@
                 <span>Username / Name Here</span>
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
-              <textarea class="form-control" v-model="caption" placeholder="Enter caption"></textarea>
-              <input class="form-control" type="file" @change="uploadImage" />
-              <div class="image-preview" v-if="imageUrl">
-                <img :src="imageUrl" alt="Preview" />
+              <div class="mt-5">
+                <textarea class="form-control" v-model="caption" placeholder="Enter caption"></textarea>
+                <input class="form-control" type="file" @change="uploadImage" />
+                <div class="image-preview" v-if="imageUrl">
+                  <img :src="imageUrl" alt="Preview" />
+                </div>
               </div>
               <button class="btn" @click="savePost">Post</button>
             </div>
