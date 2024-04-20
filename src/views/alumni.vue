@@ -40,7 +40,7 @@
                 <span>Username / Name Here</span>
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
-              <div class="mt-5">
+              <div class="mt-5 bg-dark">
                 <textarea class="form-control" v-model="caption" placeholder="Enter caption"></textarea>
                 <input class="form-control" type="file" @change="uploadImage" />
                 <div class="image-preview" v-if="imageUrl">
