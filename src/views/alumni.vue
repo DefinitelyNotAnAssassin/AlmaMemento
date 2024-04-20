@@ -236,13 +236,13 @@ onMounted(async () => {
 }
 
 .image-preview img {
-  max-width: 400px;
-  max-height: 300px; /* Limit the height of the image */
+  max-width: 300px;
+  max-height: 200px; /* Limit the height of the image */
   margin-top: 10px; /* Add some space between the image and other elements */
 }
 
 .posts-container {
-  /* height: calc(90vh - 70px); */
+  height: auto;
   width: 100% !important;
   overflow-y: auto;
 }
