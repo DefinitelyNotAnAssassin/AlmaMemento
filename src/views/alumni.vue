@@ -173,16 +173,16 @@ onMounted(async () => {
 
 <style>
 .modal {
-  display: flex; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: flex; 
+  position: fixed; 
+  z-index: 1; 
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
 }
 
 /* Modal content */
@@ -194,6 +194,7 @@ onMounted(async () => {
   padding: 20px;
   border: 1px solid #888;
   width: 400px;
+  height: auto;
   position: relative;
 }
 
