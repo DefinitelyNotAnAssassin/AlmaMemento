@@ -41,7 +41,7 @@
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
               <div class="d-flex flex-column justify-content-between bg-dark">
-                <div class="mt-5">
+                <div class="modal-main-content-container">
                   <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
                   <input class="form-control mt-2" type="file" @change="uploadImage" />
                   <div class="image-preview mt-2" v-if="imageUrl">
@@ -204,6 +204,11 @@ onMounted(async () => {
   top: 0;
   width: 100%;
   height: 60px;
+}
+
+.modal-main-content-container {
+  height: calc(100% - 60px);
+  margin-top: 60px;
 }
 
 /* Close button */
