@@ -228,14 +228,14 @@ onMounted(async () => {
 }
 
 /* Image preview */
-.image-preview {
+/* .image-preview {
   margin-top: 10px;
   max-width: 100%;
   height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+} */
 
 .image-preview img {
   max-width: 300px;
