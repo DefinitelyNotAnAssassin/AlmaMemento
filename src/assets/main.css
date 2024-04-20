@@ -256,13 +256,4 @@ main {
 .background-color-brown {
   background-color: #400;
 }
-
-.input-container {
-  position: relative;
-}
-
-.input-container label {
-  position: absolute;
-  top: -10px;
-}
 /* End of Global CSS Classes */

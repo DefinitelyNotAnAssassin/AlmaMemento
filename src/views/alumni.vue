@@ -11,21 +11,26 @@
           
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
-              <span class="close" @click="closeModal">&times;</span>
-              <div class="input-container">
-                <label for="schoolYear">Select School Years:</label>
+              <div class="d-flex justify-content-between background-color-brown">
+                <span>Select year and event to proceed</span>
+                <span class="close" @click="closeModal">&times;</span>
+              </div>
+              <div class="input-container mt-5">
+                <label for="schoolYear">Year:</label>
                 <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
                   <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
                 </select>
               </div>
-              <div class="input-container">
-                <label for="event">Select Event:</label>
+              <div class="input-container mt-2">
+                <label for="event">Event:</label>
                 <select id="event" v-model="selectedEvent" class="form-control">
                   <option v-for="event in events" :key="event.id" :value="event.id">{{ event.name }}</option>
                 </select>
               </div>
-              <button class="btn btn-primary" @click="continueModal">Continue</button>
-              <button class="btn btn-secondary" @click="closeModal">Cancel</button>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary m-1" @click="continueModal">Continue</button>
+                <button class="btn btn-secondary m-1" @click="closeModal">Cancel</button>
+              </div>
             </div>
           </div>
           
@@ -191,12 +196,12 @@ onMounted(async () => {
 /* Close button */
 .close {
   color: #aaa;
-  float: right;
+  /* float: right; */
   font-size: 28px;
   font-weight: bold;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  /* position: absolute; */
+  /* top: 10px;
+  right: 10px; */
 }
 
 .close:hover,
