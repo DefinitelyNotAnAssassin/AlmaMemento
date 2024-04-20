@@ -10,7 +10,7 @@
           </p>
           
           <div v-if="showModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content container">
               <span class="close" @click="closeModal">&times;</span>
               <div class="input-container">
                 <label for="schoolYear">Select School Years:</label>
@@ -200,11 +200,10 @@ onMounted(async () => {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
   position: relative;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
 }
 
 /* Close button */
