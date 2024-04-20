@@ -40,7 +40,7 @@
                 <span>Username / Name Here</span>
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
-              <div class="d-flex flex-column justify-content-between bg-dark">
+              <div class="d-flex flex-column justify-content-between">
                 <div class="modal-main-content-container">
                   <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
                   <input class="form-control mt-2" type="file" @change="uploadImage" />
