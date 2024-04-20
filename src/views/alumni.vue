@@ -40,14 +40,16 @@
                 <span>Username / Name Here</span>
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
-              <div class="mt-5 bg-dark">
-                <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
-                <input class="form-control mt-2" type="file" @change="uploadImage" />
-                <div class="image-preview mt-2" v-if="imageUrl">
-                  <img :src="imageUrl" alt="Preview" />
+              <div class="d-flex flex-row justify-content-between">
+                <div class="mt-5 bg-dark">
+                  <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
+                  <input class="form-control mt-2" type="file" @change="uploadImage" />
+                  <div class="image-preview mt-2" v-if="imageUrl">
+                    <img :src="imageUrl" alt="Preview" />
+                  </div>
                 </div>
+                <button class="btn mt-3" @click="savePost">Post</button>
               </div>
-              <button class="btn mt-3" @click="savePost">Post</button>
             </div>
           </div>
 
