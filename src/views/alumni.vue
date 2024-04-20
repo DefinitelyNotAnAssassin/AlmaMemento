@@ -41,13 +41,13 @@
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
               <div class="mt-5 bg-dark">
-                <textarea class="form-control" v-model="caption" placeholder="Enter caption"></textarea>
-                <input class="form-control" type="file" @change="uploadImage" />
-                <div class="image-preview" v-if="imageUrl">
+                <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
+                <input class="form-control mt-2" type="file" @change="uploadImage" />
+                <div class="image-preview mt-2" v-if="imageUrl">
                   <img :src="imageUrl" alt="Preview" />
                 </div>
               </div>
-              <button class="btn" @click="savePost">Post</button>
+              <button class="btn mt-3" @click="savePost">Post</button>
             </div>
           </div>
 
