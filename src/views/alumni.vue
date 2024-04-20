@@ -28,21 +28,24 @@
                 </select>
               </div>
               <div class="d-flex justify-content-end mt-3">
-                <button class="btn btn-primary m-1" @click="continueModal">Continue</button>
                 <button class="btn btn-secondary m-1" @click="closeModal">Cancel</button>
+                <button class="btn btn-primary m-1" @click="continueModal">Continue</button>
               </div>
             </div>
           </div>
           
           <div v-if="showImageModal" class="modal">
             <div class="modal-content">
-              <span class="close" @click="closeImageModal">&times;</span>
-              <textarea v-model="caption" placeholder="Enter caption"></textarea>
-              <input type="file" @change="uploadImage" />
+              <div class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown">
+                <span>Username / Name Here</span>
+                <span class="close" @click="closeImageModal">&times;</span>
+              </div>
+              <textarea class="form-control" v-model="caption" placeholder="Enter caption"></textarea>
+              <input class="form-control" type="file" @change="uploadImage" />
               <div class="image-preview" v-if="imageUrl">
                 <img :src="imageUrl" alt="Preview" />
               </div>
-              <button @click="savePost">Save Post</button>
+              <button class="btn" @click="savePost">Post</button>
             </div>
           </div>
 
