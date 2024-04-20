@@ -190,14 +190,13 @@ onMounted(async () => {
 }
 
 /* Modal content */
-/* Modal content */
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 400px;
-  height: 500px;
+  height: auto;
   position: relative;
 }
 
