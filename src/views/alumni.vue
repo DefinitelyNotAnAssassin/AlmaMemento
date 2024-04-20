@@ -15,7 +15,7 @@
                 <span>Select year and event to proceed</span>
                 <span class="close" @click="closeModal">&times;</span>
               </div>
-              <div class="input-container mt-5">
+              <div class="input-container mt-5 pt-5">
                 <label for="schoolYear">Year:</label>
                 <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
                   <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
@@ -27,7 +27,7 @@
                   <option v-for="event in events" :key="event.id" :value="event.id">{{ event.name }}</option>
                 </select>
               </div>
-              <div class="d-flex justify-content-end">
+              <div class="d-flex justify-content-end mt-3">
                 <button class="btn btn-primary m-1" @click="continueModal">Continue</button>
                 <button class="btn btn-secondary m-1" @click="closeModal">Cancel</button>
               </div>
@@ -187,6 +187,7 @@ onMounted(async () => {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
+  width: 400px;
   position: relative;
 }
 
@@ -194,6 +195,7 @@ onMounted(async () => {
   position: absolute;
   left: 0;
   top: 0;
+  width: 100%;
 }
 
 /* Close button */
