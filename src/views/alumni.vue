@@ -48,7 +48,9 @@
                     <img :src="imageUrl" alt="Preview" />
                   </div>
                 </div>
-                <button class="btn mt-3" @click="savePost">Post</button>
+                <div class="container mt-3">
+                  <button class="btn" @click="savePost">Post</button>
+                </div>
               </div>
             </div>
           </div>
