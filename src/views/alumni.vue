@@ -11,7 +11,7 @@
           
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
-              <div class="d-flex justify-content-between background-color-brown">
+              <div class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown">
                 <span>Select year and event to proceed</span>
                 <span class="close" @click="closeModal">&times;</span>
               </div>
@@ -188,20 +188,19 @@ onMounted(async () => {
   padding: 20px;
   border: 1px solid #888;
   position: relative;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
+}
+
+.modal-header {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 /* Close button */
 .close {
   color: #aaa;
-  /* float: right; */
   font-size: 28px;
   font-weight: bold;
-  /* position: absolute; */
-  /* top: 10px;
-  right: 10px; */
 }
 
 .close:hover,
