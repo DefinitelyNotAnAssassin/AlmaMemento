@@ -197,6 +197,7 @@ onMounted(async () => {
   padding: 20px;
   border: 1px solid #888;
   width: 400px;
+  height: 500px;
   position: relative;
 }
 
@@ -227,20 +228,10 @@ onMounted(async () => {
   cursor: pointer;
 }
 
-/* Image preview */
-/* .image-preview {
-  margin-top: 10px;
-  max-width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-} */
-
 .image-preview img {
   max-width: 300px;
-  max-height: 200px; /* Limit the height of the image */
-  margin-top: 10px; /* Add some space between the image and other elements */
+  max-height: 200px; 
+  margin-top: 10px;
 }
 
 .posts-container {
