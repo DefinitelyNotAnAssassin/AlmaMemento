@@ -18,13 +18,13 @@
               <div class="input-container mt-5 pt-5">
                 <label for="schoolYear">Year:</label>
                 <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
-                  <option v-for="year in schoolYears" :key="year.id" :value="year.id">{{ year.name }}</option>
+                  <option v-for="year in schoolYears" :key="year.id" :value="year.name">{{ year.name }}</option>
                 </select>
               </div>
               <div class="input-container mt-2">
                 <label for="event">Event:</label>
                 <select id="event" v-model="selectedEvent" class="form-control">
-                  <option v-for="event in events" :key="event.id" :value="event.id">{{ event.name }}</option>
+                  <option v-for="event in events" :key="event.id" :value="event.name">{{ event.name }}</option>
                 </select>
               </div>
               <div class="d-flex justify-content-end mt-3">
@@ -61,7 +61,7 @@
               <h5>{{ post.caption }}</h5>
               <img :src="post.imageUrl" alt="Post Image" />
               <hr class="pt-1">
-              <p>{{ getSchoolYearName(post.schoolYear) }} - {{ getEventName(post.event) }}</p>
+              <p>{{ post.schoolYear }} - {{ post.event }}</p>
             </div>
           </div>
         </div>
@@ -87,9 +87,9 @@ const selectedSchoolYear = ref("");
 const selectedEvent = ref("");
 const caption = ref("");
 const imageUrl = ref("");
-const status = ref("");
 const router = useRouter()
 const userId = computed(() => router.currentRoute.value.query.userId);
+const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 const isImageSelected = computed(() => !!imageUrl.value);
 
 const posts = ref([]);
@@ -116,9 +116,6 @@ function closeImageModal() {
   imageUrl.value = "";
 }
 
-const getSchoolYearName = id => computed(() => schoolYears.value.find(year => year.id === id)?.name).value;
-const getEventName = id => computed(() => events.value.find(event => event.id === id)?.name).value;
-
 function uploadImage(event) {
   const file = event.target.files[0];
   const storageReference = storageRef(storage, `images/${file.name}`);
@@ -144,13 +141,13 @@ async function savePost() {
   const userName = `${userData.lName}, ${userData.fName}`;
 
   const post = {
-    userId: userId.value,
+    userId: alumniId.value,
     name: userName,
     schoolYear: selectedSchoolYear.value,
     event: selectedEvent.value,
     caption: caption.value,
     imageUrl: imageUrl.value,
-    status: ""
+    status: "pending"
   };
   await addDoc(collection(db, 'posts'), post);
   closeImageModal();

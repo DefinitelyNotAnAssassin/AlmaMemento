@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Alumni</h1>
         <button v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
         <button @click="addUser">Add User</button>
       <table>
@@ -21,8 +22,8 @@
                 <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.alumnaID }}</td>
-                <td>{{ getCourseName(item.course) }}</td>
-                <td>{{ getClassYearName(item.classYear) }}</td>
+                <td>{{ item.course }}</td>
+                <td>{{ item.classYear }}</td>
                 <td>{{ item.alumna_email }}</td>
                 <td>{{ item.phone }}</td>
                 <td>{{ item.address }}</td>
@@ -39,13 +40,13 @@
         <div v-if="isAdding">
             <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
             <select v-model="selectedClassYear">
-                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.id">{{ classYear.name }}</option>
+                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
             </select>
             <input type="text" id="fName" name="fName" v-model="fName">
             <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
             <input type="text" id="lName" name="lName" v-model="lName">
             <select v-model="selectedCourse">
-                <option v-for="course in courses" :key="course.id" :value="course.id">{{ course.name }}</option>
+                <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
             </select>
             <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
             <input type="tel" id="phone" name="phone" v-model="phone">
@@ -53,15 +54,15 @@
             <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
         </div>
         <div v-else-if="isEditing">
-            <input type="number" id="alumnaID" name="alumnaID" v-model="alumnaID">
+            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
             <input type="text" id="fName" name="fName" v-model="fName">
             <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
             <input type="text" id="lName" name="lName" v-model="lName">
             <select v-model="selectedCourse">
-                <option v-for="course in courses" :key="course.id" :value="course.id">{{ course.name }}</option>
+                <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
             </select>
             <select v-model="selectedClassYear">
-                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.id">{{ classYear.name }}</option>
+                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
             </select>
             <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
             <input type="tel" id="phone" name="phone" v-model="phone">
@@ -190,7 +191,8 @@ const submitModal = async () => {
             phone: phone.value,
             address: address.value,
             alumna_password: alumna_password.value,
-            userlevel: 'alumni'
+            userlevel: 'alumni',
+            status: 'active',
         };
         await addDoc(collection(db, 'users'), data);
     } else if (isEditing.value === true) {
@@ -259,16 +261,6 @@ const sortedItems = ref([])
     watch(items, () => {
     sortedItems.value = [...items.value].sort((a, b) => a.name.localeCompare(b.name));
 })
-
-const getCourseName = (id) => {
-  const course = courses.value.find((course) => course.id === id);
-  return course ? course.name : '';
-};
-
-const getClassYearName = (id) => {
-  const classYear = classYears.value.find((classYear) => classYear.id === id);
-  return classYear ? classYear.name : '';
-};
 
 const deleteSelected = async () => {
   for (const id of selectedItems.value) {

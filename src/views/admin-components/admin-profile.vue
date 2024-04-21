@@ -18,7 +18,7 @@
       <div class="profile-info">
         <div>
           <label for="alumnaID">Admin ID:</label>
-          <input :disabled="!isEditable" type="number" id="alumnaID" name="alumnaID" v-model="userData.alumnaID">
+          <input :disabled="!isEditable" type="text" id="alumnaID" name="alumnaID" v-model="userData.alumnaID">
         </div>
     
         <div>

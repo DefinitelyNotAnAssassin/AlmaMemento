@@ -88,20 +88,10 @@ const logout = async () => {
   if (userDocSnap.exists()) {
     const user = userDocSnap.data()
     const name = `${user.fName} ${user.mInitial} ${user.lName}`
-    
-    const courseDocRef = doc(db, 'courses', user.course)
-    const courseDocSnap = await getDoc(courseDocRef)
-    const courseName = courseDocSnap.exists() ? courseDocSnap.data().name : ''
-
-    const classYearDocRef = doc(db, 'classYears', user.classYear)
-    const classYearDocSnap = await getDoc(classYearDocRef)
-    const classYearName = classYearDocSnap.exists() ? classYearDocSnap.data().name : ''
 
     userData.value = {
       ...user,
       name: name.trim(), 
-      course: courseName,
-      classYear: classYearName,
       photoURL: user.profilePicture
     }
   } else {

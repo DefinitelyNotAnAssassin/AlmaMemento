@@ -40,43 +40,47 @@
   </template>
   
   <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { db } from '../firebase/index.js'
-import { collection, getDocs, updateDoc, doc, query, where } from 'firebase/firestore'
-
-const alumniID = ref("")
-const password = ref("")
-const errMsg = ref("")
-
-const router = useRouter()
-
-const signin = async () => {
-  try {
-    console.log("Trying to sign in...")
-
-    const q = query(collection(db, "users"), where("alumnaID", "==", alumniID.value), where("alumna_password", "==", password.value));
-    const querySnapshot = await getDocs(q);
-    const user = querySnapshot.docs[0];
-
-    if (user) {
-      console.log("User found:", user.data())
-
-      await updateDoc(doc(db, 'users', user.id), { loggedIn: true });
-
-      if (user.data().userlevel === 'administrator') {
-        router.push({ name: 'adminDashboard', query: { userId: user.id } })
-      } else if(user.data().userlevel === 'alumni') {
-        router.push({ name: 'alumniDashboard', query: { userId: user.id } })
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { db } from '../firebase/index.js'
+  import { collection, getDocs, updateDoc, doc, query, where } from 'firebase/firestore'
+  
+  const alumniID = ref("")
+  const password = ref("")
+  const errMsg = ref("")
+  
+  const router = useRouter()
+  
+  const signin = async () => {
+    try {
+      console.log("Trying to sign in...")
+  
+      const q = query(collection(db, "users"), where("alumnaID", "==", alumniID.value), where("alumna_password", "==", password.value));
+      const querySnapshot = await getDocs(q);
+      const user = querySnapshot.docs[0];
+  
+      if (user) {
+        console.log("User found:", user.data())
+  
+        if (user.data().status === 'active') {
+          await updateDoc(doc(db, 'users', user.id), { loggedIn: true });
+  
+          if (user.data().userlevel === 'administrator') {
+            router.push({ name: 'adminDashboard', query: { userId: user.id } })
+          } else if(user.data().userlevel === 'alumni') {
+            router.push({ name: 'alumniDashboard', query: { userId: user.id, alumniId: user.data().alumnaID } })
+          }
+  
+          console.log("Current URL:", window.location.href);
+        } else {
+          errMsg.value = "Your account has been deactivated"
+        }
+      } else {
+        errMsg.value = "No account with that alumni number and password was found"
       }
-
-      console.log("Current URL:", window.location.href);
-    } else {
-      errMsg.value = "No account with that alumni number and password was found"
+    } catch (error) {
+      console.error("Error:", error.message)
+      errMsg.value = "An error occurred"
     }
-  } catch (error) {
-    console.error("Error:", error.message)
-    errMsg.value = "An error occurred"
   }
-}
-</script>
+  </script>
