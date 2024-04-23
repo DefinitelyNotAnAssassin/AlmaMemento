@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Moderator</h1>
+        <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
         <button v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
         <button @click="addUser">Add User</button>
       <table>
@@ -19,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-            <tr v-for="(item, index) in sortedItems" :key="index">
+            <tr v-for="(item, index) in filteredItems" :key="index">
                 <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.alumnaID }}</td>
@@ -75,9 +76,9 @@
   </template>
   
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { db } from '../../firebase/index.js';
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
   
 const items = ref([])
 const selectedItems = ref([])
@@ -97,6 +98,18 @@ const birthday = ref('');
 const phone = ref('');
 const address = ref('');
 const yearAppointed = ref(new Date().getFullYear().toString());
+
+const searchQuery = ref('');
+
+const filteredItems = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return sortedItems.value.filter(item => {
+    return (
+      item.alumnaID.toLowerCase().includes(query) ||
+      item.name.toLowerCase().includes(query)
+    );
+  });
+});
   
 const fetchData = async () => {
   const querySnapshot = await query(collection(db, 'users'), where('userlevel', '==', 'moderator'));
