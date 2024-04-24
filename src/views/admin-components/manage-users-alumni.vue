@@ -1,5 +1,5 @@
 <template>
-    <div class="container bg-secondary">
+    <div class="container bg-secondary" style="width: 100%;">
       <div class="container bg-success">
         <h1 class="text-center">Alumni</h1>
         <div class="container d-flex flex-column align-items-end">
