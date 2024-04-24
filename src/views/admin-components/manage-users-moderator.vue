@@ -2,9 +2,13 @@
   <div class="container p-3">
       <div class="">
         <h1 class="text-center">Moderator</h1>
-        <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
-        <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
-        <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+        <div class="container d-flex flex-column align-items-end">
+          <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+          <div>
+            <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+            <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+          </div>
+        </div>
       <table class="table table-striped">
         <thead>
           <tr>
