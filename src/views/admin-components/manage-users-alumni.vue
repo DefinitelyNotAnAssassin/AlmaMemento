@@ -1,6 +1,6 @@
 <template>
-    <div class="container bg-secondary" style="width: 100%;">
-      <div class="container bg-success">
+    <div class="container p-3">
+      <div class="">
         <h1 class="text-center">Alumni</h1>
         <div class="container d-flex flex-column align-items-end">
           <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
