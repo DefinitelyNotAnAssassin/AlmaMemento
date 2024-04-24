@@ -4,7 +4,7 @@
         <div class="container d-flex flex-column align-items-end">
           <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
           <div>
-            <button class="btn btn-sm btn-danger" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+            <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
             <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
           </div>
         </div>
