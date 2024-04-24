@@ -3,8 +3,10 @@
         <h1 class="text-center">Alumni</h1>
         <div class="container d-flex flex-column align-items-end">
           <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
-          <button v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
-          <button @click="addUser">Add User</button>
+          <div>
+            <button class="btn btn-sm btn-danger" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+            <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+          </div>
         </div>
       <table class="table table-striped">
         <thead>
