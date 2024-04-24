@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="container">
         <h1>Alumni</h1>
         <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
         <button v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
         <button @click="addUser">Add User</button>
-      <table>
+      <table class="table table-striped">
         <thead>
           <tr>
             <th></th>
