@@ -1,79 +1,85 @@
 <template>
-    <div>
-        <h1>Administrator</h1>
-        <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
-        <button v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
-        <button @click="addUser">Add User</button>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Moderator ID</th>
-            <th>Email</th>
-            <th>Birthday</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Year of Administratorship</th>
-            <th>Actions</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item, index) in filteredItems" :key="index">
-                <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.alumnaID }}</td>
-                <td>{{ item.alumna_email }}</td>
-                <td>{{ item.birthday }}</td>
-                <td>{{ item.phone }}</td>
-                <td>{{ item.address }}</td>
-                <td>{{ item.yearAppointed }}</td>
-                <td>
-                <button @click="editItem(item)">Edit</button>
-                <button @click="deleteItem(index)">Delete</button>
-                </td>
-                <td>
-                <button v-if="item.status === 'active'" @click="changeStatus(item.id, 'inactive')">Deactivate</button>
-                <button v-else @click="changeStatus(item.id, 'active')">Activate</button>                    
-                </td>
+  <div class="container p-3">
+      <div class="">
+          <h1 class="text-center">Administrator</h1>
+          <div class="container d-flex flex-column align-items-end">
+            <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+            <div>
+              <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+              <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+            </div>
+          </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Moderator ID</th>
+              <th>Email</th>
+              <th>Birthday</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Year of Administratorship</th>
+              <th>Actions</th>
+              <th>Status</th>
             </tr>
-        </tbody>
-      </table>
-      <div v-if="isModalVisible" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
-        <div v-if="isAdding">
-            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-            <input type="text" id="fName" name="fName" v-model="fName">
-            <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-            <input type="text" id="lName" name="lName" v-model="lName">
-            <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-            <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-            <input type="text" id="birthday" name="birthday" v-model="birthday">
-            <input type="tel" id="phone" name="phone" v-model="phone">
-            <input type="text" id="address" name="address" v-model="address">
+          </thead>
+          <tbody>
+              <tr v-for="(item, index) in filteredItems" :key="index">
+                  <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.alumnaID }}</td>
+                  <td>{{ item.alumna_email }}</td>
+                  <td>{{ item.birthday }}</td>
+                  <td>{{ item.phone }}</td>
+                  <td>{{ item.address }}</td>
+                  <td>{{ item.yearAppointed }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-dark mx-1" @click="editItem(item)"><i class="bi bi-pen"></i></button>
+                    <button class="btn btn-sm btn-danger" @click="deleteItem(index)"><i class="bi bi-trash3-fill"></i></button>
+                  </td>
+                  <td>
+                  <button class="btn btn-sm btn-danger" v-if="item.status === 'active'" @click="changeStatus(item.id, 'inactive')">Deactivate</button>
+                  <button class="btn btn-sm btn-success" v-else @click="changeStatus(item.id, 'active')">Activate</button>                    
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+        <div v-if="isModalVisible" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeModal">&times;</span>
+          <div v-if="isAdding">
+              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              <input type="text" id="fName" name="fName" v-model="fName">
+              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              <input type="text" id="lName" name="lName" v-model="lName">
+              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+              <input type="text" id="birthday" name="birthday" v-model="birthday">
+              <input type="tel" id="phone" name="phone" v-model="phone">
+              <input type="text" id="address" name="address" v-model="address">
+          </div>
+          <div v-else-if="isEditing">
+              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              <input type="text" id="fName" name="fName" v-model="fName">
+              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              <input type="text" id="lName" name="lName" v-model="lName">
+              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+              <input type="text" id="birthday" name="birthday" v-model="birthday">
+              <input type="tel" id="phone" name="phone" v-model="phone">
+              <input type="text" id="address" name="address" v-model="address">
+          </div>
+          <div v-else-if="isDeleteConfirmationVisible">
+              <p>Are you sure you want to delete the selected item(s)?</p>
+              <button @click="deleteSelected">Confirm</button>
+          </div>
+          <button @click="submitModal">Submit</button>
         </div>
-        <div v-else-if="isEditing">
-            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-            <input type="text" id="fName" name="fName" v-model="fName">
-            <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-            <input type="text" id="lName" name="lName" v-model="lName">
-            <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-            <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-            <input type="text" id="birthday" name="birthday" v-model="birthday">
-            <input type="tel" id="phone" name="phone" v-model="phone">
-            <input type="text" id="address" name="address" v-model="address">
-        </div>
-        <div v-else-if="isDeleteConfirmationVisible">
-            <p>Are you sure you want to delete the selected item(s)?</p>
-            <button @click="deleteSelected">Confirm</button>
-        </div>
-        <button @click="submitModal">Submit</button>
+      </div>
       </div>
     </div>
-    </div>
-  </template>
+</template>
   
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
