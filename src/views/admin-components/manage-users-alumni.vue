@@ -33,8 +33,8 @@
                 <td>{{ item.phone }}</td>
                 <td>{{ item.address }}</td>
                 <td>
-                <button @click="editItem(item)">Edit</button>
-                <button @click="deleteItem(index)">Delete</button>
+                <button class="btn btn-sm btn-danger" @click="editItem(item)"><i class="bi bi-pen"></i></button>
+                <button class="btn btn-sm btn-success" @click="deleteItem(index)"><i class="bi bi-trash3-fill"></i></button>
                 </td>
             </tr>
         </tbody>
