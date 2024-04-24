@@ -183,7 +183,7 @@ main {
 }
 
 .main {
-  /* display: flex; */
+  display: flex;
 }
 
 /* cards */
