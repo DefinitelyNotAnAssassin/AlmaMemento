@@ -14,8 +14,8 @@
             <th></th>
             <th>Name</th>
             <th>ID Number</th>
-            <th>Course <button @click="addCourse">Add</button></th>
-            <th>Class Year <button @click="addClassYear">Add</button></th>
+            <th>Course <button class="btn btn-sm btn-light" @click="addCourse"><i class="bi bi-plus-lg"></i></button></th>
+            <th>Class Year <button class="btn btn-sm btn-light" @click="addClassYear"><i class="bi bi-plus-lg"></i></button></th>
             <th>Email</th>
             <th>Phone</th>
             <th>Address</th>
