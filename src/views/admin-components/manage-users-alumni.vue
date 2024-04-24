@@ -1,5 +1,6 @@
 <template>
     <div class="container bg-secondary">
+      <div class="container bg-success">
         <h1 class="text-center">Alumni</h1>
         <div class="container d-flex flex-column align-items-end">
           <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
@@ -21,8 +22,8 @@
             <th>Address</th>
             <th>Actions</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr v-for="(item, index) in filteredItems" :key="index">
                 <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
                 <td>{{ item.name }}</td>
@@ -37,57 +38,58 @@
                   <button class="btn btn-sm btn-danger" @click="deleteItem(index)"><i class="bi bi-trash3-fill"></i></button>
                 </td>
             </tr>
-        </tbody>
-      </table>
-      <div v-if="isModalVisible" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
-        <div v-if="isAdding">
-            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-            <select v-model="selectedClassYear">
-                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
-            </select>
-            <input type="text" id="fName" name="fName" v-model="fName">
-            <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-            <input type="text" id="lName" name="lName" v-model="lName">
-            <select v-model="selectedCourse">
-                <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
-            </select>
-            <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-            <input type="tel" id="phone" name="phone" v-model="phone">
-            <input type="text" id="address" name="address" v-model="address">
-            <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+          </tbody>
+        </table>
+        <div v-if="isModalVisible" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeModal">&times;</span>
+          <div v-if="isAdding">
+              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              <select v-model="selectedClassYear">
+                  <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
+              </select>
+              <input type="text" id="fName" name="fName" v-model="fName">
+              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              <input type="text" id="lName" name="lName" v-model="lName">
+              <select v-model="selectedCourse">
+                  <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
+              </select>
+              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              <input type="tel" id="phone" name="phone" v-model="phone">
+              <input type="text" id="address" name="address" v-model="address">
+              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+          </div>
+          <div v-else-if="isEditing">
+              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              <input type="text" id="fName" name="fName" v-model="fName">
+              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              <input type="text" id="lName" name="lName" v-model="lName">
+              <select v-model="selectedCourse">
+                  <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
+              </select>
+              <select v-model="selectedClassYear">
+                  <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
+              </select>
+              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              <input type="tel" id="phone" name="phone" v-model="phone">
+              <input type="text" id="address" name="address" v-model="address">
+              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+          </div>
+          <div v-else-if="isAddingCourse">
+              <input type="text" id="course_name" name="course_name" v-model="course_name">
+              <input type="text" id="major" name="major" v-model="major">
+          </div>
+          <div v-else-if="isAddingClassYear">
+              <input type="text" id="year" name="year" v-model="year">
+          </div>
+          <div v-else-if="isDeleteConfirmationVisible">
+              <p>Are you sure you want to delete the selected item(s)?</p>
+              <button @click="deleteSelected">Confirm</button>
+          </div>
+            <button @click="submitModal">Submit</button>
+          </div>
         </div>
-        <div v-else-if="isEditing">
-            <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-            <input type="text" id="fName" name="fName" v-model="fName">
-            <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-            <input type="text" id="lName" name="lName" v-model="lName">
-            <select v-model="selectedCourse">
-                <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
-            </select>
-            <select v-model="selectedClassYear">
-                <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
-            </select>
-            <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-            <input type="tel" id="phone" name="phone" v-model="phone">
-            <input type="text" id="address" name="address" v-model="address">
-            <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-        </div>
-        <div v-else-if="isAddingCourse">
-            <input type="text" id="course_name" name="course_name" v-model="course_name">
-            <input type="text" id="major" name="major" v-model="major">
-        </div>
-        <div v-else-if="isAddingClassYear">
-            <input type="text" id="year" name="year" v-model="year">
-        </div>
-        <div v-else-if="isDeleteConfirmationVisible">
-            <p>Are you sure you want to delete the selected item(s)?</p>
-            <button @click="deleteSelected">Confirm</button>
-        </div>
-        <button @click="submitModal">Submit</button>
       </div>
-    </div>
     </div>
   </template>
   
