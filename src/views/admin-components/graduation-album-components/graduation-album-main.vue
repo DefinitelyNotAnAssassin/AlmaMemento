@@ -73,6 +73,7 @@ const emit = defineEmits(['update:currentPage'])
 const changeAlbumPage = (folderName) => {
   currentAlbumPage.value = 'Course';
   emit('update:currentPage', 'Course');
+  emit('folder-name', folderName);
 };
 
 const showFolderOptions = (index) => {
