@@ -1,5 +1,7 @@
 <template>
     <div class="photo-album">
+    <button @click="showModal = true">Add Folder</button>
+    <button @click="backToMain">Back</button>
       <h2>Course</h2>
       <div class="folders">
         <div class="folder" v-for="(folder, index) in folders" :key="index" @click="changeAlbumPage(folder.name)">
@@ -15,7 +17,6 @@
           </div>
         </div>
       </div>
-      <button @click="showModal = true">Add Folder</button>
       <div v-if="showModal" class="modal">
         <div class="modal-content">
           <input type="text" v-model="newFolderName" placeholder="Folder Name">
@@ -87,6 +88,11 @@
     currentAlbumPage.value = 'Course';
     emit('update:currentPage', 'Course');
     emit('folder-name', folderName);
+  };
+
+  const backToMain = () => {
+    currentAlbumPage.value = 'Main';
+    emit('update:currentPage', 'Main');
   };
   
   const showFolderOptions = (index) => {

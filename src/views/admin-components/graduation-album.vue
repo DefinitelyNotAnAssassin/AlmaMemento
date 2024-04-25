@@ -3,7 +3,7 @@
         <MainPage :currentAlbumPage="currentAlbumPage" @update:currentPage="currentAlbumPage = $event" @folder-name="updateSelectedFolder"/>
     </div>
     <div v-if="currentAlbumPage === 'Course'">
-        <Course :folderName="selectedFolderName"/>
+        <Course :folderName="selectedFolderName"  @update:currentPage="currentAlbumPage = $event"/>
     </div>
 </template>
 
@@ -20,5 +20,6 @@ const updateSelectedFolder = (folderName) => {
   selectedFolderName.value = folderName;
   currentAlbumPage.value = 'Course';
 };
+
 
 </script>
