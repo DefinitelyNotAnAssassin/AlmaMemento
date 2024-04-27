@@ -1,8 +1,9 @@
 <template>
   <div class="photo-album">
     <h2>Academic Year</h2>
+    <input type="text" v-model="searchQuery" placeholder="Search Folder">
     <div class="folders">
-      <div class="folder" v-for="(folder, index) in folders" :key="index" @click="changeAlbumPage(folder.name)">
+      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box">
           <span>{{ folder.name }}</span>
           <div class="folder-options" @click.stop="showFolderOptions(index)">
@@ -41,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted, defineEmits, computed } from 'vue';
 import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../../firebase/index.js';
 
@@ -130,6 +131,12 @@ const cancelDeleteFolder = () => {
 
 const editIndex = ref(null);
 const editFolderName = ref('');
+
+const searchQuery = ref('');
+
+const filteredFolders = computed(() => {
+  return folders.value.filter(folder => folder.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
 
 </script>
 

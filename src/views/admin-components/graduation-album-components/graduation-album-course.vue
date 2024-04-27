@@ -84,10 +84,10 @@
   
   const emit = defineEmits(['update:currentPage'])
   
-  const changeAlbumPage = (folderName) => {
-    currentAlbumPage.value = 'Course';
-    emit('update:currentPage', 'Course');
-    emit('folder-name', folderName);
+  const changeAlbumPage = (subfolderName) => {
+    currentAlbumPage.value = 'ChosenCourse';
+    emit('update:currentPage', 'ChosenCourse');
+    emit('subfolder-name', subfolderName);
   };
 
   const backToMain = () => {

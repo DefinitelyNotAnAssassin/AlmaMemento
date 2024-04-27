@@ -5,6 +5,8 @@
       <option value="approved">Approved</option>
       <option value="rejected">Rejected</option>
     </select>
+    <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+    <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
     <table>
       <thead>
         <tr>
@@ -44,13 +46,20 @@
         <img :src="imagePreview" alt="Image Preview">
       </div>
     </div>
+    <div v-if="isModalVisible" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <p>Are you sure you want to delete the selected item(s)?</p>
+        <button @click="deleteSelected">Confirm</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { db } from '../../firebase/index.js';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 const items = ref([]);
 const selectedItems = ref([]);
@@ -59,17 +68,19 @@ const schoolYear = ref([]);
 const event = ref([]);
 const userId = ref([]);
 const filterStatus = ref('all');
+const isModalVisible = ref(false)
 
 onMounted(async () => {
-  const querySnapshot = await getDocs(collection(db, 'posts'));
-  items.value = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
   fetchUsersAndClassYearsAndEvents();
+  listenForPostChanges();
 });
 
 const fetchUsersAndClassYearsAndEvents = async () => {
   const userSnapshot = await getDocs(collection(db, 'users'));
   userId.value = userSnapshot.docs.map(doc => ({ id: doc.id, alumnaID: doc.data().alumnaID, name: doc.data().name }));
+
+  const querySnapshot = await getDocs(collection(db, 'posts'));
+  items.value = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
   const classYearsSnapshot = await getDocs(collection(db, 'classYears'));
   schoolYear.value = classYearsSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
@@ -77,6 +88,25 @@ const fetchUsersAndClassYearsAndEvents = async () => {
   const eventsSnapshot = await getDocs(collection(db, 'events'));
   event.value = eventsSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
 }
+
+const listenForPostChanges = () => {
+  const unsubscribe = onSnapshot(collection(db, 'posts'), (snapshot) => {
+    snapshot.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        items.value.push({ id: change.doc.id, ...change.doc.data() });
+      } else if (change.type === 'modified') {
+        const index = items.value.findIndex(item => item.id === change.doc.id);
+        if (index !== -1) {
+          items.value[index] = { id: change.doc.id, ...change.doc.data() };
+        }
+      } else if (change.type === 'removed') {
+        items.value = items.value.filter(item => item.id !== change.doc.id);
+      }
+    });
+  });
+}
+
+const searchQuery = ref('');
 
 async function approvePost(item, index) {
   const postRef = doc(db, 'posts', item.id);
@@ -99,12 +129,35 @@ function closeModal() {
 }
 
 const filteredItems = computed(() => {
-  if (filterStatus.value === 'all') {
-    return items.value;
-  } else {
-    return items.value.filter(item => item.status === filterStatus.value);
+  let filtered = items.value;
+
+  if (filterStatus.value !== 'all') {
+    filtered = filtered.filter(item => item.status === filterStatus.value);
   }
+
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(item =>
+      item.userId.toLowerCase().includes(query) ||
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  return filtered;
 });
+
+const confirmDelete = () => {
+  isModalVisible.value = true
+}
+
+const deleteSelected = async () => {
+  for (const id of selectedItems.value) {
+    const docRef = doc(db, 'posts', id);
+    await deleteDoc(docRef);
+  }
+  isModalVisible.value = false
+  selectedItems.value = []
+}
 </script>
 
 <style>
