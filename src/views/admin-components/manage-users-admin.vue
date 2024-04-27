@@ -159,8 +159,18 @@ const closeModal = () => {
     isDeleteConfirmationVisible.value = false
 }
 
+const checkAlumnaIDExists = async (alumnaID) => {
+    const querySnapshot = await getDocs(query(collection(db, 'users'), where('alumnaID', '==', alumnaID)));
+    return querySnapshot.size > 0;
+}
+
 const submitModal = async () => {
     if (isAdding.value === true) {
+      const alumnaIDExists = await checkAlumnaIDExists(alumnaID.value);
+        if (alumnaIDExists) {
+            console.error('Alumna ID already exists');
+            return;
+        }
         const data = {
             alumnaID: alumnaID.value,
             fName: fName.value,

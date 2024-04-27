@@ -1,7 +1,7 @@
 <template>
   <div class="photo-album">
-    <h2>Academic Year</h2>
     <input type="text" v-model="searchQuery" placeholder="Search Folder">
+    <h2>Academic Year</h2>
     <div class="folders">
       <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box">
@@ -38,6 +38,11 @@
         <button @click="cancelDeleteFolder">Cancel</button>
       </div>
     </div>
+    <div v-if="showWarningModal" class="modal">
+      <div class="modal-content">
+        <p>A folder with the same name already exists!</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -50,7 +55,11 @@ const currentAlbumPage = ref('Main')
 
 const folders = ref([]);
 const showModal = ref(false);
+const showWarningModal = ref(false);
 const newFolderName = ref('');
+const editIndex = ref(null);
+const editFolderName = ref('');
+const searchQuery = ref('');
 const showDeleteConfirmation = ref(false);
 let folderToDeleteIndex = null;
 
@@ -63,6 +72,16 @@ onMounted(fetchFolders);
 
 const addFolder = async () => {
   if (!newFolderName.value.trim()) return;
+
+  const existingFolder = folders.value.find(folder => folder.name === newFolderName.value);
+  if (existingFolder) {
+    showWarningModal.value = true;
+    setTimeout(() => {
+      showWarningModal.value = false;
+    }, 2000);
+    return;
+  }
+
   await addDoc(collection(db, 'folders'), { name: newFolderName.value });
   newFolderName.value = '';
   showModal.value = false;
@@ -128,11 +147,6 @@ const cancelDeleteFolder = () => {
   folderToDeleteIndex = null;
   showDeleteConfirmation.value = false;
 };
-
-const editIndex = ref(null);
-const editFolderName = ref('');
-
-const searchQuery = ref('');
 
 const filteredFolders = computed(() => {
   return folders.value.filter(folder => folder.name.toLowerCase().includes(searchQuery.value.toLowerCase()));

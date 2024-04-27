@@ -2,9 +2,10 @@
     <div class="photo-album">
     <button @click="showModal = true">Add Folder</button>
     <button @click="backToMain">Back</button>
+    <input type="text" v-model="searchQuery" placeholder="Search Folder">
       <h2>Course</h2>
       <div class="folders">
-        <div class="folder" v-for="(folder, index) in folders" :key="index" @click="changeAlbumPage(folder.name)">
+        <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
           <div class="folder-box">
             <span>{{ folder.name }}</span>
             <div class="folder-options" @click.stop="showFolderOptions(index)">
@@ -38,11 +39,16 @@
           <button @click="cancelDeleteFolder">Cancel</button>
         </div>
       </div>
+      <div v-if="showWarningModal" class="modal">
+        <div class="modal-content">
+          <p>A folder with the same name already exists!</p>
+        </div>
+      </div>
     </div>
   </template>
   
   <script setup>
-  import { ref, onMounted, defineEmits } from 'vue';
+  import { ref, onMounted, defineEmits, computed } from 'vue';
   import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where } from 'firebase/firestore';
   import { db } from '../../../firebase/index.js';
   
@@ -50,9 +56,13 @@
   
   const folders = ref([]);
   const showModal = ref(false);
+  const showWarningModal = ref(false);
   const newFolderName = ref('');
   const showDeleteConfirmation = ref(false);
   let folderToDeleteIndex = null;
+  const editIndex = ref(null);
+  const editFolderName = ref('');
+  const searchQuery = ref('');
   const props = defineProps(['folderName']);
   
   const fetchFolders = async () => {
@@ -60,7 +70,9 @@
     const querySnapshot = await getDocs(
       query(collection(db, 'subfolders'), where('year', '==', props.folderName))
     );
-    folders.value = querySnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+    folders.value = querySnapshot.docs
+      .map(doc => ({ id: doc.id, name: doc.data().name, type: doc.data().type }))
+      .filter(folder => folder.type === 'course');
   } else {
     folders.value = [];
   }
@@ -71,11 +83,23 @@
   const addFolder = async () => {
   if (!newFolderName.value.trim()) return;
 
+  const existingFolder = folders.value.find(folder => folder.name === newFolderName.value);
+  if (existingFolder) {
+    showWarningModal.value = true;
+    setTimeout(() => {
+      showWarningModal.value = false;
+    }, 2000);
+    return;
+  }
+
   console.log(currentAlbumPage.value)
   const selectedYear = currentAlbumPage.value === 'Course' ? props.folderName : '';
   console.log(selectedYear)
 
-  await addDoc(collection(db, 'subfolders'), { name: newFolderName.value, year: selectedYear });
+  await addDoc(collection(db, 'subfolders'), { name: newFolderName.value, year: selectedYear, type: 'course' });
+
+  const subfolderName = `Graduation Portrait`;
+  await addDoc(collection(db, 'subfolders'), { name: subfolderName, year: selectedYear, type: 'subfolder', parentFolder: newFolderName.value });
 
   newFolderName.value = '';
   showModal.value = false;
@@ -106,9 +130,20 @@
   };
   
   const deleteFolder = async (index) => {
-    await deleteDoc(doc(db, 'subfolders', folders.value[index].id));
-    fetchFolders();
-  };
+  const folderId = folders.value[index].id;
+  const folderName = folders.value[index].name;
+
+  await deleteDoc(doc(db, 'subfolders', folderId));
+
+  const subfoldersSnapshot = await getDocs(
+    query(collection(db, 'subfolders'), where('parentFolder', '==', folderName))
+  );
+  subfoldersSnapshot.docs.forEach(async (doc) => {
+    await deleteDoc(doc.ref);
+  });
+
+  fetchFolders();
+};
   
   const editFolder = (index) => {
     editIndex.value = index;
@@ -146,9 +181,10 @@
     folderToDeleteIndex = null;
     showDeleteConfirmation.value = false;
   };
-  
-  const editIndex = ref(null);
-  const editFolderName = ref('');
+
+const filteredFolders = computed(() => {
+  return folders.value.filter(folder => folder.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
   
   </script>
   
