@@ -90,16 +90,47 @@
                 </div>
               </div>
             </div>
-            <div v-else-if="isEditing">
-                <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-                <input type="text" id="fName" name="fName" v-model="fName">
-                <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-                <input type="text" id="lName" name="lName" v-model="lName">
-                <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-                <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-                <input type="text" id="birthday" name="birthday" v-model="birthday">
-                <input type="tel" id="phone" name="phone" v-model="phone">
-                <input type="text" id="address" name="address" v-model="address">
+            <div v-else-if="isEditing" class="d-flex">
+              <div class="mx-1">
+                <div>
+                  <label for="alumnaID">ID Number</label>
+                  <input class="form-control" type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+                </div>
+                <div>
+                  <label for="fName">First Name</label>
+                  <input class="form-control" type="text" id="fName" name="fName" v-model="fName">
+                </div>
+                <div>
+                  <label for="mInitial">Middle Initial</label>
+                  <input class="form-control" type="text" id="mInitial" name="mInitial" v-model="mInitial">
+                </div>
+                <div>
+                  <label for="lName">Last Name</label>
+                  <input class="form-control" type="text" id="lName" name="lName" v-model="lName">
+                </div>
+                <div>
+                  <label for="alumna_email">Email</label>
+                  <input class="form-control" type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+                </div>
+              </div>
+              <div class="mx-1">
+                <div>
+                  <label for="alumna_password">Password</label>
+                  <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+                </div>
+                <div>
+                  <label for="birthday">Birthday</label>
+                  <input class="form-control" type="text" id="birthday" name="birthday" v-model="birthday">
+                </div>
+                <div>
+                  <label for="phone">Phone</label>
+                  <input class="form-control" type="tel" id="phone" name="phone" v-model="phone">
+                </div>
+                <div>
+                  <label for="address">Address</label>
+                  <input class="form-control" type="text" id="address" name="address" v-model="address">
+                </div>
+              </div>
             </div>
             <div v-else-if="isDeleteConfirmationVisible">
                 <p>Are you sure you want to delete the selected item(s)?</p>
