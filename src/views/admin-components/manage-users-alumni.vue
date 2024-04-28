@@ -43,16 +43,11 @@
         <div v-if="isModalVisible" class="modal">
         <div class="modal-content">
           <span class="close" @click="closeModal">&times;</span>
-          <div v-if="isAdding">
+          <div v-if="isAdding" class="d-flex">
+            <div>
               <div>
                 <label for="alumnaID">ID Number</label>
                 <input class="form-control" type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-              </div>
-              <div>
-                <label>Class Year</label>
-                <select class="form-control" v-model="selectedClassYear">
-                  <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
-                </select>
               </div>
               <div>
                 <label for="fName">First Name</label>
@@ -72,6 +67,14 @@
                   <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
                 </select>
               </div>
+            </div>
+            <div>
+              <div>
+                <label>Class Year</label>
+                <select class="form-control" v-model="selectedClassYear">
+                  <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
+                </select>
+              </div>
               <div>
                 <label for="alumna_email">Email</label>
                 <input class="form-control" type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
@@ -88,6 +91,7 @@
                 <label for="alumna_password">Password</label>
                 <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
               </div>
+            </div>
           </div>
           <div v-else-if="isEditing">
               <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
@@ -116,7 +120,7 @@
               <p>Are you sure you want to delete the selected item(s)?</p>
               <button @click="deleteSelected">Confirm</button>
           </div>
-            <button @click="submitModal">Submit</button>
+            <button class="btn btn-sm btn-dark" @click="submitModal">Submit</button>
           </div>
         </div>
       </div>
