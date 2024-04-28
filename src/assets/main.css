@@ -78,7 +78,7 @@ body {
 }
 
 .logo-container img {
-  max-width: 80%;
+  width: 80%;
   transform: scale(0.5);
   position: relative;
   z-index: 2;
