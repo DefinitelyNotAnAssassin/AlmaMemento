@@ -93,21 +93,55 @@
               </div>
             </div>
           </div>
-          <div v-else-if="isEditing">
-              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-              <input type="text" id="fName" name="fName" v-model="fName">
-              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-              <input type="text" id="lName" name="lName" v-model="lName">
-              <select v-model="selectedCourse">
-                  <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
-              </select>
-              <select v-model="selectedClassYear">
-                  <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
-              </select>
-              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-              <input type="tel" id="phone" name="phone" v-model="phone">
-              <input type="text" id="address" name="address" v-model="address">
-              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+          <div class="d-flex" v-else-if="isEditing">
+            <div class="mx-1">
+              <div>
+                <label for="alumnaID">ID Number</label>
+                <input class="form-control" type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              </div>
+              <div>
+                <label for="fName">First Name</label>
+                <input class="form-control" type="text" id="fName" name="fName" v-model="fName">
+              </div>
+              <div>
+                <label for="mInitial">Middle Initial</label>
+                <input class="form-control" type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              </div>
+              <div>
+                <label for="lName">Last Name</label>
+                <input class="form-control" type="text" id="lName" name="lName" v-model="lName">
+              </div>
+              <div>
+                <label>Course</label>
+                <select class="form-control" v-model="selectedCourse">
+                    <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="mx-1">
+              <div>
+                <label>Class Year</label>
+                <select class="form-control" v-model="selectedClassYear">
+                    <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
+                </select>
+              </div>
+              <div>
+                <label for="alumna_email">Email</label>
+                <input class="form-control" type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              </div>
+              <div>
+                <label for="phone">Phone</label>
+                <input class="form-control" type="tel" id="phone" name="phone" v-model="phone">
+              </div>
+              <div>
+                <label for="address">Address</label>
+                <input class="form-control" type="text" id="address" name="address" v-model="address">
+              </div>
+              <div>
+                <label for="alumna_password">Password</label>
+                <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+              </div>
+            </div>
           </div>
           <div v-else-if="isAddingCourse">
               <input type="text" id="course_name" name="course_name" v-model="course_name">
