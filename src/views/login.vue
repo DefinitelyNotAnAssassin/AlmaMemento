@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
-      <div class="login-container d-flex flex-column align-items-center justify-content-between bg-dark">
-        <form @submit.prevent="signin">
+      <div class="login-container d-flex flex-column align-items-center justify-content-between">
+        <form class="mt-5" @submit.prevent="signin">
           <div class="login-logo">
             <img src="@/assets/images/logo2.png" alt="Logo" style="width: 250px; height: 250px;">
           </div>
@@ -13,7 +13,7 @@
             <a href="#" class="forgot-password-link">Forgot Password?</a>
           </div>
         </form>
-        <div>
+        <div class="mb-2">
           <a class="login-footer">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
         </div>
       </div>
