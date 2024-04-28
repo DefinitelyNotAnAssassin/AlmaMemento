@@ -42,7 +42,7 @@ body {
 .login-container form input {
   outline: none;
   padding: 10px;
-  width: 90%;
+  width: 100%;
 }
 
 .login-container form button {
@@ -78,7 +78,7 @@ body {
 }
 
 .logo-container img {
-  max-width: 50%;
+  max-width: 80%;
   transform: scale(0.5);
   position: relative;
   z-index: 2;

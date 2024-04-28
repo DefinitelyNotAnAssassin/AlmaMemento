@@ -14,7 +14,7 @@
           </div>
         </form>
         <div class="mb-2">
-          <a class="login-footer">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
+          <a class="login-footer text-dark">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
         </div>
       </div>
       <div class="logo-container">
