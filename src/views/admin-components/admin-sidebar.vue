@@ -14,7 +14,9 @@
           </ul>
         </li>
       </ul>
-      <button @click="logout" class="logout-button"><i class="fas fa-power-off"></i>  Logout</button>
+      <div>
+        <button @click="logout" class="logout-button btn"><i class="fas fa-power-off"></i>  Logout</button>
+      </div>
     </aside>
   </template>
   
