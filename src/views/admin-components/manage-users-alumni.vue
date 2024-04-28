@@ -144,11 +144,20 @@
             </div>
           </div>
           <div v-else-if="isAddingCourse">
-              <input type="text" id="course_name" name="course_name" v-model="course_name">
-              <input type="text" id="major" name="major" v-model="major">
+            <div>
+              <label for="course_name">Course</label>
+              <input class="form-control" type="text" id="course_name" name="course_name" v-model="course_name">
+            </div>
+            <div>
+              <label for="major">Major</label>
+              <input class="form-control" type="text" id="major" name="major" v-model="major">
+            </div>
           </div>
           <div v-else-if="isAddingClassYear">
-              <input type="text" id="year" name="year" v-model="year">
+            <div>
+              <label for="year">Class Year</label>
+              <input class="form-control" type="text" id="year" name="year" v-model="year">
+            </div>
           </div>
           <div v-else-if="isDeleteConfirmationVisible">
               <p>Are you sure you want to delete the selected item(s)?</p>
