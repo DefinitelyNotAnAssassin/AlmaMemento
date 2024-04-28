@@ -168,14 +168,14 @@ main {
 }
 
 /* Logout button */
-
-/* .logout-button {
-  colo
+.logout-button-container {
+    position: absolute;
+    bottom: 20px;
 }
 
-.logout-button:hover {
-  background-color: #555;
-} */
+.logout-button {
+  color: white;
+}
 
 .login-footer {
   text-decoration: none;

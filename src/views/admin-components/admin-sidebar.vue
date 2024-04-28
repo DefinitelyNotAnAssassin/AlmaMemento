@@ -14,7 +14,7 @@
           </ul>
         </li>
       </ul>
-      <div>
+      <div class="logout-button-container d-flex justify-content-center">
         <button @click="logout" class="logout-button btn"><i class="fas fa-power-off"></i>  Logout</button>
       </div>
     </aside>
