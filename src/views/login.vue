@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-      <div class="login-container d-flex flex-column align-items-center justify-content-center">
+      <div class="login-container d-flex flex-column align-items-center justify-content-between bg-dark">
         <form @submit.prevent="signin">
           <div class="login-logo">
             <img src="@/assets/images/logo2.png" alt="Logo" style="width: 250px; height: 250px;">
