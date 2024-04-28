@@ -177,7 +177,8 @@ main {
 }
 
 .logout-button {
-  color: white;
+  width: 250px;
+  text-align: center;
 }
 
 .login-footer {
