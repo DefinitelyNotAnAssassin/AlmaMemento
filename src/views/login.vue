@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-      <div class="login-container">
+      <div class="login-container bg-dark">
         <form @submit.prevent="signin">
           <div class="login-logo">
             <img src="@/assets/images/logo2.png" alt="Logo" style="width: 250px; height: 250px;">
@@ -14,22 +14,6 @@
           </div>
         </form>
         <div>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
           <a class="login-footer">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
         </div>
       </div>
