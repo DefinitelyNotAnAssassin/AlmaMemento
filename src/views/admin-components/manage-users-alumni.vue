@@ -44,7 +44,7 @@
         <div class="modal-content">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
-            <div>
+            <div class="mx-1">
               <div>
                 <label for="alumnaID">ID Number</label>
                 <input class="form-control" type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
@@ -68,7 +68,7 @@
                 </select>
               </div>
             </div>
-            <div>
+            <div class="mx-1">
               <div>
                 <label>Class Year</label>
                 <select class="form-control" v-model="selectedClassYear">
@@ -120,7 +120,7 @@
               <p>Are you sure you want to delete the selected item(s)?</p>
               <button @click="deleteSelected">Confirm</button>
           </div>
-            <button class="btn btn-sm btn-dark" @click="submitModal">Submit</button>
+            <button class="btn btn-sm btn-dark mt-2" @click="submitModal">Submit</button>
           </div>
         </div>
       </div>
