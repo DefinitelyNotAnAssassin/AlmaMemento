@@ -44,20 +44,50 @@
         <div class="modal-content">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding">
-              <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
-              <select v-model="selectedClassYear">
+              <div>
+                <label for="alumnaID">ID Number</label>
+                <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
+              </div>
+              <div>
+                <label>Class Year</label>
+                <select v-model="selectedClassYear">
                   <option v-for="classYear in classYears" :key="classYear.id" :value="classYear.name">{{ classYear.name }}</option>
-              </select>
-              <input type="text" id="fName" name="fName" v-model="fName">
-              <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
-              <input type="text" id="lName" name="lName" v-model="lName">
-              <select v-model="selectedCourse">
+                </select>
+              </div>
+              <div>
+                <label for="fName">First Name</label>
+                <input type="text" id="fName" name="fName" v-model="fName">
+              </div>
+              <div>
+                <label for="mInitial">Middle Initial</label>
+                <input type="text" id="mInitial" name="mInitial" v-model="mInitial">
+              </div>
+              <div>
+                <label for="lName">Last Name</label>
+                <input type="text" id="lName" name="lName" v-model="lName">
+              </div>
+              <div>
+                <label>Course</label>
+                <select v-model="selectedCourse">
                   <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
-              </select>
-              <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
-              <input type="tel" id="phone" name="phone" v-model="phone">
-              <input type="text" id="address" name="address" v-model="address">
-              <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+                </select>
+              </div>
+              <div>
+                <label for="alumna_email">Email</label>
+                <input type="email" id="alumna_email" name="alumna_email" v-model="alumna_email">
+              </div>
+              <div>
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" v-model="phone">
+              </div>
+              <div>
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" v-model="address">
+              </div>
+              <div>
+                <label for="alumna_password">Password</label>
+                <input type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
+              </div>
           </div>
           <div v-else-if="isEditing">
               <input type="text" id="alumnaID" name="alumnaID" v-model="alumnaID">
