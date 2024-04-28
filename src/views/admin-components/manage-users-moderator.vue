@@ -48,7 +48,7 @@
         <div v-if="isModalVisible" class="modal">
          <div class="modal-content">
             <span class="close" @click="closeModal">&times;</span>
-            <div v-if="isAdding">
+            <div v-if="isAdding" class="d-flex">
               <div class="mx-1">
                 <div>
                   <label for="alumnaID">ID Number</label>
