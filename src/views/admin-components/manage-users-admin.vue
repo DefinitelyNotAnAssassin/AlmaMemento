@@ -136,7 +136,7 @@
               <p>Are you sure you want to delete the selected item(s)?</p>
               <button @click="deleteSelected">Confirm</button>
           </div>
-          <button @click="submitModal">Submit</button>
+          <button class="btn btn-sm btn-dark" @click="submitModal">Submit</button>
         </div>
       </div>
       </div>
