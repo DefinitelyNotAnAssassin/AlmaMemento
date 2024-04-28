@@ -5,12 +5,12 @@
         </a>
       </div>
       <div class="navbar-end">
-        <a class="navbar-item" @click="toggleNotifications">
+        <a class="navbar-item text-light" @click="toggleNotifications">
           <span class="icon">
             <i class="fas fa-bell"></i>
           </span>
         </a>
-        <a class="navbar-item" @click="toggleProfile">
+        <a class="navbar-item text-light" @click="toggleProfile">
           <span class="icon">
             <i class="fas fa-user"></i>
           </span>
