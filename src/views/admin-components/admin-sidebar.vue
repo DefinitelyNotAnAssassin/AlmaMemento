@@ -3,7 +3,7 @@
       <img src="../../assets/images/logo.png" alt="Logo">
       <ul>
         <li v-for="(item, index) in sidebarItems" :key="index">
-          <a @click="handleSidebarItemClick(item)">
+          <a class="text-light" @click="handleSidebarItemClick(item)">
             {{ item }}
             <span v-if="item === 'Manage Users' || item === 'Yearbook'" class="dropdown-arrow">▼</span>
           </a>
