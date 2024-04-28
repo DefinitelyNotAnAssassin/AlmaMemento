@@ -1,6 +1,6 @@
 <template>
     <aside class="sidebar">
-      <img src="../../assets/images/logo.png" alt="Logo">
+      <img src="../../assets/images/w-logo.png" alt="Logo">
       <ul class="mt-3">
         <li v-for="(item, index) in sidebarItems" :key="index">
           <a class="text-light" @click="handleSidebarItemClick(item)">
