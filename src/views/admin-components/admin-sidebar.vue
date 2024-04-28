@@ -9,7 +9,7 @@
           </a>
           <ul v-if="dropdownItemsVisibility[item]">
             <li v-for="(dropdownItem, dropdownIndex) in dropdownItems[item]" :key="dropdownIndex">
-              <button @click="handleDropdownClick(dropdownItem)">{{ dropdownItem }}</button>
+              <button class="sidebar-button text-light" @click="handleDropdownClick(dropdownItem)">{{ dropdownItem }}</button>
             </li>
           </ul>
         </li>
