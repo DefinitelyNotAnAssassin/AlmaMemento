@@ -7,6 +7,7 @@
           <div>
             <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
             <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+            <input type="file" @change="importUsers" accept=".xlsx,.xls" />
           </div>
         </div>
       <table class="table table-striped">
@@ -173,6 +174,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { db } from '../../firebase/index.js';
+import { read, utils } from 'xlsx';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
   
 const items = ref([])
@@ -195,14 +197,14 @@ const alumna_email = ref('');
 const phone = ref('');
 const address = ref('');
 const alumna_password = ref('');
-
+const users = ref([]);
 const searchQuery = ref('');
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
   return sortedItems.value.filter(item => {
     return (
-      item.alumnaID.toLowerCase().includes(query) ||
+      (typeof item.alumnaID === 'string' && item.alumnaID.toLowerCase().includes(query)) ||
       item.name.toLowerCase().includes(query)
     );
   });
@@ -375,6 +377,43 @@ const deleteSelected = async () => {
   isDeleteConfirmationVisible.value = false
   selectedItems.value = []
 }
+
+const importUsers = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = new Uint8Array(e.target.result);
+    const workbook = read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const usersData = utils.sheet_to_json(worksheet, { header: 2 });
+
+    for (const user of usersData) {
+      const { alumnaID, fName, mInitial, lName, course, classYear, alumna_email, phone, address, alumna_password } = user;
+      console.log(usersData);
+      await addDoc(collection(db, 'users'), {
+        alumnaID,
+        fName,
+        mInitial,
+        lName,
+        course,
+        classYear,
+        alumna_email,
+        phone,
+        address,
+        alumna_password,
+        userlevel: 'alumni',
+        status: 'active',
+      });
+    }
+
+    alert('Users imported successfully');
+    fetchData();
+  };
+  reader.readAsArrayBuffer(file);
+};
 
 </script>
   

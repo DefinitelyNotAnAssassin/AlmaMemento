@@ -1,6 +1,8 @@
 <template>
 {{ props.gradsubfolderName }} - {{ props.subfolderName }} - {{ props.folderName }}
 
+<button @click="backToGrad">Back</button>
+
 <button @click="openModal" class="add-photo-button">Add Photo</button>
 
 <div class="adviser-container">
@@ -37,12 +39,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, defineProps, defineEmits } from 'vue';
 import { addDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { uploadBytes, getDownloadURL, deleteObject, ref as storageRef } from 'firebase/storage';
 import { db, storage } from '../../../firebase/index.js';
 
 const currentAlbumPage = ref('GraduationPortrait')
+
 const props = defineProps(['folderName', 'subfolderName', 'gradsubfolderName']);
 const isModalOpen = ref(false);
 const imageInput = ref(null);
@@ -56,15 +59,54 @@ const adviser = ref(null);
 const adviserImageUrl = ref('');
 const adviserName = ref('');
 
+const emit = defineEmits(['update:currentPage'])
+
+const backToGrad = async () => {
+  currentAlbumPage.value = 'ChosenCourse';
+  emit('update:currentPage', 'ChosenCourse');
+};
+
+const openModal = async () => {
+    isModalOpen.value = true;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+
+const uploadData = async () => {
+    const imageRef = storageRef(storage, `gradportrait/${imageInput.value.files[0].name}`);
+    await uploadBytes(imageRef, imageInput.value.files[0]);
+    const imageUrl = await getDownloadURL(imageRef);
+
+    await addDoc(collection(db, 'gradportrait'), {
+        year: props.folderName,
+        course: props.subfolderName,
+        folderIn: props.gradsubfolderName,
+        role: selectedRole.value,
+        name: nameInput.value,
+        address: addressInput.value,
+        quotes: quotesInput.value,
+        imageUrl: imageUrl,
+    });
+
+    selectedRole.value = '';
+    nameInput.value = '';
+    addressInput.value = '';
+    quotesInput.value = '';
+
+    closeModal();
+};
+
 const checkAdviserExists = async () => {
-    const q = query(collection(db, 'images'), where('year', '==', props.folderName), where('course', '==', props.subfolderName), where('role', '==', 'adviser'));
+    const q = query(collection(db, 'gradportrait'), where('year', '==', props.folderName), where('course', '==', props.subfolderName), where('role', '==', 'adviser'));
     const querySnapshot = await getDocs(q);
     isAdviserDisabled.value = querySnapshot.size > 0; 
 };
 
 const fetchStudentsAndAdviser = async () => {
   const q = query(
-    collection(db, 'images'),
+    collection(db, 'gradportrait'),
     where('year', '==', props.folderName),
     where('course', '==', props.subfolderName)
   );
@@ -88,11 +130,6 @@ const fetchStudentsAndAdviser = async () => {
   return unsubscribe1;
 };
 
-onMounted(
-  checkAdviserExists,
-  fetchStudentsAndAdviser
-);
-
 const unsubscribe1 = fetchStudentsAndAdviser(); watch(
   () => [props.folderName, props.subfolderName],
   () => {
@@ -101,41 +138,14 @@ const unsubscribe1 = fetchStudentsAndAdviser(); watch(
   }
 );
 
-const unsubscribe = onSnapshot(query(collection(db, 'images'), where('year', '==', props.folderName), where('course', '==', props.subfolderName), where('role', '==', 'adviser')), () => {
+const unsubscribe = onSnapshot(query(collection(db, 'gradportrait'), where('year', '==', props.folderName), where('course', '==', props.subfolderName), where('role', '==', 'adviser')), () => {
     checkAdviserExists();
 });
 
-const openModal = async () => {
-    isModalOpen.value = true;
-};
-
-const closeModal = () => {
-    isModalOpen.value = false;
-};
-
-const uploadData = async () => {
-    const imageRef = storageRef(storage, `images/${imageInput.value.files[0].name}`);
-    await uploadBytes(imageRef, imageInput.value.files[0]);
-    const imageUrl = await getDownloadURL(imageRef);
-
-    await addDoc(collection(db, 'images'), {
-        year: props.folderName,
-        course: props.subfolderName,
-        folderIn: props.gradsubfolderName,
-        role: selectedRole.value,
-        name: nameInput.value,
-        address: addressInput.value,
-        quotes: quotesInput.value,
-        imageUrl: imageUrl,
-    });
-
-    selectedRole.value = '';
-    nameInput.value = '';
-    addressInput.value = '';
-    quotesInput.value = '';
-
-    closeModal();
-};
+onMounted(
+  checkAdviserExists,
+  fetchStudentsAndAdviser
+);
 
 </script>
 
