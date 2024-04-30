@@ -20,48 +20,51 @@
     </div>
     <div class="folders">
       <div
-        class="folder"
+        class="folder m-2"
         v-for="(folder, index) in filteredFolders"
         :key="index"
         @click="changeAlbumPage(folder.name)"
       >
-        <div class="folder-box">
-          <span>{{ folder.name }}</span>
+        <div class="folder-box bg-secondary">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
-            ...
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)"
-                >Delete</span
-              >
-            </div>
+            <i class="bi bi-three-dots-vertical"></i>
+          </div>
+          <div class="folder-options-content" v-if="folder.showOptions">
+            <span @click.stop="editFolder(index)">Edit</span>
+            <span @click.stop="showDeleteFolderConfirmation(index)"
+              >Delete</span
+            >
+          </div>
+          <div class="folder-name-bottom bg-primary text-light">
+            <span>{{ folder.name }}</span>
+            <span><i class="bi bi-arrow-right-circle-fill"></i></span>
           </div>
         </div>
       </div>
     </div>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <input type="text" v-model="newFolderName" placeholder="Folder Name" />
-        <button @click="addFolder">Create Folder</button>
-        <button @click="showModal = false">Cancel</button>
+        <input class="form-control" type="text" v-model="newFolderName" placeholder="Folder Name" />
+        <button class="btn btn-sm btn-primary" @click="addFolder">Create Folder</button>
+        <button class="btn btn-sm btn-primary mt-1" @click="showModal = false">Cancel</button>
       </div>
     </div>
     <div v-if="editIndex !== null" class="modal">
       <div class="modal-content">
-        <input type="text" v-model="editFolderName" placeholder="Folder Name" />
-        <button @click="saveEditFolder">Save</button>
-        <button @click="cancelEditFolder">Cancel</button>
+        <input class="form-control" type="text" v-model="editFolderName" placeholder="Folder Name" />
+        <button class="btn btn-sm btn-primary" @click="saveEditFolder">Save</button>
+        <button class="btn btn-sm btn-primary mt-1" @click="cancelEditFolder">Cancel</button>
       </div>
     </div>
     <div v-if="showDeleteConfirmation" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p>
-        <button @click="confirmDeleteFolder">Delete</button>
-        <button @click="cancelDeleteFolder">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="confirmDeleteFolder">Delete</button>
+        <button class="btn btn-sm btn-primary" @click="cancelDeleteFolder">Cancel</button>
       </div>
     </div>
     <div v-if="showWarningModal" class="modal">
-      <div class="modal-content">
+      <div class="modal-content alert alert-warning">
         <p>A folder with the same name already exists!</p>
       </div>
     </div>
@@ -259,21 +262,46 @@ input {
 }
 
 .folders {
-  display: flex;
-  flex-direction: row;
+  height: 70vh;
+  overflow-y: auto;
 }
 
 .folder-box {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: center;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border-radius: 0% !important;
 }
 
-.folder-box span {
-  display: block;
-  font-weight: bold;
-  margin-top: auto;
+.folder-options {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.folder-options-content {
+  background-color: white;
+  position: absolute;
+  top: 25px;
+  right: 5px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.folder-options-content span {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.folder-name-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }
 </style>

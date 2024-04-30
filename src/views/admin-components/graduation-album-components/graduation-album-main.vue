@@ -4,20 +4,35 @@
       <h3>Academic Year</h3>
     </div>
     <div class="d-flex justify-content-end">
-      <input class="form-control" style="width: 250px;" type="text" v-model="searchQuery" placeholder="Search Folder">
+      <input
+        class="form-control"
+        style="width: 250px"
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search Folder"
+      />
     </div>
     <div class="d-flex justify-content-end">
-      <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
+      <button class="btn btn-sm btn-success" @click="showModal = true">
+        Add Folder
+      </button>
     </div>
     <div class="folders d-flex flex-wrap">
-      <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
+      <div
+        class="folder m-2"
+        v-for="(folder, index) in filteredFolders"
+        :key="index"
+        @click="changeAlbumPage(folder.name)"
+      >
         <div class="folder-box bg-secondary">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
             <i class="bi bi-three-dots-vertical"></i>
           </div>
           <div class="folder-options-content" v-if="folder.showOptions">
             <span @click.stop="editFolder(index)">Edit</span>
-            <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
+            <span @click.stop="showDeleteFolderConfirmation(index)"
+              >Delete</span
+            >
           </div>
           <div class="folder-name-bottom bg-primary text-light">
             <span>{{ folder.name }}</span>
@@ -28,23 +43,51 @@
     </div>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <input class="form-control" type="text" v-model="newFolderName" placeholder="Folder Name">
-        <button class="btn btn-sm btn-primary" @click="addFolder">Create Folder</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="showModal = false">Cancel</button>
+        <input
+          class="form-control"
+          type="text"
+          v-model="newFolderName"
+          placeholder="Folder Name"
+        />
+        <button class="btn btn-sm btn-primary" @click="addFolder">
+          Create Folder
+        </button>
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="showModal = false"
+        >
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="editIndex !== null" class="modal">
       <div class="modal-content">
-        <input class="form-control" type="text" v-model="editFolderName" placeholder="Folder Name">
-        <button class="btn btn-sm btn-primary" @click="saveEditFolder">Save</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="cancelEditFolder">Cancel</button>
+        <input
+          class="form-control"
+          type="text"
+          v-model="editFolderName"
+          placeholder="Folder Name"
+        />
+        <button class="btn btn-sm btn-primary" @click="saveEditFolder">
+          Save
+        </button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelEditFolder">
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="showDeleteConfirmation" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p>
-        <button class="btn btn-sm btn-danger" @click="confirmDeleteFolder">Delete</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">Cancel</button>
+        <button class="btn btn-sm btn-danger" @click="confirmDeleteFolder">
+          Delete
+        </button>
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="cancelDeleteFolder"
+        >
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="showWarningModal" class="modal">
@@ -56,25 +99,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, computed } from 'vue';
-import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../../../firebase/index.js';
+import { ref, onMounted, defineEmits, computed } from "vue";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "../../../firebase/index.js";
 
-const currentAlbumPage = ref('Main')
+const currentAlbumPage = ref("Main");
 
 const folders = ref([]);
 const showModal = ref(false);
 const showWarningModal = ref(false);
-const newFolderName = ref('');
+const newFolderName = ref("");
 const editIndex = ref(null);
-const editFolderName = ref('');
-const searchQuery = ref('');
+const editFolderName = ref("");
+const searchQuery = ref("");
 const showDeleteConfirmation = ref(false);
 let folderToDeleteIndex = null;
 
 const fetchFolders = async () => {
-  const querySnapshot = await getDocs(collection(db, 'folders'));
-  folders.value = querySnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+  const querySnapshot = await getDocs(collection(db, "folders"));
+  folders.value = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    name: doc.data().name,
+  }));
 };
 
 onMounted(fetchFolders);
@@ -82,7 +135,9 @@ onMounted(fetchFolders);
 const addFolder = async () => {
   if (!newFolderName.value.trim()) return;
 
-  const existingFolder = folders.value.find(folder => folder.name === newFolderName.value);
+  const existingFolder = folders.value.find(
+    (folder) => folder.name === newFolderName.value
+  );
   if (existingFolder) {
     showWarningModal.value = true;
     setTimeout(() => {
@@ -91,18 +146,18 @@ const addFolder = async () => {
     return;
   }
 
-  await addDoc(collection(db, 'folders'), { name: newFolderName.value });
-  newFolderName.value = '';
+  await addDoc(collection(db, "folders"), { name: newFolderName.value });
+  newFolderName.value = "";
   showModal.value = false;
   fetchFolders();
 };
 
-const emit = defineEmits(['update:currentPage'])
+const emit = defineEmits(["update:currentPage"]);
 
 const changeAlbumPage = (folderName) => {
-  currentAlbumPage.value = 'Course';
-  emit('update:currentPage', 'Course');
-  emit('folder-name', folderName);
+  currentAlbumPage.value = "Course";
+  emit("update:currentPage", "Course");
+  emit("folder-name", folderName);
 };
 
 const showFolderOptions = (index) => {
@@ -116,7 +171,7 @@ const showFolderOptions = (index) => {
 };
 
 const deleteFolder = async (index) => {
-  await deleteDoc(doc(db, 'folders', folders.value[index].id));
+  await deleteDoc(doc(db, "folders", folders.value[index].id));
   fetchFolders();
 };
 
@@ -129,7 +184,7 @@ const saveEditFolder = async () => {
   if (editIndex.value === null) return;
   if (!editFolderName.value.trim()) return;
   const folderId = folders.value[editIndex.value].id;
-  const folderRef = doc(db, 'folders', folderId);
+  const folderRef = doc(db, "folders", folderId);
   await updateDoc(folderRef, { name: editFolderName.value });
   editIndex.value = null;
   fetchFolders();
@@ -158,9 +213,10 @@ const cancelDeleteFolder = () => {
 };
 
 const filteredFolders = computed(() => {
-  return folders.value.filter(folder => folder.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  return folders.value.filter((folder) =>
+    folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 });
-
 </script>
 
 <style>
