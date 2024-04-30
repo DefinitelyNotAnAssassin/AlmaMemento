@@ -13,7 +13,9 @@
       <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box bg-dark">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
-            <i class="bi bi-three-dots-vertical"></i>
+            <span class="btn text-light">
+              <i class="bi bi-three-dots-vertical"></i>
+            </span> 
             <div class="folder-options-content" v-if="folder.showOptions">
               <span @click.stop="editFolder(index)">Edit</span>
               <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
@@ -187,11 +189,8 @@ input {
 }
 
 .folder-box {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: center;
+  width: 100px;
+  height: 100px;
 }
 
 .folder-box span {
