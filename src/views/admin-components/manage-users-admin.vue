@@ -1,7 +1,7 @@
 <template>
-  <div class="container p-3">
+  <div class="components-page-main-container p-3">
       <div class="">
-          <h1 class="text-center">Administrator</h1>
+          <h3 class="text-center">Administrator</h3>
           <div class="container d-flex flex-column align-items-end">
             <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
             <div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="components-page-main-container">
+  <div class="components-page-main-container p-3">
     <div class="text-center">
       <h3>Manage Content</h3>
     </div>
