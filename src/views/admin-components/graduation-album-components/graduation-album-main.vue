@@ -10,51 +10,18 @@
       <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
     </div>
     <div class="folders bg-secondary d-flex">
-      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box">
-          <span>{{ folder.name }}</span>
+      <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
+        <div class="folder-box bg-dark">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
-            ...
+            <i class="bi bi-three-dots-vertical"></i>
             <div class="folder-options-content" v-if="folder.showOptions">
               <span @click.stop="editFolder(index)">Edit</span>
               <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box">
-          <span>{{ folder.name }}</span>
-          <div class="folder-options" @click.stop="showFolderOptions(index)">
-            ...
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box">
-          <span>{{ folder.name }}</span>
-          <div class="folder-options" @click.stop="showFolderOptions(index)">
-            ...
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box">
-          <span>{{ folder.name }}</span>
-          <div class="folder-options" @click.stop="showFolderOptions(index)">
-            ...
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
-            </div>
+          <div class="bg-primary">
+            <span>{{ folder.name }}</span>
+            <span><i class="bi bi-arrow-right-circle-fill"></i></span>
           </div>
         </div>
       </div>
@@ -217,11 +184,6 @@ const filteredFolders = computed(() => {
 
 input {
   margin-bottom: 10px;
-}
-
-.folders {
-  display: flex;
-  flex-direction: row;
 }
 
 .folder-box {
