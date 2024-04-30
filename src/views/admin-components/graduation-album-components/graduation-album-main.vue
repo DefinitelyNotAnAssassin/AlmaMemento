@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-album">
+  <div class="components-page-main-container photo-album">
     <div class="text-center">
       <h3>Academic Year</h3>
     </div>
