@@ -3,7 +3,7 @@
     <div class="text-center">
       <h3>Course</h3>
     </div>
-    <div>
+    <div class="d-flex justify-content-end">
       <input
         class="form-control"
         style="width: 250px;"
