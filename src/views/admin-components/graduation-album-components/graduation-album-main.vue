@@ -14,12 +14,12 @@
         <div class="folder-box bg-secondary">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
             <i class="bi bi-three-dots-vertical"></i>
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
-            </div>
           </div>
-          <div class="folder-name-bottom bg-primary">
+          <div class="folder-options-content" v-if="folder.showOptions">
+            <span @click.stop="editFolder(index)">Edit</span>
+            <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
+          </div>
+          <div class="folder-name-bottom bg-primary text-light">
             <span>{{ folder.name }}</span>
             <span><i class="bi bi-arrow-right-circle-fill"></i></span>
           </div>
@@ -193,19 +193,26 @@ input {
   border-radius: 0% !important;
 }
 
+.folder-options-content {
+  background-color: white;
+  position: absolute;
+  top: 10px;
+  right: 5px;
+}
+
 .folder-name-bottom {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-
+  padding: 5px;
   display: flex;
   justify-content: space-between;
 }
 
 .folder-options {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 5px;
 }
 </style>
