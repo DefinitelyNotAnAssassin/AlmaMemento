@@ -11,7 +11,7 @@
     </div>
     <div class="folders bg-secondary d-flex">
       <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box bg-dark">
+        <div class="folder-box bg-secondary">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
             <i class="bi bi-three-dots-vertical"></i>
             <div class="folder-options-content" v-if="folder.showOptions">
@@ -187,8 +187,8 @@ input {
 }
 
 .folder-box {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   position: relative;
 }
 
