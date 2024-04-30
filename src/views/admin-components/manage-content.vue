@@ -32,7 +32,7 @@
           <td>{{ item.schoolYear }}</td>
           <td>{{ item.event }}</td>
           <td>{{ item.caption }}</td>
-          <td><a @click="showImagePreview(item.imageUrl)">View Image</a></td>
+          <td><a class="btn-view-image" @click="showImagePreview(item.imageUrl)">View Image</a></td>
           <td>
             <template v-if="item.status === 'pending'">
               <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
@@ -205,5 +205,9 @@ const deleteSelected = async () => {
 
 .txt-search {
   width: 200px;
+}
+
+.btn-view-image {
+  cursor: pointer;
 }
 </style>
