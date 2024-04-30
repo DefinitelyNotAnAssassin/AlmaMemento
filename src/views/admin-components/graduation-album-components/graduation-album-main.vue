@@ -1,10 +1,10 @@
 <template>
-  <div class="components-page-main-container photo-album">
+  <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
       <h3>Academic Year</h3>
     </div>
     <div class="d-flex justify-content-end">
-      <input class="form-control" type="text" v-model="searchQuery" placeholder="Search Folder">
+      <input class="form-control" style="width: 250px;" type="text" v-model="searchQuery" placeholder="Search Folder">
     </div>
     <div class="d-flex justify-content-end">
       <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
