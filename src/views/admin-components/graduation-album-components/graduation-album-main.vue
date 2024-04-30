@@ -197,6 +197,7 @@ input {
   position: absolute;
   top: 5px;
   right: 5px;
+  cursor: pointer;
 }
 
 .folder-options-content {
