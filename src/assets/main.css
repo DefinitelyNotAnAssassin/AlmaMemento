@@ -268,5 +268,5 @@ main {
 
 .components-page-main-container {
   background-color: red !important;
-  width: calc(100% - 250px);
+  width: calc(100vw - 250px);
 }
