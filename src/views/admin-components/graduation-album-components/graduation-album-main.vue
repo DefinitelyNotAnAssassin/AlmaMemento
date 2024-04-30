@@ -423,7 +423,7 @@ const filteredFolders = computed(() => {
 }
 
 .folders {
-  height: 100vh;
+  height: 80vh;
   background-color: red;
   overflow-y: auto;
 }
