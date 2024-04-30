@@ -3,7 +3,7 @@
       <div class="">
           <h3 class="text-center">Administrator</h3>
           <div class="container d-flex flex-column align-items-end">
-            <input class="form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+            <input class="search-bar form-control" style="width: 250px;" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
             <div>
               <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
               <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
