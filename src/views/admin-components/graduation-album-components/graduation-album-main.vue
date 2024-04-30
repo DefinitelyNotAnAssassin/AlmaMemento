@@ -30,21 +30,21 @@
       <div class="modal-content">
         <input class="form-control" type="text" v-model="newFolderName" placeholder="Folder Name">
         <button class="btn btn-sm btn-primary" @click="addFolder">Create Folder</button>
-        <button class="btn btn-sm btn-secondary" @click="showModal = false">Cancel</button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="showModal = false">Cancel</button>
       </div>
     </div>
     <div v-if="editIndex !== null" class="modal">
       <div class="modal-content">
         <input class="form-control" type="text" v-model="editFolderName" placeholder="Folder Name">
-        <button class="btn btm-sm btn-primary" @click="saveEditFolder">Save</button>
-        <button class="btn btn-sm btn-secondary" @click="cancelEditFolder">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="saveEditFolder">Save</button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelEditFolder">Cancel</button>
       </div>
     </div>
     <div v-if="showDeleteConfirmation" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p>
         <button class="btn btn-sm btn-danger" @click="confirmDeleteFolder">Delete</button>
-        <button class="btn btn-sm btn-secondary" @click="cancelDeleteFolder">Cancel</button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">Cancel</button>
       </div>
     </div>
     <div v-if="showWarningModal" class="modal">
