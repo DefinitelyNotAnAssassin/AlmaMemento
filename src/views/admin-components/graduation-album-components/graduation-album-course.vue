@@ -13,7 +13,7 @@
       />
     </div>
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-secondary mx-1" @click="backToMain"><i class="bi bi-arrow-return-left"></i></button>
+      <button class="btn btn-sm btn-dark mx-1" @click="backToMain"><i class="bi bi-arrow-return-left"></i></button>
       <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
         Add Folder
       </button>
