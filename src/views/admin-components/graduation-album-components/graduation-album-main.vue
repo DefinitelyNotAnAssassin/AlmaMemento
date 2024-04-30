@@ -190,11 +190,12 @@ input {
   width: 200px;
   height: 200px;
   position: relative;
+  border-radius: 0% !important;
 }
 
 .folder-name-bottom {
   position: absolute;
   bottom: 0;
-  widows: 100%;
+  width: 100%;
 }
 </style>
