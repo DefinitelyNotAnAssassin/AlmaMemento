@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-end">
       <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
     </div>
-    <div class="folders d-flex">
+    <div class="folders d-flex flex-wrap">
       <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box bg-secondary">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
