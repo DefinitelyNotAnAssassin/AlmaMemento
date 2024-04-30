@@ -6,13 +6,14 @@
     <div>
       <input
         class="form-control"
+        style="width: 250px;"
         type="text"
         v-model="searchQuery"
         placeholder="Search Folder"
       />
     </div>
-    <div>
-      <button class="btn btn-sm btn-success" @click="showModal = true">
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
         Add Folder
       </button>
       <button class="btn btn-sm btn-secondary" @click="backToMain">Back</button>
