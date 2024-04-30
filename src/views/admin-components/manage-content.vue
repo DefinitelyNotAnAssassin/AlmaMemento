@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="d-flex justify-content-between bg-secondary">
-      <select class="form-control" v-model="filterStatus">
+      <select class="select-status form-control" v-model="filterStatus">
         <option value="all">All</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
       </select>
-      <input class="form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+      <input class="txt-search form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
     </div>
     <div class="d-flex justify-content-end mt-1 bg-secondary">
       <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
@@ -38,8 +38,8 @@
               <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
               <button class="btn btn-sm btn-danger" @click="rejectPost(item, index)">Reject</button>
             </template>
-            <span class="bg-success" v-else-if="item.status === 'approved'">Approved</span>
-            <span class="bg-danger" v-else-if="item.status === 'rejected'">Rejected</span>
+            <span class="bg-success text-light p-1 rounded" v-else-if="item.status === 'approved'">Approved</span>
+            <span class="bg-danger text-light p-1 rounded" v-else-if="item.status === 'rejected'">Rejected</span>
           </td>
         </tr>
       </tbody>
@@ -197,5 +197,13 @@ const deleteSelected = async () => {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.select-status {
+  width: 150px;
+}
+
+.txt-search {
+  width: 200px;
 }
 </style>
