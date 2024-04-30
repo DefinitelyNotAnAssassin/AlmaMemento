@@ -202,4 +202,10 @@ input {
   display: flex;
   justify-content: space-between;
 }
+
+.folder-options {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 </style>
