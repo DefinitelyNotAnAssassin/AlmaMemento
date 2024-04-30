@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="text-center">
+      <h3>Manage Content</h3>
+    </div>
     <div class="d-flex justify-content-between bg-secondary">
       <select class="select-status form-control" v-model="filterStatus">
         <option value="all">All</option>
