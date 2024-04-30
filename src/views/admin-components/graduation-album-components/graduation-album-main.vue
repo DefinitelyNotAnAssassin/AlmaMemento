@@ -21,7 +21,7 @@
               <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
             </div>
           </div>
-          <div class="bg-primary">
+          <div class="folder-name-bottom bg-primary">
             <span>{{ folder.name }}</span>
             <span><i class="bi bi-arrow-right-circle-fill"></i></span>
           </div>
@@ -191,11 +191,12 @@ input {
 .folder-box {
   width: 100px;
   height: 100px;
+  position: relative;
 }
 
-.folder-box span {
-  display: block;
-  font-weight: bold;
-  margin-top: auto;
+.folder-name-bottom {
+  position: absolute;
+  bottom: 0;
+  widows: 100%;
 }
 </style>
