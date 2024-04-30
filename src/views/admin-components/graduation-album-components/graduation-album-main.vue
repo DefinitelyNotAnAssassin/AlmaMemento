@@ -422,8 +422,10 @@ const filteredFolders = computed(() => {
   border-radius: 5px;
 }
 
-input {
-  margin-bottom: 10px;
+.folders {
+  height: 100vh;
+  background-color: red;
+  overflow-y: auto;
 }
 
 .folder-box {
