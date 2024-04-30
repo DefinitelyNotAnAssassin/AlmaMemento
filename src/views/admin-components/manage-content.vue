@@ -3,7 +3,7 @@
     <div class="text-center">
       <h3>Manage Content</h3>
     </div>
-    <div class="d-flex justify-content-between bg-secondary">
+    <div class="d-flex justify-content-between">
       <select class="select-status form-control" v-model="filterStatus">
         <option value="all">All</option>
         <option value="approved">Approved</option>
@@ -11,7 +11,7 @@
       </select>
       <input class="txt-search form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
     </div>
-    <div class="d-flex justify-content-end mt-1 bg-secondary">
+    <div class="d-flex justify-content-end mt-1 mb-1">
       <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
     </div>
     <table class="table table-striped">
