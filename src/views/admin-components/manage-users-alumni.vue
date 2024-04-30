@@ -7,7 +7,10 @@
           <div>
             <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
             <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
-            <input class="btn btn-dark" type="file" @change="importUsers" accept=".xlsx,.xls" />
+            <!-- <input class="btn btn-dark" type="file" @change="importUsers" accept=".xlsx,.xls" /> -->
+            <label class="btn btn-dark">
+                Import Users <input type="file" style="display: none;" @change="importUsers" accept=".xlsx,.xls">
+            </label>
           </div>
         </div>
       <table class="table table-striped">
