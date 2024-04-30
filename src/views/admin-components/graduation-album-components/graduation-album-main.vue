@@ -9,7 +9,43 @@
     <div class="d-flex justify-content-end">
       <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
     </div>
-    <div class="folders">
+    <div class="folders bg-secondary d-flex">
+      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
+        <div class="folder-box">
+          <span>{{ folder.name }}</span>
+          <div class="folder-options" @click.stop="showFolderOptions(index)">
+            ...
+            <div class="folder-options-content" v-if="folder.showOptions">
+              <span @click.stop="editFolder(index)">Edit</span>
+              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
+        <div class="folder-box">
+          <span>{{ folder.name }}</span>
+          <div class="folder-options" @click.stop="showFolderOptions(index)">
+            ...
+            <div class="folder-options-content" v-if="folder.showOptions">
+              <span @click.stop="editFolder(index)">Edit</span>
+              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
+        <div class="folder-box">
+          <span>{{ folder.name }}</span>
+          <div class="folder-options" @click.stop="showFolderOptions(index)">
+            ...
+            <div class="folder-options-content" v-if="folder.showOptions">
+              <span @click.stop="editFolder(index)">Edit</span>
+              <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box">
           <span>{{ folder.name }}</span>
