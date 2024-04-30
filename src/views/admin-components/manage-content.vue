@@ -1,12 +1,16 @@
 <template>
   <div>
-    <select v-model="filterStatus">
-      <option value="all">All</option>
-      <option value="approved">Approved</option>
-      <option value="rejected">Rejected</option>
-    </select>
-    <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
-    <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+    <div class="d-flex justify-content-between bg-secondary">
+      <select v-model="filterStatus">
+        <option value="all">All</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+    </div>
+    <div class="d-flex justify-content-end mt-1 bg-secondary">
+      <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+    </div>
     <table>
       <thead>
         <tr>
