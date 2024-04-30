@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="d-flex justify-content-between bg-secondary">
-      <select v-model="filterStatus">
+      <select class="form-control" v-model="filterStatus">
         <option value="all">All</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
       </select>
-      <input type="text" v-model="searchQuery" placeholder="Search by ID or Name">
+      <input class="form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
     </div>
     <div class="d-flex justify-content-end mt-1 bg-secondary">
       <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
     </div>
-    <table>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th></th>
@@ -35,11 +35,11 @@
           <td><a @click="showImagePreview(item.imageUrl)">View Image</a></td>
           <td>
             <template v-if="item.status === 'pending'">
-              <button @click="approvePost(item, index)">Approve</button>
-              <button @click="rejectPost(item, index)">Reject</button>
+              <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
+              <button class="btn btn-sm btn-danger" @click="rejectPost(item, index)">Reject</button>
             </template>
-            <span v-else-if="item.status === 'approved'">Approved</span>
-            <span v-else-if="item.status === 'rejected'">Rejected</span>
+            <span class="bg-success" v-else-if="item.status === 'approved'">Approved</span>
+            <span class="bg-danger" v-else-if="item.status === 'rejected'">Rejected</span>
           </td>
         </tr>
       </tbody>
@@ -54,7 +54,7 @@
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
         <p>Are you sure you want to delete the selected item(s)?</p>
-        <button @click="deleteSelected">Confirm</button>
+        <button class="btn btn-sm btn-danger" @click="deleteSelected">Confirm</button>
       </div>
     </div>
   </div>
