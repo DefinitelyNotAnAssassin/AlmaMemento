@@ -11,7 +11,7 @@
     </div>
     <div class="folders bg-secondary d-flex">
       <div class="folder m-2" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-        <div class="folder-box bg-secondary">
+        <div class="folder-box">
           <div class="folder-options" @click.stop="showFolderOptions(index)">
             <i class="bi bi-three-dots-vertical"></i>
           </div>
@@ -193,11 +193,24 @@ input {
   border-radius: 0% !important;
 }
 
+.folder-options {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
 .folder-options-content {
   background-color: white;
   position: absolute;
-  top: 10px;
+  top: 25px;
   right: 5px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.folder-options-content span {
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .folder-name-bottom {
@@ -208,11 +221,5 @@ input {
   padding: 5px;
   display: flex;
   justify-content: space-between;
-}
-
-.folder-options {
-  position: absolute;
-  top: 5px;
-  right: 5px;
 }
 </style>
