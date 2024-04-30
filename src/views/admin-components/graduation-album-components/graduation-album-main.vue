@@ -1,7 +1,14 @@
 <template>
   <div class="photo-album">
-    <input type="text" v-model="searchQuery" placeholder="Search Folder">
-    <h2>Academic Year</h2>
+    <div class="text-center">
+      <h3>Academic Year</h3>
+    </div>
+    <div class="d-flex justify-content-end">
+      <input class="form-control" type="text" v-model="searchQuery" placeholder="Search Folder">
+    </div>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-sm btn-success" @click="showModal = true">Add Folder</button>
+    </div>
     <div class="folders">
       <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
         <div class="folder-box">
@@ -16,7 +23,6 @@
         </div>
       </div>
     </div>
-    <button @click="showModal = true">Add Folder</button>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <input type="text" v-model="newFolderName" placeholder="Folder Name">
