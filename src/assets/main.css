@@ -267,6 +267,6 @@ main {
 /* End of Global CSS Classes */
 
 .components-page-main-container {
-  background-color: red !important;
+  background-color: rgb(89, 0, 255) !important;
   width: calc(100vw - 250px);
 }
