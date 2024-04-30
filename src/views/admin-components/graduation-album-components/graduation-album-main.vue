@@ -424,7 +424,6 @@ const filteredFolders = computed(() => {
 
 .folders {
   height: 70vh;
-  background-color: red;
   overflow-y: auto;
 }
 
