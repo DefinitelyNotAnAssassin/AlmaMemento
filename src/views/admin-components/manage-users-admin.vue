@@ -7,6 +7,9 @@
             <div>
               <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
               <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+              <label class="btn btn-sm btn-dark">
+                <i class="bi bi-upload"></i> Import Users <input type="file" style="display: none;" @change="importUsers" accept=".xlsx,.xls">
+              </label>
             </div>
           </div>
         <table class="table table-striped">
@@ -146,6 +149,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { db } from '../../firebase/index.js';
+import { read, utils } from 'xlsx';
 import { collection, query, where, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
   
 const items = ref([])
@@ -316,6 +320,42 @@ const changeStatus = async (userId, status) => {
   await updateDoc(docRef, { status });
 }
 
+const importUsers = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = new Uint8Array(e.target.result);
+    const workbook = read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const usersData = utils.sheet_to_json(worksheet, { header: 2 });
+
+    for (const user of usersData) {
+      const { alumnaID, fName, mInitial, lName, alumna_email, alumna_password, birthday, phone, address, yearAppointed } = user;
+      console.log(usersData);
+      await addDoc(collection(db, 'users'), {
+        alumnaID,
+        fName,
+        mInitial,
+        lName,
+        alumna_email,
+        alumna_password,
+        birthday,
+        phone,
+        address,
+        yearAppointed,
+        userlevel: 'administrator',
+        status: 'active',
+      });
+    }
+
+    alert('Users imported successfully');
+    fetchData();
+  };
+  reader.readAsArrayBuffer(file);
+};
 
 </script>
   
