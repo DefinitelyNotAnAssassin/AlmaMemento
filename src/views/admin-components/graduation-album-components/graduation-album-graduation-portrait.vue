@@ -23,7 +23,7 @@
       :key="student.id"
     >
       <img
-        style="height: 100px; width: 100px"
+        style="height: 200px; width: 200px"
         :src="student.imageUrl"
         alt="Student Image"
       />
