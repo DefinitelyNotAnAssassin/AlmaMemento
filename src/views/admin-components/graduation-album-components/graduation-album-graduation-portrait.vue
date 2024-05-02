@@ -46,15 +46,15 @@
         />
         <div
           class="text-center"
-          style="font-size: 12px; height: 60px; overflow-y: auto"
+          style="width: 150px; font-size: 12px;"
         >
-          <div style="max-width: 150px" class="bg-dark text-light">
+          <div class="bg-dark text-light">
             {{ student.name }}
           </div>
-          <div style="max-width: 150px" v-if="student.address">
+          <div v-if="student.address">
             {{ student.address }}
           </div>
-          <div style="max-width: 150px" v-if="student.quotes">
+          <div style="height: 30px; overflow-y: auto" v-if="student.quotes">
             <p>
               {{ student.quotes }}
             </p>
