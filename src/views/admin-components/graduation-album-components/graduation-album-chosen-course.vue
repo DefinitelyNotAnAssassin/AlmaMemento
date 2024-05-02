@@ -1,95 +1,138 @@
 <template>
-    <div class="photo-album">
-    <button @click="showModal = true">Add Folder</button>
-    <button @click="backToCourse">Back</button>
-    <input type="text" v-model="searchQuery" placeholder="Search Folder">
-      <h2>{{ props.subfolderName }} - {{ props.folderName }}</h2>
-      <div class="folders">
-        <div class="folder" v-for="(folder, index) in filteredFolders" :key="index" @click="changeAlbumPage(folder.name)">
-          <div class="folder-box">
+  <div class="components-page-main-container p-3 photo-album">
+    <div class="text-center">
+      <h3>{{ props.subfolderName }} - {{ props.folderName }}</h3>
+    </div>
+    <div class="d-flex justify-content-end">
+      <input
+        class="form-control"
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search Folder"
+      />
+    </div>
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-sm btn-dark mx-1" @click="backToCourse">
+        <i class="bi bi-arrow-return-left"></i>
+      </button>
+      <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
+        Add Folder
+      </button>
+    </div>
+    <div class="folders">
+      <div
+        class="folder m-2"
+        v-for="(folder, index) in filteredFolders"
+        :key="index"
+        @click="changeAlbumPage(folder.name)"
+      >
+        <div class="folder-box bg-secondary">
+          <div class="folder-options" @click.stop="showFolderOptions(index)">
+            <i class="bi bi-three-dots-vertical"></i>
+          </div>
+          <div class="folder-options-content" v-if="folder.showOptions">
+            <span @click.stop="editFolder(index)">Edit</span>
+            <span @click.stop="showDeleteFolderConfirmation(index)"
+              >Delete</span
+            >
+          </div>
+          <div class="folder-name-bottom bg-primary text-light">
             <span>{{ folder.name }}</span>
-            <div class="folder-options" @click.stop="showFolderOptions(index)">
-              ...
-              <div class="folder-options-content" v-if="folder.showOptions">
-                <span @click.stop="editFolder(index)">Edit</span>
-                <span @click.stop="showDeleteFolderConfirmation(index)">Delete</span>
-              </div>
-            </div>
+            <span><i class="bi bi-arrow-right-circle-fill"></i></span>
           </div>
         </div>
       </div>
-      <div v-if="showModal" class="modal">
-        <div class="modal-content">
-          <input type="text" v-model="newFolderName" placeholder="Folder Name">
-          <button @click="addFolder">Create Folder</button>
-          <button @click="showModal = false">Cancel</button>
-        </div>
-      </div>
-      <div v-if="editIndex !== null" class="modal">
-        <div class="modal-content">
-          <input type="text" v-model="editFolderName" placeholder="Folder Name">
-          <button @click="saveEditFolder">Save</button>
-          <button @click="cancelEditFolder">Cancel</button>
-        </div>
-      </div>
-      <div v-if="showDeleteConfirmation" class="modal">
-        <div class="modal-content">
-          <p>Are you sure you want to delete this folder?</p>
-          <button @click="confirmDeleteFolder">Delete</button>
-          <button @click="cancelDeleteFolder">Cancel</button>
-        </div>
-      </div>
-      <div v-if="showWarningModal" class="modal">
-        <div class="modal-content">
-          <p>A folder with the same name already exists!</p>
-        </div>
+    </div>
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <input type="text" v-model="newFolderName" placeholder="Folder Name" />
+        <button @click="addFolder">Create Folder</button>
+        <button @click="showModal = false">Cancel</button>
       </div>
     </div>
+    <div v-if="editIndex !== null" class="modal">
+      <div class="modal-content">
+        <input type="text" v-model="editFolderName" placeholder="Folder Name" />
+        <button @click="saveEditFolder">Save</button>
+        <button @click="cancelEditFolder">Cancel</button>
+      </div>
+    </div>
+    <div v-if="showDeleteConfirmation" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to delete this folder?</p>
+        <button @click="confirmDeleteFolder">Delete</button>
+        <button @click="cancelDeleteFolder">Cancel</button>
+      </div>
+    </div>
+    <div v-if="showWarningModal" class="modal">
+      <div class="modal-content">
+        <p>A folder with the same name already exists!</p>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
-  import { ref, onMounted, defineEmits, computed } from 'vue';
-  import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where } from 'firebase/firestore';
-  import { db } from '../../../firebase/index.js';
-  
-  const currentAlbumPage = ref('Chosen Course')
-  
-  const folders = ref([]);
-  const subfolders = ref([]); 
-  const showModal = ref(false);
-  const showWarningModal = ref(false);
-  const newFolderName = ref('');
-  const showDeleteConfirmation = ref(false);
-  const editIndex = ref(null);
-  const editFolderName = ref('');
-  const searchQuery = ref('');
-  let folderToDeleteIndex = null;
-  const props = defineProps(['folderName', 'subfolderName']);
+import { ref, onMounted, defineEmits, computed } from "vue";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../firebase/index.js";
 
-  const fetchFolders = async () => {
-  if (currentAlbumPage.value === 'Chosen Course' && props.folderName && props.subfolderName) {
+const currentAlbumPage = ref("Chosen Course");
+
+const folders = ref([]);
+const subfolders = ref([]);
+const showModal = ref(false);
+const showWarningModal = ref(false);
+const newFolderName = ref("");
+const showDeleteConfirmation = ref(false);
+const editIndex = ref(null);
+const editFolderName = ref("");
+const searchQuery = ref("");
+let folderToDeleteIndex = null;
+const props = defineProps(["folderName", "subfolderName"]);
+
+const fetchFolders = async () => {
+  if (
+    currentAlbumPage.value === "Chosen Course" &&
+    props.folderName &&
+    props.subfolderName
+  ) {
     const querySnapshot = await getDocs(
-  query(collection(db, 'subfolders'), 
-    where('year', '==', props.folderName), 
-    where('parentFolder', '==', props.subfolderName),
-    where('type', 'in', ['grad-album', 'subfolder'])
-  )
-);
+      query(
+        collection(db, "subfolders"),
+        where("year", "==", props.folderName),
+        where("parentFolder", "==", props.subfolderName),
+        where("type", "in", ["grad-album", "subfolder"])
+      )
+    );
 
-    folders.value = querySnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+    folders.value = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      name: doc.data().name,
+    }));
   } else {
     folders.value = [];
     subfolders.value = [];
   }
 };
-  
-  onMounted(fetchFolders);
-  
-  const addFolder = async () => {
+
+onMounted(fetchFolders);
+
+const addFolder = async () => {
   if (!newFolderName.value.trim()) return;
 
-  const existingFolder = folders.value.find(folder => folder.name === newFolderName.value);
+  const existingFolder = folders.value.find(
+    (folder) => folder.name === newFolderName.value
+  );
   if (existingFolder) {
-
     showWarningModal.value = true;
     setTimeout(() => {
       showWarningModal.value = false;
@@ -97,88 +140,96 @@
     return;
   }
 
-  const selectedYear = currentAlbumPage.value === 'Chosen Course' ? props.folderName : '';
-  const selectedCourse = currentAlbumPage.value === 'Chosen Course' ? props.subfolderName : '';
+  const selectedYear =
+    currentAlbumPage.value === "Chosen Course" ? props.folderName : "";
+  const selectedCourse =
+    currentAlbumPage.value === "Chosen Course" ? props.subfolderName : "";
 
-  await addDoc(collection(db, 'subfolders'), { name: newFolderName.value, year: selectedYear, type: 'subfolder', parentFolder: selectedCourse });
+  await addDoc(collection(db, "subfolders"), {
+    name: newFolderName.value,
+    year: selectedYear,
+    type: "subfolder",
+    parentFolder: selectedCourse,
+  });
 
-  newFolderName.value = '';
+  newFolderName.value = "";
   showModal.value = false;
 
   fetchFolders();
 };
-  const emit = defineEmits(['update:currentPage'])
-  
-  const changeAlbumPage = (gradsubfolderName) => {
-    currentAlbumPage.value = 'Chosen Course';
-    if (gradsubfolderName !== 'Graduation Portrait') {
-    emit('update:currentPage', 'Gallery');
+const emit = defineEmits(["update:currentPage"]);
+
+const changeAlbumPage = (gradsubfolderName) => {
+  currentAlbumPage.value = "Chosen Course";
+  if (gradsubfolderName !== "Graduation Portrait") {
+    emit("update:currentPage", "Gallery");
   } else {
-    emit('update:currentPage', 'Graduation Portrait');
+    emit("update:currentPage", "Graduation Portrait");
   }
-  emit('grad-subfolder-name', gradsubfolderName);
+  emit("grad-subfolder-name", gradsubfolderName);
 };
-  const backToCourse = () => {
-    currentAlbumPage.value = 'Course';
-    emit('update:currentPage', 'Course');
-  };
-  
-  const showFolderOptions = (index) => {
-    folders.value.forEach((folder, i) => {
-      if (i !== index) {
-        folder.showOptions = false;
-      } else {
-        folder.showOptions = !folder.showOptions;
-      }
-    });
-  };
-  
-  const deleteFolder = async (index) => {
-    await deleteDoc(doc(db, 'subfolders', folders.value[index].id));
-    fetchFolders();
-  };
-  
-  const editFolder = (index) => {
-    editIndex.value = index;
-    editFolderName.value = folders.value[index].name;
-  };
-  
-  const saveEditFolder = async () => {
-    if (editIndex.value === null) return;
-    if (!editFolderName.value.trim()) return;
-    const folderId = folders.value[editIndex.value].id;
-    const folderRef = doc(db, 'subfolders', folderId);
-    await updateDoc(folderRef, { name: editFolderName.value });
-    editIndex.value = null;
-    fetchFolders();
-  };
-  
-  const cancelEditFolder = () => {
-    editIndex.value = null;
-  };
-  
-  const confirmDeleteFolder = async () => {
-    if (folderToDeleteIndex !== null) {
-      await deleteFolder(folderToDeleteIndex);
-      folderToDeleteIndex = null;
-      showDeleteConfirmation.value = false;
+const backToCourse = () => {
+  currentAlbumPage.value = "Course";
+  emit("update:currentPage", "Course");
+};
+
+const showFolderOptions = (index) => {
+  folders.value.forEach((folder, i) => {
+    if (i !== index) {
+      folder.showOptions = false;
+    } else {
+      folder.showOptions = !folder.showOptions;
     }
-  };
-  
-  const showDeleteFolderConfirmation = (index) => {
-    folderToDeleteIndex = index;
-    showDeleteConfirmation.value = true;
-  };
-  
-  const cancelDeleteFolder = () => {
+  });
+};
+
+const deleteFolder = async (index) => {
+  await deleteDoc(doc(db, "subfolders", folders.value[index].id));
+  fetchFolders();
+};
+
+const editFolder = (index) => {
+  editIndex.value = index;
+  editFolderName.value = folders.value[index].name;
+};
+
+const saveEditFolder = async () => {
+  if (editIndex.value === null) return;
+  if (!editFolderName.value.trim()) return;
+  const folderId = folders.value[editIndex.value].id;
+  const folderRef = doc(db, "subfolders", folderId);
+  await updateDoc(folderRef, { name: editFolderName.value });
+  editIndex.value = null;
+  fetchFolders();
+};
+
+const cancelEditFolder = () => {
+  editIndex.value = null;
+};
+
+const confirmDeleteFolder = async () => {
+  if (folderToDeleteIndex !== null) {
+    await deleteFolder(folderToDeleteIndex);
     folderToDeleteIndex = null;
     showDeleteConfirmation.value = false;
-  };
+  }
+};
 
-  const filteredFolders = computed(() => {
-  return folders.value.filter(folder => folder.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+const showDeleteFolderConfirmation = (index) => {
+  folderToDeleteIndex = index;
+  showDeleteConfirmation.value = true;
+};
+
+const cancelDeleteFolder = () => {
+  folderToDeleteIndex = null;
+  showDeleteConfirmation.value = false;
+};
+
+const filteredFolders = computed(() => {
+  return folders.value.filter((folder) =>
+    folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 });
-  
 </script>
 
 <style>
