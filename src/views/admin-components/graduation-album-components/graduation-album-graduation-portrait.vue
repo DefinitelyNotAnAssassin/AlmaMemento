@@ -3,14 +3,16 @@
     <div class="text-center">
       <h3>
         {{ props.folderName }}
-      </h3> 
-      <h4>
-        {{ props.gradsubfolderName }} - {{ props.subfolderName }} -
-      </h4>
+      </h3>
+      <h4>{{ props.gradsubfolderName }} - {{ props.subfolderName }} -</h4>
     </div>
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-dark mx-1" @click="backToGrad"><i class="bi bi-arrow-return-left"></i></button>
-      <button class="btn btn-sm btn-success mx-1" @click="openModal">Add Photo</button>
+      <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">
+        <i class="bi bi-arrow-return-left"></i>
+      </button>
+      <button class="btn btn-sm btn-success mx-1" @click="openModal">
+        Add Photo
+      </button>
     </div>
 
     <div class="adviser-container">
@@ -20,7 +22,14 @@
         :src="adviserImageUrl"
         alt="Adviser Image"
       />
-      <h3 v-if="adviserName">Adviser: {{ adviserName }}</h3>
+      <div class="text-center">
+        <span v-if="adviserName">
+          <div>
+            {{ adviserName }}
+          </div>
+          <div>Adviser</div>
+        </span>
+      </div>
     </div>
 
     <div
@@ -33,9 +42,9 @@
         :src="student.imageUrl"
         alt="Student Image"
       />
-      <h3>{{ student.name }}</h3>
-      <p v-if="student.address">Address: {{ student.address }}</p>
-      <p v-if="student.quotes">Quotes: {{ student.quotes }}</p>
+      <span>{{ student.name }}</span>
+      <span v-if="student.address">{{ student.address }}</span>
+      <span v-if="student.quotes">{{ student.quotes }}</span>
     </div>
 
     <div v-if="isModalOpen" class="modal">
