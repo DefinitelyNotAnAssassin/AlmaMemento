@@ -34,7 +34,7 @@
 
     <div class="students-container">
       <div
-        class="student-container bg-primary"
+        class="student-container"
         style="width: 150px;"
         v-for="student in students"
         :key="student.id"
