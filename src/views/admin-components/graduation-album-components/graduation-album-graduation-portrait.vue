@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="students-container">
+    <div class="students-container d-flex flex-wrap">
       <div
         class="student-container"
         style="width: 150px;"
