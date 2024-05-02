@@ -9,8 +9,8 @@
       </h4>
     </div>
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">Back</button>
-      <button class="btn btn-sm btn-success mx-1 add-photo-button" @click="openModal">Add Photo</button>
+      <button class="btn btn-sm btn-dark mx-1" @click="backToGrad"><i class="bi bi-arrow-return-left"></i></button>
+      <button class="btn btn-sm btn-success mx-1" @click="openModal">Add Photo</button>
     </div>
 
     <div class="adviser-container">
@@ -207,18 +207,6 @@ onMounted(checkAdviserExists, fetchStudentsAndAdviser);
 </script>
 
 <style scoped>
-.add-photo-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-
 .modal {
   position: fixed;
   z-index: 1;
