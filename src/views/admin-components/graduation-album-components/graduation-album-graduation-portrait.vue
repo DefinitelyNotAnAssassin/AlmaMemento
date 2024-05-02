@@ -8,7 +8,12 @@
     <button @click="openModal" class="add-photo-button">Add Photo</button>
 
     <div class="adviser-container">
-      <img v-if="adviserImageUrl" :src="adviserImageUrl" alt="Adviser Image" />
+      <img
+        style="height: 200px; width: 200px"
+        v-if="adviserImageUrl"
+        :src="adviserImageUrl"
+        alt="Adviser Image"
+      />
       <h3 v-if="adviserName">Adviser: {{ adviserName }}</h3>
     </div>
 
@@ -17,7 +22,11 @@
       v-for="student in students"
       :key="student.id"
     >
-      <img :src="student.imageUrl" alt="Student Image" />
+      <img
+        style="height: 100px; width: 100px"
+        :src="student.imageUrl"
+        alt="Student Image"
+      />
       <h3>{{ student.name }}</h3>
       <p v-if="student.address">Address: {{ student.address }}</p>
       <p v-if="student.quotes">Quotes: {{ student.quotes }}</p>
