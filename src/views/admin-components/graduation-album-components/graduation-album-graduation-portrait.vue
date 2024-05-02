@@ -34,7 +34,7 @@
 
     <div class="students-container">
       <div
-        class="student-container"
+        class="student-container bg-primary"
         style="width: 150px;"
         v-for="student in students"
         :key="student.id"
@@ -45,7 +45,7 @@
           alt="Student Image"
         />
         <div class="text-center" style="font-size: 12px;">
-          <div>{{ student.name }}</div>
+          <div class="bg-dark text-light">{{ student.name }}</div>
           <div v-if="student.address">{{ student.address }}</div>
           <div v-if="student.quotes">{{ student.quotes }}</div>
         </div>
