@@ -5,10 +5,10 @@
     <div v-if="currentAlbumPage === 'Course'">
         <Course :folderName="selectedFolderName"  @update:currentPage="currentAlbumPage = $event" @subfolder-name="updateSelectedSubFolder"/>
     </div>
-    <div v-if="currentAlbumPage === 'ChosenCourse'">
+    <div v-if="currentAlbumPage === 'Chosen Course'">
         <ChosenCourse :folderName="selectedFolderName" :subfolderName="selectedSubFolderName" @update:currentPage="currentAlbumPage = $event" @grad-subfolder-name="updateSelectedGradSubFolder"/>
     </div>
-    <div v-if="currentAlbumPage === 'GraduationPortrait'">
+    <div v-if="currentAlbumPage === 'Graduation Portrait'">
         <GraduationPortrait :folderName="selectedFolderName" :subfolderName="selectedSubFolderName" :gradsubfolderName="selectedGradSubFolderName" @update:currentPage="currentAlbumPage = $event" />
     </div>
     <div v-if="currentAlbumPage === 'Gallery'">
@@ -38,14 +38,14 @@ const updateSelectedFolder = (folderName) => {
 const updateSelectedSubFolder = (subfolderName) => {
   console.log('Folder name selected:', subfolderName);
   selectedSubFolderName.value = subfolderName;
-  currentAlbumPage.value = 'ChosenCourse';
+  currentAlbumPage.value = 'Chosen Course';
 };
 
 const updateSelectedGradSubFolder = (gradsubfolderName) => {
   console.log('Folder name selected:', gradsubfolderName);
   if (gradsubfolderName === 'Graduation Portrait') {
     selectedGradSubFolderName.value = gradsubfolderName;
-    currentAlbumPage.value = 'GraduationPortrait';
+    currentAlbumPage.value = 'Graduation Portrait';
   }else {
     selectedGradSubFolderName.value = gradsubfolderName;
     currentAlbumPage.value = 'Gallery';

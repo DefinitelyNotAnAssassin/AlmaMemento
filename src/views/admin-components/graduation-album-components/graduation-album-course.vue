@@ -158,8 +158,8 @@ const addFolder = async () => {
 const emit = defineEmits(["update:currentPage"]);
 
 const changeAlbumPage = (subfolderName) => {
-  currentAlbumPage.value = "ChosenCourse";
-  emit("update:currentPage", "ChosenCourse");
+  currentAlbumPage.value = "Chosen Course";
+  emit("update:currentPage", "Chosen Course");
   emit("subfolder-name", subfolderName);
 };
 

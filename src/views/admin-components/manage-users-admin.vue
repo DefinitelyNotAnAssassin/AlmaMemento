@@ -17,7 +17,7 @@
             <tr>
               <th></th>
               <th>Name</th>
-              <th>Moderator ID</th>
+              <th>Administrator ID</th>
               <th>Email</th>
               <th>Birthday</th>
               <th>Phone</th>

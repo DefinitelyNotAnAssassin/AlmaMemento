@@ -100,14 +100,7 @@
 
 <script setup>
 import { ref, onMounted, defineEmits, computed } from "vue";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../../firebase/index.js";
 
 const currentAlbumPage = ref("Main");

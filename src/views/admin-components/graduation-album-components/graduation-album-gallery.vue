@@ -47,12 +47,14 @@ const uploadImage = async () => {
   const imageUrl = await getDownloadURL(imageRef);
 
   await addDoc(collection(db, 'gallery'), {
-    gradsubfolder: props.gradsubfolderName,
+    folder: props.folderName,
+    subfolder: props.gradsubfolderName,
+    gradsubfolder: props.subfolderName,
     url: imageUrl,
   });
 };
 
-onSnapshot(query(collection(db, 'gallery'), where('gradsubfolder', '==', props.gradsubfolderName)), (snapshot) => {
+onSnapshot(query(collection(db, 'gallery'), where('gradsubfolder', '==', props.gradsubfolderName), where('subfolder', '==', props.subfolderName), where('folder', '==', props.folderName)), (snapshot) => {
   images.value = [];
   snapshot.forEach((doc) => {
     const data = doc.data();

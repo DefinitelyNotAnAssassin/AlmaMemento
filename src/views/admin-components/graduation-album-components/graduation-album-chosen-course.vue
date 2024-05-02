@@ -51,7 +51,7 @@
   import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where } from 'firebase/firestore';
   import { db } from '../../../firebase/index.js';
   
-  const currentAlbumPage = ref('ChosenCourse')
+  const currentAlbumPage = ref('Chosen Course')
   
   const folders = ref([]);
   const subfolders = ref([]); 
@@ -66,7 +66,7 @@
   const props = defineProps(['folderName', 'subfolderName']);
 
   const fetchFolders = async () => {
-  if (currentAlbumPage.value === 'ChosenCourse' && props.folderName && props.subfolderName) {
+  if (currentAlbumPage.value === 'Chosen Course' && props.folderName && props.subfolderName) {
     const querySnapshot = await getDocs(
   query(collection(db, 'subfolders'), 
     where('year', '==', props.folderName), 
@@ -97,8 +97,8 @@
     return;
   }
 
-  const selectedYear = currentAlbumPage.value === 'ChosenCourse' ? props.folderName : '';
-  const selectedCourse = currentAlbumPage.value === 'ChosenCourse' ? props.subfolderName : '';
+  const selectedYear = currentAlbumPage.value === 'Chosen Course' ? props.folderName : '';
+  const selectedCourse = currentAlbumPage.value === 'Chosen Course' ? props.subfolderName : '';
 
   await addDoc(collection(db, 'subfolders'), { name: newFolderName.value, year: selectedYear, type: 'subfolder', parentFolder: selectedCourse });
 
@@ -110,11 +110,11 @@
   const emit = defineEmits(['update:currentPage'])
   
   const changeAlbumPage = (gradsubfolderName) => {
-    currentAlbumPage.value = 'ChosenCourse';
+    currentAlbumPage.value = 'Chosen Course';
     if (gradsubfolderName !== 'Graduation Portrait') {
     emit('update:currentPage', 'Gallery');
   } else {
-    emit('update:currentPage', 'GraduationPortrait');
+    emit('update:currentPage', 'Graduation Portrait');
   }
   emit('grad-subfolder-name', gradsubfolderName);
 };

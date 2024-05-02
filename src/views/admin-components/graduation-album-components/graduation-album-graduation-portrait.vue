@@ -44,7 +44,7 @@ import { addDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/
 import { uploadBytes, getDownloadURL, deleteObject, ref as storageRef } from 'firebase/storage';
 import { db, storage } from '../../../firebase/index.js';
 
-const currentAlbumPage = ref('GraduationPortrait')
+const currentAlbumPage = ref('Graduation Portrait')
 
 const props = defineProps(['folderName', 'subfolderName', 'gradsubfolderName']);
 const isModalOpen = ref(false);
@@ -62,8 +62,8 @@ const adviserName = ref('');
 const emit = defineEmits(['update:currentPage'])
 
 const backToGrad = async () => {
-  currentAlbumPage.value = 'ChosenCourse';
-  emit('update:currentPage', 'ChosenCourse');
+  currentAlbumPage.value = 'Chosen Course';
+  emit('update:currentPage', 'Chosen Course');
 };
 
 const openModal = async () => {
