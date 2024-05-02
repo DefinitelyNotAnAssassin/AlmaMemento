@@ -6,7 +6,7 @@
           <input class="search-bar form-control" style="width: 250px;" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
           <div>
             <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
-            <button class="btn btn-sm btn-success" @click="addUser">Add User</button>
+            <button class="btn btn-sm btn-success mx-1" @click="addUser">Add User</button>
             <label class="btn btn-sm btn-dark">
               <i class="bi bi-upload"></i> Import Users <input type="file" style="display: none;" @change="importUsers" accept=".xlsx,.xls">
             </label>
