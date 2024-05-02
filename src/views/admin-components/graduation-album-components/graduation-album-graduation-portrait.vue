@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div class="adviser-container">
+    <div class="adviser-container text-center">
       <img
         style="height: 150px; width: 150px"
         v-if="adviserImageUrl"
