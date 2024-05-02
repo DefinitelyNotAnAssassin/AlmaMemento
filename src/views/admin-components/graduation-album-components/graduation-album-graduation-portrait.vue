@@ -1,15 +1,21 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
-    {{ props.gradsubfolderName }} - {{ props.subfolderName }} -
-    {{ props.folderName }}
-
-    <button @click="backToGrad">Back</button>
-
-    <button @click="openModal" class="add-photo-button">Add Photo</button>
+    <div class="text-center">
+      <h3>
+        {{ props.folderName }}
+      </h3> 
+      <h4>
+        {{ props.gradsubfolderName }} - {{ props.subfolderName }} -
+      </h4>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">Back</button>
+      <button class="btn btn-sm btn-success mx-1 add-photo-button" @click="openModal">Add Photo</button>
+    </div>
 
     <div class="adviser-container">
       <img
-        style="height: 200px; width: 200px"
+        style="height: 150px; width: 150px"
         v-if="adviserImageUrl"
         :src="adviserImageUrl"
         alt="Adviser Image"
@@ -23,7 +29,7 @@
       :key="student.id"
     >
       <img
-        style="height: 200px; width: 200px"
+        style="height: 150px; width: 150px"
         :src="student.imageUrl"
         alt="Student Image"
       />
