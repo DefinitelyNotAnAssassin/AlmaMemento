@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div class="adviser-container text-center" style="font-size: 12px;">
+    <div class="adviser-container text-center" style="font-size: 12px">
       <img
         style="height: 150px; width: 150px"
         v-if="adviserImageUrl"
@@ -34,8 +34,8 @@
 
     <div class="students-container d-flex flex-wrap">
       <div
-        class="student-container"
-        style="width: 150px;"
+        class="student-container m-2"
+        style="width: 150px"
         v-for="student in students"
         :key="student.id"
       >
@@ -44,10 +44,21 @@
           :src="student.imageUrl"
           alt="Student Image"
         />
-        <div class="text-center" style="font-size: 12px;">
-          <div style="max-width: 150px;" class="bg-dark text-light">{{ student.name }}</div>
-          <div style="max-width: 150px;" v-if="student.address">{{ student.address }}</div>
-          <div style="max-width: 150px;" v-if="student.quotes">{{ student.quotes }}</div>
+        <div
+          class="text-center"
+          style="font-size: 12px; height: 60px; overflow-y: auto"
+        >
+          <div style="max-width: 150px" class="bg-dark text-light">
+            {{ student.name }}
+          </div>
+          <div style="max-width: 150px" v-if="student.address">
+            {{ student.address }}
+          </div>
+          <div style="max-width: 150px" v-if="student.quotes">
+            <p>
+              {{ student.quotes }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
