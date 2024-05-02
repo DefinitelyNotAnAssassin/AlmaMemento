@@ -34,20 +34,16 @@
 
     <div class="students-container d-flex flex-wrap">
       <div
-        class="student-container m-2"
-        style="width: 150px"
+        class="width-150px student-container m-2"
         v-for="student in students"
         :key="student.id"
       >
         <img
-          style="height: 150px; width: 150px"
+          style="height: 150px"
           :src="student.imageUrl"
           alt="Student Image"
         />
-        <div
-          class="text-center"
-          style="width: 150px; font-size: 12px;"
-        >
+        <div class="width-150px text-center" style="font-size: 12px">
           <div class="bg-dark text-light">
             {{ student.name }}
           </div>
@@ -275,5 +271,17 @@ onMounted(checkAdviserExists, fetchStudentsAndAdviser);
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.width-150px {
+  width: 150px;
+}
+
+.width-150px img {
+  width: 150px;
+}
+
+.width-150px div {
+  width: 150px;
 }
 </style>
