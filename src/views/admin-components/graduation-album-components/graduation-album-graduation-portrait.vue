@@ -51,7 +51,7 @@
             {{ student.address }}
           </div>
           <div style="height: 30px; overflow-y: auto" v-if="student.quotes">
-            <p>
+            <p class="width-150px">
               {{ student.quotes }}
             </p>
           </div>
