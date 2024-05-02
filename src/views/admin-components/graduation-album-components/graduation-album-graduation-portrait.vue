@@ -32,19 +32,23 @@
       </div>
     </div>
 
-    <div
-      class="student-container"
-      v-for="student in students"
-      :key="student.id"
-    >
-      <img
-        style="height: 150px; width: 150px"
-        :src="student.imageUrl"
-        alt="Student Image"
-      />
-      <span>{{ student.name }}</span>
-      <span v-if="student.address">{{ student.address }}</span>
-      <span v-if="student.quotes">{{ student.quotes }}</span>
+    <div class="students-container">
+      <div
+        class="student-container"
+        v-for="student in students"
+        :key="student.id"
+      >
+        <img
+          style="height: 150px; width: 150px"
+          :src="student.imageUrl"
+          alt="Student Image"
+        />
+        <div>
+          <div>{{ student.name }}</div>
+          <div v-if="student.address">{{ student.address }}</div>
+          <div v-if="student.quotes">{{ student.quotes }}</div>
+        </div>
+      </div>
     </div>
 
     <div v-if="isModalOpen" class="modal">
