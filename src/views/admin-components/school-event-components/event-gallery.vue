@@ -1,8 +1,8 @@
 <template>
     <div>
-        {{ props.folderName }}
+        {{ props.subfolderName }} -{{ props.folderName }}
       <button @click="showModal = true">Upload Image</button>
-      <button @click="backToGrad">Back</button>
+      <button @click="backToEvent">Back</button>
       <div v-if="showModal" class="modal">
         <div class="modal-content">
           <span class="close" @click="showModal = false">&times;</span>
@@ -22,7 +22,7 @@
   import { addDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
   import { db, storage } from '../../../firebase/index.js';
   
-  const props = defineProps(['folderName']);
+  const props = defineProps(['folderName', 'subfolderName']);
   const emit = defineEmits(['update:currentPage']);
   
   const currentAlbumPage = ref('Event Gallery');
@@ -30,7 +30,7 @@
   let selectedFile = null;
   const images = ref([]);
   
-  const backToGrad = async () => {
+  const backToEvent = async () => {
     currentAlbumPage.value = 'Event';
     emit('update:currentPage', 'Event');
   };

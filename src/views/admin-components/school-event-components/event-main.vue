@@ -4,18 +4,11 @@
         <h3>School Events</h3>
       </div>
       <div class="d-flex justify-content-end">
-        <input
-          class="form-control"
-          style="width: 250px"
-          type="text"
-          v-model="searchQuery"
-          placeholder="Search Folder"
-        />
+        <input class="form-control" style="width: 250px" type="text" v-model="searchQuery" placeholder="Search Folder" />
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-sm btn-success" @click="showModal = true">
-          Add Folder
-        </button>
+        <button class="btn btn-sm btn-success" @click="showModal = true"> Add Folder </button>
+        <button @click="backToEvent">Back</button>
       </div>
       <div class="folders d-flex flex-wrap">
         <div
@@ -100,10 +93,11 @@
   
   <script setup>
   import { ref, onMounted, defineEmits, computed } from "vue";
-  import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
+  import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, where, query } from "firebase/firestore";
   import { db } from "../../../firebase/index.js";
   
   const currentAlbumPage = ref("Event");
+  const props = defineProps(["folderName"]);
   
   const folders = ref([]);
   const showModal = ref(false);
@@ -114,14 +108,28 @@
   const searchQuery = ref("");
   const showDeleteConfirmation = ref(false);
   let folderToDeleteIndex = null;
+
+  const backToEvent = async () => {
+    currentAlbumPage.value = 'Event Year';
+    emit('update:currentPage', 'Event Year');
+  };
   
   const fetchFolders = async () => {
-    const querySnapshot = await getDocs(collection(db, "eventfolders"));
-    folders.value = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      name: doc.data().name,
-    }));
-  };
+  if (currentAlbumPage.value === "Event" && props.folderName) {
+    const querySnapshot = await getDocs(
+      query(collection(db, "eventsubfolders"), where("year", "==", props.folderName))
+    );
+    folders.value = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        name: doc.data().name,
+        type: doc.data().type,
+      }))
+      .filter((folder) => folder.type === "event");
+  } else {
+    folders.value = [];
+  }
+};
   
   onMounted(fetchFolders);
   
@@ -138,8 +146,14 @@
       }, 2000);
       return;
     }
+
+    const selectedYear = currentAlbumPage.value === "Event" ? props.folderName : "";
   
-    await addDoc(collection(db, "eventfolders"), { name: newFolderName.value });
+    await addDoc(collection(db, "eventsubfolders"), { 
+      name: newFolderName.value,
+      year: props.folderName,
+      type: "event",
+    });
     newFolderName.value = "";
     showModal.value = false;
     fetchFolders();
@@ -147,10 +161,10 @@
   
   const emit = defineEmits(["update:currentPage"]);
   
-  const changeAlbumPage = (folderName) => {
+  const changeAlbumPage = (subfolderName) => {
     currentAlbumPage.value = "Event Gallery";
     emit("update:currentPage", "Event Gallery");
-    emit("folder-name", folderName);
+    emit("subfolder-name", subfolderName);
   };
   
   const showFolderOptions = (index) => {
@@ -164,7 +178,7 @@
   };
   
   const deleteFolder = async (index) => {
-    await deleteDoc(doc(db, "eventfolders", folders.value[index].id));
+    await deleteDoc(doc(db, "eventsubfolders", folders.value[index].id));
     fetchFolders();
   };
   
@@ -177,7 +191,7 @@
     if (editIndex.value === null) return;
     if (!editFolderName.value.trim()) return;
     const folderId = folders.value[editIndex.value].id;
-    const folderRef = doc(db, "eventfolders", folderId);
+    const folderRef = doc(db, "eventsubfolders", folderId);
     await updateDoc(folderRef, { name: editFolderName.value });
     editIndex.value = null;
     fetchFolders();
