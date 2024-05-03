@@ -137,7 +137,7 @@
     fetchFolders();
   };
   
-  const emit = defineEmits(["update:currentPage"]);
+  const emit = defineEmits(["update:currentPage", "folder-name"]);
   
   const changeAlbumPage = (folderName) => {
     currentAlbumPage.value = "Event";
