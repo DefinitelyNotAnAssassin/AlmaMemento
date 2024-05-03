@@ -5,7 +5,7 @@
         <div class="container d-flex flex-column align-items-end">
           <input class="search-bar form-control" style="width: 250px;" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
           <div>
-            <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
+            <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete</button>
             <button class="btn btn-sm btn-success mx-1" @click="addUser">Add User</button>
             <!-- <input class="btn btn-dark" type="file" @change="importUsers" accept=".xlsx,.xls" /> -->
             <label class="btn btn-sm btn-dark">

@@ -60,7 +60,7 @@
       <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p>
         <button class="btn btn-sm btn-primary" @click="confirmDeleteFolder">Delete</button>
-        <button class="btn btn-sm btn-secondary" @click="cancelDeleteFolder">Cancel</button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">Cancel</button>
       </div>
     </div>
     <div v-if="showWarningModal" class="modal">
