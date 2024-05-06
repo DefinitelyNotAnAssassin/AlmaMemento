@@ -16,6 +16,20 @@
     </div>
 
     <div class="adviser-container text-center" style="font-size: 12px">
+      <div class="image-menu">
+        <!-- <div class="three-dot-menu" @click="toggleAdviserMenu">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div> -->
+        <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
+          <i class="bi bi-list"></i>
+        </button>
+        <div v-if="showAdviserMenu" class="menu-options">
+          <button @click="editAdviser(adviser)">Edit</button>
+          <button @click="deleteAdviser">Delete</button>
+        </div>
+      </div>
       <div class="image-container">
         <img
           style="height: 150px; width: 150px; cursor: pointer"
@@ -24,20 +38,6 @@
           alt="Adviser Image"
           @click="openImageModal(adviserImageUrl)"
         />
-        <div class="image-menu">
-          <!-- <div class="three-dot-menu" @click="toggleAdviserMenu">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div> -->
-          <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
-            <i class="bi bi-list"></i>
-          </button>
-          <div v-if="showAdviserMenu" class="menu-options">
-            <button @click="editAdviser(adviser)">Edit</button>
-            <button @click="deleteAdviser">Delete</button>
-          </div>
-        </div>
       </div>
       <div class="text-center">
         <span v-if="adviserName">
