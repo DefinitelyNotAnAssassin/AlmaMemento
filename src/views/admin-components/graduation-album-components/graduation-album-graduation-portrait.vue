@@ -542,8 +542,10 @@ watch(
 }
 
 .menu-options {
+  width: 50px;
+  height: 50px;
   position: absolute;
-  top: 10px;
+  top: 30px;
   right: 0;
 }
 
