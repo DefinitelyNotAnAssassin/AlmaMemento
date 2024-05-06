@@ -106,9 +106,8 @@
         />
       </div>
 
-      <div class="">
-        <label style="color: #000">-</label>
-        <button class="btn btn-dark" v-if="isEditable" @click="showModal">
+      <div class="btn-save-container">
+        <button class="btn btn-sm btn-dark" v-if="isEditable" @click="showModal">
           Save Changes
         </button>
       </div>
@@ -359,5 +358,15 @@ const deletePhoto = async () => {
 
 .profile-info input[type="password"] {
   font-family: "password";
+}
+
+.btn-save-container {
+  position: relative;
+}
+
+.btn-save-container button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 </style>
