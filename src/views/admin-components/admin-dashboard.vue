@@ -8,7 +8,7 @@
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Total Alumni</h3>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToAlumni"></button>
             </div>
         </div>
         <div class="card-two">
@@ -40,18 +40,31 @@
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Pending for Approval</h3>
                 <i class="fas fa-circle-right"></i>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToManageContent"></button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineEmits } from 'vue'
 import { db } from '../../firebase/index.js'
 import { collection, getDocs } from 'firebase/firestore'
 
-const alumniCount = ref(0)
+const alumniCount = ref(0);
+const currentPage = ref('Dashboard');
+
+const emit = defineEmits(["update:currentPage"]);
+
+const goToAlumni = () => {
+  currentPage.value = "Alumni";
+  emit("update:currentPage", "Alumni");
+};
+
+const goToManageContent = () => {
+  currentPage.value = "Manage Content";
+  emit("update:currentPage", "Manage Content");
+};
 
 const fetchAlumniCount = async () => {
   try {

@@ -69,7 +69,7 @@
     emit('update:currentPage', dropdownItem)
   }
 
-  const router = useRouter()
+  const router = useRouter();
   
   const logout = async () => {
     try {

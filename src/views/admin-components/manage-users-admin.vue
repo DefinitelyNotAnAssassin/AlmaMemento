@@ -139,7 +139,9 @@
               <p>Are you sure you want to delete the selected item(s)?</p>
               <button @click="deleteSelected">Confirm</button>
           </div>
-          <button class="btn btn-sm btn-dark" @click="submitModal">Submit</button>
+          <div v-if="!isDeleteConfirmationVisible">
+              <button class="btn btn-sm btn-dark mt-2" @click="submitModal">Submit</button>
+          </div> 
         </div>
       </div>
       </div>

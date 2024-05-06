@@ -16,17 +16,29 @@
     </div>
 
     <div class="adviser-container text-center" style="font-size: 12px">
-      <img
-        style="height: 150px; width: 150px"
-        v-if="adviserImageUrl"
-        :src="adviserImageUrl"
-        alt="Adviser Image"
-      />
+      <div class="image-container">
+        <img
+          style="height: 150px; width: 150px; cursor: pointer"
+          v-if="adviserImageUrl"
+          :src="adviserImageUrl"
+          alt="Adviser Image"
+          @click="openImageModal(adviserImageUrl)"
+        />
+        <div class="image-menu">
+          <div class="three-dot-menu" @click="toggleAdviserMenu">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div v-if="showAdviserMenu" class="menu-options">
+            <button @click="editAdviser(adviser)">Edit</button>
+            <button @click="deleteAdviser">Delete</button>
+          </div>
+        </div>
+      </div>
       <div class="text-center">
         <span v-if="adviserName">
-          <div>
-            {{ adviserName }}
-          </div>
+          <div>{{ adviserName }}</div>
           <div>Adviser</div>
         </span>
       </div>
@@ -38,22 +50,30 @@
         v-for="student in students"
         :key="student.id"
       >
-        <img
-          style="height: 150px"
-          :src="student.imageUrl"
-          alt="Student Image"
-        />
+        <div class="image-container">
+          <img
+            style="height: 150px; cursor: pointer"
+            :src="student.imageUrl"
+            alt="Student Image"
+            @click="openImageModal(student.imageUrl)"
+          />
+          <div class="image-menu">
+            <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            <div v-if="showStudentMenu === student.id" class="menu-options">
+              <button @click="editStudent(student)">Edit</button>
+              <button @click="deleteStudent(student.id)">Delete</button>
+            </div>
+          </div>
+        </div>
         <div class="width-150px text-center" style="font-size: 12px">
-          <div class="bg-dark text-light">
-            {{ student.name }}
-          </div>
-          <div v-if="student.address">
-            {{ student.address }}
-          </div>
+          <div class="bg-dark text-light">{{ student.name }}</div>
+          <div v-if="student.address">{{ student.address }}</div>
           <div style="height: 30px; overflow-y: auto" v-if="student.quotes">
-            <p class="width-150px" style="word-wrap: break-word;">
-              {{ student.quotes }}
-            </p>
+            <p class="width-150px" style="word-wrap: break-word;">{{ student.quotes }}</p>
           </div>
         </div>
       </div>
@@ -88,6 +108,60 @@
         <button @click="uploadData" class="upload-button">Upload</button>
       </div>
     </div>
+
+    <div v-if="isOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closeImageModal" class="close">&times;</span>
+        <img :src="imageUrl" alt="Preview Image" style="max-width: 100%; max-height: 80vh;">
+      </div>
+    </div>
+
+    <div v-if="isAdviserModalOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closeAdviserModal" class="close">&times;</span>
+        <h2>Edit Adviser</h2>
+        <label for="adviserName">Name:</label>
+        <input type="text" id="adviserName" v-model="editedAdviserName" />
+        <label for="adviserImage">Image:</label>
+        <input type="file" id="adviserImage" ref="adviserImageInput" @change="uploadAdviserImage" />
+        <button @click="saveAdviserChanges" class="upload-button">Save Changes</button>
+      </div>
+    </div>
+
+    <div v-if="isStudentModalOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closeStudentModal" class="close">&times;</span>
+        <h2>Edit Student</h2>
+        <label for="studentName">Name:</label>
+        <input type="text" id="studentName" v-model="editedStudentName" />
+        <label for="studentAddress">Address:</label>
+        <input type="text" id="studentAddress" v-model="editedStudentAddress" />
+        <label for="studentQuotes">Quotes:</label>
+        <input type="text" id="studentQuotes" v-model="editedStudentQuotes" />
+        <label for="studentImage">Image:</label>
+        <input type="file" id="studentImage" ref="studentImageInput" @change="uploadStudentImage" />
+        <button @click="saveStudentChanges" class="upload-button">Save Changes</button>
+      </div>
+    </div>
+
+    <div v-if="isDeleteAdviserModalOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closeDeleteAdviserModal" class="close">&times;</span>
+        <h2>Delete Adviser</h2>
+        <p>Are you sure you want to delete?</p>
+        <button @click="deleteAdviserNow" class="upload-button">Delete</button>
+      </div>
+    </div>
+
+    <div v-if="isDeleteStudentModalOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closeDeleteStudentModal" class="close">&times;</span>
+        <h2>Delete Student</h2>
+        <p>Are you sure you want to delete?</p>
+        <button @click="deleteStudentNow" class="upload-button">Delete</button>
+      </div>
+    </div>
+    
   </div>
 </template>
 
@@ -100,6 +174,9 @@ import {
   where,
   getDocs,
   onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc
 } from "firebase/firestore";
 import {
   uploadBytes,
@@ -120,9 +197,28 @@ const addressInput = ref("");
 const quotesInput = ref("");
 const isAdviserDisabled = ref(false);
 const students = ref([]);
-const adviser = ref(null);
+const adviser = ref({});
 const adviserImageUrl = ref("");
 const adviserName = ref("");
+const isOpen = ref(false);
+const imageUrl = ref("");
+const showAdviserMenu = ref(false);
+const showStudentMenu = ref(null);
+const isAdviserModalOpen = ref(false);
+const editedAdviserName = ref("");
+const adviserImageInput = ref(null);
+const isStudentModalOpen = ref(false);
+const editedStudentName = ref("");
+const editedStudentAddress = ref("");
+const editedStudentQuotes = ref("");
+const studentImageInput = ref(null);
+const isDeleteStudentModalOpen = ref(false);
+const isDeleteAdviserModalOpen = ref(false);
+let selectedDeleteStudentId = null;
+let selectedStudentId = null;
+let selectedAdviserId = null;
+const studentImageUrl = ref("");
+
 
 const emit = defineEmits(["update:currentPage"]);
 
@@ -131,12 +227,138 @@ const backToGrad = async () => {
   emit("update:currentPage", "Chosen Course");
 };
 
+const openImageModal = (url) => {
+  imageUrl.value = url;
+  isOpen.value = true;
+};
+
+const closeImageModal = () => {
+  isOpen.value = false;
+};
+
 const openModal = async () => {
   isModalOpen.value = true;
 };
 
 const closeModal = () => {
   isModalOpen.value = false;
+};
+
+const toggleAdviserMenu = () => {
+  showAdviserMenu.value = !showAdviserMenu.value;
+};
+
+const toggleStudentMenu = (studentId) => {
+  showStudentMenu.value = showStudentMenu.value === studentId ? null : studentId;
+};
+
+const editAdviser = (adviser) => {
+  editedAdviserName.value = adviser.name;
+  selectedAdviserId = adviser.id;
+
+  isAdviserModalOpen.value = true;
+};
+
+const closeAdviserModal = () => {
+  isAdviserModalOpen.value = false;
+};
+
+const uploadAdviserImage = async (event) => {
+  const imageFile = event.target.files[0];
+  const imageRef = storageRef(storage, `adviserImages/${imageFile.name}`);
+  await uploadBytes(imageRef, imageFile);
+  const imageUrl = await getDownloadURL(imageRef);
+  adviserImageUrl.value = imageUrl;
+};
+
+const saveAdviserChanges = async () => {
+  let newImageUrl = adviserImageUrl.value;
+
+const imageInput = adviserImageInput.value;
+if (imageInput && imageInput.files.length > 0) {
+  const imageFile = imageInput.files[0];
+  const imageRef = storageRef(storage, `adviserImages/${imageFile.name}`);
+  await uploadBytes(imageRef, imageFile);
+  newImageUrl = await getDownloadURL(imageRef);
+}
+
+await updateDoc(doc(db, "gradportrait", selectedAdviserId), {
+  name: editedAdviserName.value,
+  imageUrl: newImageUrl,
+});
+  isAdviserModalOpen.value = false;
+};
+
+const deleteAdviser = async () => {
+  isDeleteAdviserModalOpen.value = true;
+};
+
+const closeDeleteAdviserModal = () => {
+  isDeleteAdviserModalOpen.value = false;
+};
+
+const deleteAdviserNow = async () => {
+  await deleteDoc(doc(db, 'gradportrait', adviser.value.id));
+  adviser.value = {};
+  isDeleteAdviserModalOpen.value = false;
+};
+
+
+const editStudent = (student) => {
+  editedStudentName.value = student.name;
+  editedStudentAddress.value = student.address;
+  editedStudentQuotes.value = student.quotes;
+  selectedStudentId = student.id;
+
+  isStudentModalOpen.value = true;
+};
+
+const closeStudentModal = () => {
+  isStudentModalOpen.value = false;
+};
+
+const uploadStudentImage = async (event) => {
+  const imageFile = event.target.files[0];
+  const imageRef = storageRef(storage, `studentImages/${imageFile.name}`);
+  await uploadBytes(imageRef, imageFile);
+  const imageUrl = await getDownloadURL(imageRef);
+  studentImageUrl.value = imageUrl;
+};
+
+const saveStudentChanges = async () => {
+  let newImageUrl = studentImageUrl.value;
+
+  const imageInput = studentImageInput.value;
+  if (imageInput && imageInput.files.length > 0) {
+    const imageFile = imageInput.files[0];
+    const imageRef = storageRef(storage, `studentImages/${imageFile.name}`);
+    await uploadBytes(imageRef, imageFile);
+    newImageUrl = await getDownloadURL(imageRef);
+  }
+
+  await updateDoc(doc(db, "gradportrait", selectedStudentId), {
+    name: editedStudentName.value,
+    address: editedStudentAddress.value,
+    quotes: editedStudentQuotes.value,
+    imageUrl: newImageUrl,
+  });
+
+  isStudentModalOpen.value = false;
+};
+
+const deleteStudent = async (studentId) => {
+  selectedDeleteStudentId = studentId;
+  isDeleteStudentModalOpen.value = true;
+};
+
+const closeDeleteStudentModal = () => {
+  isDeleteStudentModalOpen.value = false;
+};
+
+const deleteStudentNow = async () => {
+  await deleteDoc(doc(db, 'gradportrait', selectedDeleteStudentId));
+  selectedDeleteStudentId = null;
+  isDeleteStudentModalOpen.value = false;
 };
 
 const uploadData = async () => {
@@ -184,33 +406,26 @@ const fetchStudentsAndAdviser = async () => {
     where("course", "==", props.subfolderName)
   );
 
-  const unsubscribe1 = onSnapshot(q, (querySnapshot) => {
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
     students.value = [];
-    adviser.value = null;
+    adviser.value = {};
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       if (data.role === "adviser") {
-        adviser.value = data;
+        adviser.value = { ...data, id: doc.id };
         adviserImageUrl.value = data.imageUrl;
         adviserName.value = data.name;
       } else {
-        students.value.push(data);
+        students.value.push({ ...data, id: doc.id });
       }
     });
   });
 
-  return unsubscribe1;
+  return unsubscribe;
 };
 
-const unsubscribe1 = fetchStudentsAndAdviser();
-watch(
-  () => [props.folderName, props.subfolderName],
-  () => {
-    unsubscribe1();
-    unsubscribe1 = fetchStudentsAndAdviser();
-  }
-);
+let unsubscribe1;
 
 const unsubscribe = onSnapshot(
   query(
@@ -224,7 +439,19 @@ const unsubscribe = onSnapshot(
   }
 );
 
-onMounted(checkAdviserExists, fetchStudentsAndAdviser);
+onMounted(() => {
+  checkAdviserExists();
+  unsubscribe1 = fetchStudentsAndAdviser();
+});
+
+watch(
+  () => [props.folderName, props.subfolderName],
+  () => {
+    unsubscribe1();
+    unsubscribe1 = fetchStudentsAndAdviser();
+  }
+);
+
 </script>
 
 <style scoped>
@@ -283,5 +510,60 @@ onMounted(checkAdviserExists, fetchStudentsAndAdviser);
 
 .width-150px div {
   width: 150px;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.image-menu {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: none;
+}
+
+.image-container:hover .image-menu {
+  display: block;
+}
+
+.three-dot-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+
+.three-dot-menu div {
+  width: 100%;
+  height: 2px;
+  background-color: black;
+}
+
+.menu-options {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 1;
+  width: 70px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-options button {
+  display: block;
+  width: 100%;
+  padding: 5px 0;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.menu-options button:hover {
+  background-color: #f9f9f9;
 }
 </style>

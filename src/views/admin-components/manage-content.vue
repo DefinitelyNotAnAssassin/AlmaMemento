@@ -8,6 +8,7 @@
         <option value="all">All</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
+        <option value="history">History</option>
       </select>
       <input class="txt-search form-control" type="text" v-model="searchQuery" placeholder="Search by ID or Name">
     </div>
@@ -15,7 +16,7 @@
       <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete Selected</button>
     </div>
     <table class="table table-striped">
-      <thead>
+      <thead v-show="filterStatus !== 'history'">
         <tr>
           <th></th>
           <th>ID Number</th>
@@ -25,6 +26,7 @@
           <th>Description</th>
           <th>Image</th>
           <th>Actions</th>
+          <th>History</th>
         </tr>
       </thead>
       <tbody>
@@ -44,9 +46,28 @@
             <span class="bg-success text-light p-1 rounded" v-else-if="item.status === 'approved'">Approved</span>
             <span class="bg-danger text-light p-1 rounded" v-else-if="item.status === 'rejected'">Rejected</span>
           </td>
+          <td>
+            <template v-if="item.history && item.history.length > 0">
+              <ul>
+                <li v-for="historyItem in item.history" :key="historyItem.id">{{ historyItem.admin }} - {{ historyItem.status }}</li>
+              </ul>
+            </template>
+            <span v-else>No History</span>
+          </td>
         </tr>
       </tbody>
     </table>
+    <div v-show="filterStatus === 'history'" class="history-list">
+      <h4>History</h4>
+      <ul>
+        <li v-for="item in filteredHistory" :key="item.id">
+          <template v-for="(historyItem, historyIndex) in item.history">
+            <span v-if="historyIndex > 0">, </span>
+            <span>{{ historyItem.admin }} - {{ historyItem.status }}</span>
+          </template>
+        </li>
+      </ul>
+    </div>
     <div v-if="imagePreview" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -66,7 +87,8 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { db } from '../../firebase/index.js';
-import { collection, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { useRouter } from 'vue-router'
+import { collection, getDocs, doc, updateDoc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 
 const items = ref([]);
 const selectedItems = ref([]);
@@ -77,10 +99,8 @@ const userId = ref([]);
 const filterStatus = ref('all');
 const isModalVisible = ref(false)
 
-onMounted(async () => {
-  fetchUsersAndClassYearsAndEvents();
-  listenForPostChanges();
-});
+const router = useRouter();
+const adminId = router.currentRoute.value.query.userId;
 
 const fetchUsersAndClassYearsAndEvents = async () => {
   const userSnapshot = await getDocs(collection(db, 'users'));
@@ -115,16 +135,33 @@ const listenForPostChanges = () => {
 
 const searchQuery = ref('');
 
+const userIdToName = async (adminId) => {
+  const docRef = doc(db, 'users', adminId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data().name;
+  } else {
+    console.log('No such document!');
+    return null;
+  }
+};
+
 async function approvePost(item, index) {
   const postRef = doc(db, 'posts', item.id);
-  await updateDoc(postRef, { status: 'approved' });
-  items.value[index].status = 'approved';
+  const adminName = await userIdToName(adminId);
+  if (adminName) {
+    await updateDoc(postRef, { status: 'approved', history: [...(item.history || []), { admin: adminName, status: 'approved' }] });
+    items.value[index].status = 'approved';
+  }
 }
 
 async function rejectPost(item, index) {
   const postRef = doc(db, 'posts', item.id);
-  await updateDoc(postRef, { status: 'rejected' });
-  items.value[index].status = 'rejected';
+  const adminName = await userIdToName(adminId);
+  if (adminName) {
+    await updateDoc(postRef, { status: 'rejected', history: [...(item.history || []), { admin: adminName, status: 'rejected' }] });
+    items.value[index].status = 'rejected';
+  }
 }
 
 function showImagePreview(imageUrl) {
@@ -134,6 +171,14 @@ function showImagePreview(imageUrl) {
 function closeModal() {
   imagePreview.value = null;
 }
+
+const filteredHistory = computed(() => {
+  if (filterStatus.value === 'history') {
+    return items.value.filter(item => item.history && item.history.length > 0);
+  } else {
+    return [];
+  }
+});
 
 const filteredItems = computed(() => {
   let filtered = items.value;
@@ -165,7 +210,13 @@ const deleteSelected = async () => {
   isModalVisible.value = false
   selectedItems.value = []
 }
+
+onMounted(async () => {
+  fetchUsersAndClassYearsAndEvents();
+  listenForPostChanges();
+});
 </script>
+
 
 <style>
 .modal {
