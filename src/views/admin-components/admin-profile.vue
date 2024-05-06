@@ -1,6 +1,6 @@
 <template>
   <div class="components-page-main-container profile-container container">
-    <div class="user-profile">
+    <div class="user-profile bg-secondary">
       <div>
         <img
           @click="openImageModal"
