@@ -25,11 +25,14 @@
           @click="openImageModal(adviserImageUrl)"
         />
         <div class="image-menu">
-          <div class="three-dot-menu" @click="toggleAdviserMenu">
+          <!-- <div class="three-dot-menu" @click="toggleAdviserMenu">
             <div></div>
             <div></div>
             <div></div>
-          </div>
+          </div> -->
+          <button class="btn" @click="toggleAdviserMenu">
+            <i class="bi bi-list"></i>
+          </button>
           <div v-if="showAdviserMenu" class="menu-options">
             <button @click="editAdviser(adviser)">Edit</button>
             <button @click="deleteAdviser">Delete</button>
@@ -58,11 +61,14 @@
             @click="openImageModal(student.imageUrl)"
           />
           <div class="image-menu">
-            <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
+            <!-- <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
               <div></div>
               <div></div>
               <div></div>
-            </div>
+            </div> -->
+            <button class="btn" @click="toggleStudentMenu(student.id)">
+              <i class="bi bi-list"></i>
+            </button>
             <div v-if="showStudentMenu === student.id" class="menu-options">
               <button @click="editStudent(student)">Edit</button>
               <button @click="deleteStudent(student.id)">Delete</button>
@@ -73,7 +79,9 @@
           <div class="bg-dark text-light">{{ student.name }}</div>
           <div v-if="student.address">{{ student.address }}</div>
           <div style="height: 30px; overflow-y: auto" v-if="student.quotes">
-            <p class="width-150px" style="word-wrap: break-word;">{{ student.quotes }}</p>
+            <p class="width-150px" style="word-wrap: break-word">
+              {{ student.quotes }}
+            </p>
           </div>
         </div>
       </div>
@@ -112,7 +120,11 @@
     <div v-if="isOpen" class="modal">
       <div class="modal-content">
         <span @click="closeImageModal" class="close">&times;</span>
-        <img :src="imageUrl" alt="Preview Image" style="max-width: 100%; max-height: 80vh;">
+        <img
+          :src="imageUrl"
+          alt="Preview Image"
+          style="max-width: 100%; max-height: 80vh"
+        />
       </div>
     </div>
 
@@ -123,8 +135,15 @@
         <label for="adviserName">Name:</label>
         <input type="text" id="adviserName" v-model="editedAdviserName" />
         <label for="adviserImage">Image:</label>
-        <input type="file" id="adviserImage" ref="adviserImageInput" @change="uploadAdviserImage" />
-        <button @click="saveAdviserChanges" class="upload-button">Save Changes</button>
+        <input
+          type="file"
+          id="adviserImage"
+          ref="adviserImageInput"
+          @change="uploadAdviserImage"
+        />
+        <button @click="saveAdviserChanges" class="upload-button">
+          Save Changes
+        </button>
       </div>
     </div>
 
@@ -139,8 +158,15 @@
         <label for="studentQuotes">Quotes:</label>
         <input type="text" id="studentQuotes" v-model="editedStudentQuotes" />
         <label for="studentImage">Image:</label>
-        <input type="file" id="studentImage" ref="studentImageInput" @change="uploadStudentImage" />
-        <button @click="saveStudentChanges" class="upload-button">Save Changes</button>
+        <input
+          type="file"
+          id="studentImage"
+          ref="studentImageInput"
+          @change="uploadStudentImage"
+        />
+        <button @click="saveStudentChanges" class="upload-button">
+          Save Changes
+        </button>
       </div>
     </div>
 
@@ -161,7 +187,6 @@
         <button @click="deleteStudentNow" class="upload-button">Delete</button>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -176,7 +201,7 @@ import {
   onSnapshot,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import {
   uploadBytes,
@@ -219,7 +244,6 @@ let selectedStudentId = null;
 let selectedAdviserId = null;
 const studentImageUrl = ref("");
 
-
 const emit = defineEmits(["update:currentPage"]);
 
 const backToGrad = async () => {
@@ -249,7 +273,8 @@ const toggleAdviserMenu = () => {
 };
 
 const toggleStudentMenu = (studentId) => {
-  showStudentMenu.value = showStudentMenu.value === studentId ? null : studentId;
+  showStudentMenu.value =
+    showStudentMenu.value === studentId ? null : studentId;
 };
 
 const editAdviser = (adviser) => {
@@ -274,18 +299,18 @@ const uploadAdviserImage = async (event) => {
 const saveAdviserChanges = async () => {
   let newImageUrl = adviserImageUrl.value;
 
-const imageInput = adviserImageInput.value;
-if (imageInput && imageInput.files.length > 0) {
-  const imageFile = imageInput.files[0];
-  const imageRef = storageRef(storage, `adviserImages/${imageFile.name}`);
-  await uploadBytes(imageRef, imageFile);
-  newImageUrl = await getDownloadURL(imageRef);
-}
+  const imageInput = adviserImageInput.value;
+  if (imageInput && imageInput.files.length > 0) {
+    const imageFile = imageInput.files[0];
+    const imageRef = storageRef(storage, `adviserImages/${imageFile.name}`);
+    await uploadBytes(imageRef, imageFile);
+    newImageUrl = await getDownloadURL(imageRef);
+  }
 
-await updateDoc(doc(db, "gradportrait", selectedAdviserId), {
-  name: editedAdviserName.value,
-  imageUrl: newImageUrl,
-});
+  await updateDoc(doc(db, "gradportrait", selectedAdviserId), {
+    name: editedAdviserName.value,
+    imageUrl: newImageUrl,
+  });
   isAdviserModalOpen.value = false;
 };
 
@@ -298,11 +323,10 @@ const closeDeleteAdviserModal = () => {
 };
 
 const deleteAdviserNow = async () => {
-  await deleteDoc(doc(db, 'gradportrait', adviser.value.id));
+  await deleteDoc(doc(db, "gradportrait", adviser.value.id));
   adviser.value = {};
   isDeleteAdviserModalOpen.value = false;
 };
-
 
 const editStudent = (student) => {
   editedStudentName.value = student.name;
@@ -356,7 +380,7 @@ const closeDeleteStudentModal = () => {
 };
 
 const deleteStudentNow = async () => {
-  await deleteDoc(doc(db, 'gradportrait', selectedDeleteStudentId));
+  await deleteDoc(doc(db, "gradportrait", selectedDeleteStudentId));
   selectedDeleteStudentId = null;
   isDeleteStudentModalOpen.value = false;
 };
@@ -451,7 +475,6 @@ watch(
     unsubscribe1 = fetchStudentsAndAdviser();
   }
 );
-
 </script>
 
 <style scoped>
@@ -524,11 +547,11 @@ watch(
   display: none;
 }
 
-.image-container:hover .image-menu {
+/* .image-container:hover .image-menu {
   display: block;
-}
+} */
 
-.three-dot-menu {
+/* .three-dot-menu {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -541,7 +564,7 @@ watch(
   width: 100%;
   height: 2px;
   background-color: black;
-}
+} */
 
 .menu-options {
   background-color: white;
