@@ -24,8 +24,8 @@
           <i class="bi bi-list"></i>
         </button>
         <div v-if="showAdviserMenu" class="menu-options card bg-light">
-          <button @click="editAdviser(adviser)">Edit</button>
-          <button @click="deleteAdviser">Delete</button>
+          <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
+          <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
         </div>
         <div class="image-container">
           <img
@@ -58,8 +58,8 @@
           <i class="bi bi-list"></i>
         </button>
         <div v-if="showStudentMenu === student.id" class="menu-options card bg-light">
-          <button @click="editStudent(student)">Edit</button>
-          <button @click="deleteStudent(student.id)">Delete</button>
+          <button class="btn btn-sm" @click="editStudent(student)">Edit</button>
+          <button class="btn btn-sm" @click="deleteStudent(student.id)">Delete</button>
         </div>
         <div class="image-container">
           <img
