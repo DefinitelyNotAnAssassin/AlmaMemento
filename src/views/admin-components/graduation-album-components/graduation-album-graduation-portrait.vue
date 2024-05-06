@@ -544,7 +544,6 @@ watch(
   position: absolute;
   top: 5px;
   right: 5px;
-  display: none;
 }
 
 /* .image-container:hover .image-menu {
