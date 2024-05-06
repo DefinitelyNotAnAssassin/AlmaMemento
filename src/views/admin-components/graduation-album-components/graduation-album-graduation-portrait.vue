@@ -17,7 +17,10 @@
 
     <div class="d-flex justify-content-center picture-container">
       <div class="adviser-container text-center" style="font-size: 12px">
-        <button class="btn btn-sm btn-light btn-menu" @click="toggleAdviserMenu">
+        <button
+          class="btn btn-sm btn-light btn-menu"
+          @click="toggleAdviserMenu"
+        >
           <i class="bi bi-list"></i>
         </button>
         <div v-if="showAdviserMenu" class="menu-options">
@@ -48,16 +51,16 @@
         v-for="student in students"
         :key="student.id"
       >
-          <button
-            class="btn btn-sm btn-light btn-menu"
-            @click="toggleStudentMenu(student.id)"
-          >
-            <i class="bi bi-list"></i>
-          </button>
-          <div v-if="showStudentMenu === student.id" class="menu-options">
-            <button @click="editStudent(student)">Edit</button>
-            <button @click="deleteStudent(student.id)">Delete</button>
-          </div>
+        <button
+          class="btn btn-sm btn-light btn-menu"
+          @click="toggleStudentMenu(student.id)"
+        >
+          <i class="bi bi-list"></i>
+        </button>
+        <div v-if="showStudentMenu === student.id" class="menu-options">
+          <button @click="editStudent(student)">Edit</button>
+          <button @click="deleteStudent(student.id)">Delete</button>
+        </div>
         <div class="image-container">
           <img
             style="height: 150px; cursor: pointer"
@@ -538,17 +541,13 @@ watch(
   right: 0 !important;
 }
 
-/* .menu-options {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  z-index: 1;
-  width: 70px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.menu-options {
+  position: absolute;
+  top: 10px;
+  right: 0;
 }
 
-.menu-options button {
+/* .menu-options button {
   display: block;
   width: 100%;
   padding: 5px 0;
