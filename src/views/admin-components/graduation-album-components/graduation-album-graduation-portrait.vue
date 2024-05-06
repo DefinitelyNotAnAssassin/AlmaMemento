@@ -552,7 +552,7 @@ watch(
   right: 0 !important;
 }
 
-.menu-options {
+/* .menu-options {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -571,7 +571,7 @@ watch(
   background: none;
   cursor: pointer;
   font-size: 12px;
-}
+} */
 
 .menu-options button:hover {
   background-color: #f9f9f9;
