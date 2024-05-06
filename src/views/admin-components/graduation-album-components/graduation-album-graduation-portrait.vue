@@ -30,7 +30,7 @@
             <div></div>
             <div></div>
           </div> -->
-          <button class="btn" @click="toggleAdviserMenu">
+          <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
             <i class="bi bi-list"></i>
           </button>
           <div v-if="showAdviserMenu" class="menu-options">
@@ -66,7 +66,7 @@
               <div></div>
               <div></div>
             </div> -->
-            <button class="btn" @click="toggleStudentMenu(student.id)">
+            <button class="btn btn-sm btn-light" @click="toggleStudentMenu(student.id)">
               <i class="bi bi-list"></i>
             </button>
             <div v-if="showStudentMenu === student.id" class="menu-options">
