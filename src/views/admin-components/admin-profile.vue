@@ -1,5 +1,5 @@
 <template>
-    <div class="profile-container">
+    <div class="profile-container container">
       <h1 class="template-title">Profile</h1>
       <div class="user-profile">
         <div>
@@ -53,7 +53,7 @@
       </div>
   
       <div>
-        <button v-if="isEditable" @click="showModal">Save Changes</button>
+        <button class="btn btn-sm" v-if="isEditable" @click="showModal">Save Changes</button>
       </div>
   
       <div v-if="isModalOpen" class="modal">
@@ -238,11 +238,16 @@ const deletePhoto = async () => {
     text-decoration: none;
     cursor: pointer;
   }
+
   .profile-container {
       width: 100%;
+      height: 80vh;
       margin: 24px;
       overflow: auto;
+
+      background-color: blue;
   }
+
   .template-title {
       margin: 10px;
   }
