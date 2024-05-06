@@ -43,8 +43,8 @@
               <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
               <button class="btn btn-sm btn-danger mx-1" @click="rejectPost(item, index)">Reject</button>
             </template>
-            <span class="btn btn-sm btn-success" v-else-if="item.status === 'approved'">Approved</span>
-            <span class="btn btn-sm btn-danger" style="cursor: none;" v-else-if="item.status === 'rejected'">Rejected</span>
+            <span class="btn btn-sm btn-success" style="cursor: not-allowed;" v-else-if="item.status === 'approved'">Approved</span>
+            <span class="btn btn-sm btn-danger" style="cursor: not-allowed;" v-else-if="item.status === 'rejected'">Rejected</span>
           </td>
           <td>
             <template v-if="item.history && item.history.length > 0">
