@@ -107,8 +107,9 @@
       </div>
 
       <div class="">
+        <label> </label>
         <button
-          class="btn btn-sm btn-dark"
+          class="btn btn-dark"
           v-if="isEditable"
           @click="showModal"
         >
