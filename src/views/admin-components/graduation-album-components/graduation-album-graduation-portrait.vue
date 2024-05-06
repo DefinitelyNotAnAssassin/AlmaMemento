@@ -538,10 +538,6 @@ watch(
   width: 150px;
 }
 
-.image-container {
-  position: relative;
-}
-
 .image-menu {
   position: absolute !important;
   top: 5px !important;
