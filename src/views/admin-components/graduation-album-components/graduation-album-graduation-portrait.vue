@@ -542,6 +542,7 @@ watch(
 
 .picture-container {
   position: relative;
+  background-color: red;
 }
 
 .image-menu {
