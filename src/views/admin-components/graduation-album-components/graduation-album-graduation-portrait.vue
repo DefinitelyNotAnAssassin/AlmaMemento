@@ -53,6 +53,23 @@
         v-for="student in students"
         :key="student.id"
       >
+        <div class="image-menu">
+          <!-- <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div> -->
+          <button
+            class="btn btn-sm btn-light"
+            @click="toggleStudentMenu(student.id)"
+          >
+            <i class="bi bi-list"></i>
+          </button>
+          <div v-if="showStudentMenu === student.id" class="menu-options">
+            <button @click="editStudent(student)">Edit</button>
+            <button @click="deleteStudent(student.id)">Delete</button>
+          </div>
+        </div>
         <div class="image-container">
           <img
             style="height: 150px; cursor: pointer"
@@ -60,23 +77,6 @@
             alt="Student Image"
             @click="openImageModal(student.imageUrl)"
           />
-          <div class="image-menu">
-            <!-- <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div> -->
-            <button
-              class="btn btn-sm btn-light"
-              @click="toggleStudentMenu(student.id)"
-            >
-              <i class="bi bi-list"></i>
-            </button>
-            <div v-if="showStudentMenu === student.id" class="menu-options">
-              <button @click="editStudent(student)">Edit</button>
-              <button @click="deleteStudent(student.id)">Delete</button>
-            </div>
-          </div>
         </div>
         <div class="width-150px text-center" style="font-size: 12px">
           <div class="bg-dark text-light">{{ student.name }}</div>
