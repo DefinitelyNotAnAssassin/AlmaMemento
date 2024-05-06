@@ -105,12 +105,16 @@
           v-model="userData.year"
         />
       </div>
-    </div>
 
-    <div class="d-flex bg-secondary justify-content-end">
-      <button class="btn btn-sm btn-dark" v-if="isEditable" @click="showModal">
-        Save Changes
-      </button>
+      <div class="d-flex bg-secondary justify-content-end">
+        <button
+          class="btn btn-sm btn-dark"
+          v-if="isEditable"
+          @click="showModal"
+        >
+          Save Changes
+        </button>
+      </div>
     </div>
 
     <div v-if="isModalOpen" class="modal">
@@ -330,9 +334,10 @@ const deletePhoto = async () => {
 .user-profile {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .profile-details {
-  margin-left: 40px;
+  margin-left: 50px;
 }
 .profile-details h1 {
   font-size: 4rem;
