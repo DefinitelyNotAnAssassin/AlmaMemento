@@ -548,18 +548,4 @@ watch(
   top: 30px;
   right: 0;
 }
-
-/* .menu-options button {
-  width: 100%;
-  padding: 5px 0;
-  text-align: left;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.menu-options button:hover {
-  background-color: #f9f9f9;
-} */
 </style>
