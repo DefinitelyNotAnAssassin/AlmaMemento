@@ -548,8 +548,8 @@ watch(
 
 .image-menu {
   position: absolute !important;
-  top: 5px !important;
-  right: 5px !important;
+  top: 0 !important;
+  right: 0 !important;
 }
 
 .menu-options {
