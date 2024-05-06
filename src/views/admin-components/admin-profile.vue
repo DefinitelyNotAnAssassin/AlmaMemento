@@ -1,6 +1,6 @@
 <template>
   <div class="components-page-main-container p-3 profile-container container">
-    <div class="user-profile bg-secondary mt-2">
+    <div class="user-profile mt-2">
       <div>
         <img
           @click="openImageModal"
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="profile-info">
+    <div class="profile-info mt-2">
       <div>
         <label for="alumnaID">Admin ID:</label>
         <input
@@ -107,7 +107,7 @@
       </div>
     </div>
 
-    <div>
+    <div class="d-flex bg-secondary justify-content-end">
       <button class="btn btn-sm btn-dark" v-if="isEditable" @click="showModal">
         Save Changes
       </button>
