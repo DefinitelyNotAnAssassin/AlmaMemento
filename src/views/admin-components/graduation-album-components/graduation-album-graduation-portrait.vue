@@ -17,19 +17,12 @@
 
     <div class="d-flex justify-content-center picture-container">
       <div class="adviser-container text-center" style="font-size: 12px">
-        <div class="image-menu">
-          <!-- <div class="three-dot-menu" @click="toggleAdviserMenu">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div> -->
-          <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
-            <i class="bi bi-list"></i>
-          </button>
-          <div v-if="showAdviserMenu" class="menu-options">
-            <button @click="editAdviser(adviser)">Edit</button>
-            <button @click="deleteAdviser">Delete</button>
-          </div>
+        <button class="btn btn-sm btn-light btn-menu" @click="toggleAdviserMenu">
+          <i class="bi bi-list"></i>
+        </button>
+        <div v-if="showAdviserMenu" class="menu-options">
+          <button @click="editAdviser(adviser)">Edit</button>
+          <button @click="deleteAdviser">Delete</button>
         </div>
         <div class="image-container">
           <img
@@ -55,14 +48,8 @@
         v-for="student in students"
         :key="student.id"
       >
-        <div class="image-menu">
-          <!-- <div class="three-dot-menu" @click="toggleStudentMenu(student.id)">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div> -->
           <button
-            class="btn btn-sm btn-light"
+            class="btn btn-sm btn-light btn-menu"
             @click="toggleStudentMenu(student.id)"
           >
             <i class="bi bi-list"></i>
@@ -71,7 +58,6 @@
             <button @click="editStudent(student)">Edit</button>
             <button @click="deleteStudent(student.id)">Delete</button>
           </div>
-        </div>
         <div class="image-container">
           <img
             style="height: 150px; cursor: pointer"
@@ -546,7 +532,7 @@ watch(
   width: 150px;
 }
 
-.image-menu {
+.btn-menu {
   position: absolute !important;
   top: 0 !important;
   right: 0 !important;
