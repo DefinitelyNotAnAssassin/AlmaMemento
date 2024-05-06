@@ -40,11 +40,11 @@
           <td><a class="btn-view-image" @click="showImagePreview(item.imageUrl)">View Image</a></td>
           <td>
             <template class="d-flex flex-wrap" v-if="item.status === 'pending'">
-              <button class="btn btn-sm btn-success mx-1" @click="approvePost(item, index)">Approve</button>
+              <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
               <button class="btn btn-sm btn-danger mx-1" @click="rejectPost(item, index)">Reject</button>
             </template>
-            <span class="bg-success text-light p-1 rounded" v-else-if="item.status === 'approved'">Approved</span>
-            <span class="bg-danger text-light p-1 rounded" v-else-if="item.status === 'rejected'">Rejected</span>
+            <span class="btn btn-sm btn-success" v-else-if="item.status === 'approved'">Approved</span>
+            <span class="btn btn-sm btn-danger" style="cursor: none;" v-else-if="item.status === 'rejected'">Rejected</span>
           </td>
           <td>
             <template v-if="item.history && item.history.length > 0">
