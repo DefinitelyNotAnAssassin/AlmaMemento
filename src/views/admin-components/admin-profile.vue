@@ -107,12 +107,8 @@
       </div>
 
       <div class="">
-        <label> </label>
-        <button
-          class="btn btn-dark"
-          v-if="isEditable"
-          @click="showModal"
-        >
+        <label style="color: #000">-</label>
+        <button class="btn btn-dark" v-if="isEditable" @click="showModal">
           Save Changes
         </button>
       </div>
