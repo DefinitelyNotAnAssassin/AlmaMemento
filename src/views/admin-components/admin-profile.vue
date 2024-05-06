@@ -14,10 +14,10 @@
         </h5>
       </div>
       <div class="profile-details">
-        <h1>{{ userData.name }}</h1>
+        <h2>{{ userData.name }}</h2>
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
-          <h3 style="margin-right: 10px">{{ userData.address }}</h3>
+          <h4 style="margin-right: 10px">{{ userData.address }}</h4>
           <img
             @click="editProfile"
             width="25"
@@ -332,7 +332,7 @@ const deletePhoto = async () => {
   justify-content: center;
 }
 .profile-details {
-  margin-left: 24px;
+  margin-left: 40px;
 }
 .profile-details h1 {
   font-size: 4rem;
