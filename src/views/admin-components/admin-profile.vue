@@ -14,10 +14,10 @@
         </h5>
       </div>
       <div class="profile-details">
-        <h2>{{ userData.name }}</h2>
+        <h1>{{ userData.name }}</h1>
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
-          <h4 style="margin-right: 10px">{{ userData.address }}</h4>
+          <h3 style="margin-right: 10px">{{ userData.address }}</h3>
           <img
             @click="editProfile"
             width="25"
