@@ -51,7 +51,7 @@
 
     <div class="students-container d-flex flex-wrap">
       <div
-        class="width-150px student-container m-2 picture-container"
+        class="width-150px student-container m-2 picture-container p-0"
         v-for="student in students"
         :key="student.id"
       >
@@ -543,6 +543,7 @@ watch(
 .picture-container {
   position: relative;
   background-color: red;
+  width: 150px;
 }
 
 .image-menu {
