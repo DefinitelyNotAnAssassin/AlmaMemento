@@ -53,7 +53,7 @@
       </div>
   
       <div>
-        <button class="btn btn-sm" v-if="isEditable" @click="showModal">Save Changes</button>
+        <button class="btn btn-sm btn-dark" v-if="isEditable" @click="showModal">Save Changes</button>
       </div>
   
       <div v-if="isModalOpen" class="modal">
