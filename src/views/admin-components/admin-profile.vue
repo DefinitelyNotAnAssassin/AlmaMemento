@@ -1,5 +1,5 @@
 <template>
-    <div class="profile-container container">
+    <div class="components-page-main-container profile-container container">
       <h1 class="template-title">Profile</h1>
       <div class="user-profile">
         <div>
@@ -240,10 +240,8 @@ const deletePhoto = async () => {
   }
 
   .profile-container {
-      width: 100vw;
       height: 85vh;
-      margin: 24px;
-      overflow: auto;
+      overflow-y: auto;
   }
 
   .template-title {
