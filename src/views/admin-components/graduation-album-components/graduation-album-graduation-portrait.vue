@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center picture-container">
       <div class="adviser-container text-center" style="font-size: 12px">
         <div class="image-menu">
           <!-- <div class="three-dot-menu" @click="toggleAdviserMenu">
@@ -51,7 +51,7 @@
 
     <div class="students-container d-flex flex-wrap">
       <div
-        class="width-150px student-container m-2"
+        class="width-150px student-container m-2 picture-container"
         v-for="student in students"
         :key="student.id"
       >
@@ -538,6 +538,10 @@ watch(
 
 .width-150px div {
   width: 150px;
+}
+
+.picture-container {
+  position: relative;
 }
 
 .image-menu {
