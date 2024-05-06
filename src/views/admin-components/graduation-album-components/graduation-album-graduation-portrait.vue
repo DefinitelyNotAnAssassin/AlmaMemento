@@ -66,7 +66,10 @@
               <div></div>
               <div></div>
             </div> -->
-            <button class="btn btn-sm btn-light" @click="toggleStudentMenu(student.id)">
+            <button
+              class="btn btn-sm btn-light"
+              @click="toggleStudentMenu(student.id)"
+            >
               <i class="bi bi-list"></i>
             </button>
             <div v-if="showStudentMenu === student.id" class="menu-options">
@@ -537,33 +540,13 @@ watch(
 
 .image-container {
   position: relative;
-  display: inline-block;
 }
 
 .image-menu {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
 }
-
-/* .image-container:hover .image-menu {
-  display: block;
-} */
-
-/* .three-dot-menu {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
-}
-
-.three-dot-menu div {
-  width: 100%;
-  height: 2px;
-  background-color: black;
-} */
 
 .menu-options {
   background-color: white;
@@ -583,6 +566,7 @@ watch(
   border: none;
   background: none;
   cursor: pointer;
+  font-size: 12px;
 }
 
 .menu-options button:hover {
