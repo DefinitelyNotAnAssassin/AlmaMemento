@@ -4,18 +4,18 @@
       <div>
         <img
           @click="openImageModal"
-          width="200"
-          height="200"
+          width="150"
+          height="150"
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <h3 style="text-align: center">{{ userData.userlevel }}</h3>
+        <h5 style="text-align: center">{{ userData.userlevel }}</h5>
       </div>
       <div class="profile-details">
         <h1>{{ userData.name }}</h1>
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
-          <h2 style="margin-right: 10px">{{ userData.address }}</h2>
+          <h3 style="margin-right: 10px">{{ userData.address }}</h3>
           <img
             @click="editProfile"
             width="25"
@@ -318,7 +318,7 @@ const deletePhoto = async () => {
 }
 .user-profile {
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 .profile-details {
   margin-left: 24px;
