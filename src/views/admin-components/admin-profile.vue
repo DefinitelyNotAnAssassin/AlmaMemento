@@ -1,6 +1,6 @@
 <template>
-  <div class="components-page-main-container profile-container container">
-    <div class="user-profile bg-secondary">
+  <div class="components-page-main-container p-3 profile-container container">
+    <div class="user-profile bg-secondary mt-2">
       <div>
         <img
           @click="openImageModal"
@@ -9,13 +9,13 @@
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <h5 style="text-align: center">{{ userData.userlevel }}</h5>
+        <h5 class="mt-1" style="text-align: center">{{ userData.userlevel }}</h5>
       </div>
       <div class="profile-details">
-        <h1>{{ userData.name }}</h1>
+        <h2>{{ userData.name }}</h2>
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
-          <h3 style="margin-right: 10px">{{ userData.address }}</h3>
+          <h4 style="margin-right: 10px">{{ userData.address }}</h4>
           <img
             @click="editProfile"
             width="25"
