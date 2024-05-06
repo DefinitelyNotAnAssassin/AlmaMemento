@@ -23,7 +23,7 @@
         >
           <i class="bi bi-list"></i>
         </button>
-        <div v-if="showAdviserMenu" class="menu-options">
+        <div v-if="showAdviserMenu" class="menu-options card bg-light">
           <button @click="editAdviser(adviser)">Edit</button>
           <button @click="deleteAdviser">Delete</button>
         </div>
@@ -57,7 +57,7 @@
         >
           <i class="bi bi-list"></i>
         </button>
-        <div v-if="showStudentMenu === student.id" class="menu-options">
+        <div v-if="showStudentMenu === student.id" class="menu-options card bg-light">
           <button @click="editStudent(student)">Edit</button>
           <button @click="deleteStudent(student.id)">Delete</button>
         </div>
@@ -548,7 +548,6 @@ watch(
 }
 
 /* .menu-options button {
-  display: block;
   width: 100%;
   padding: 5px 0;
   text-align: left;
@@ -556,9 +555,9 @@ watch(
   background: none;
   cursor: pointer;
   font-size: 12px;
-} */
+}
 
 .menu-options button:hover {
   background-color: #f9f9f9;
-}
+} */
 </style>
