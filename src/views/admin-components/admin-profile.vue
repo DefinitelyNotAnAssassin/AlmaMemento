@@ -241,11 +241,9 @@ const deletePhoto = async () => {
 
   .profile-container {
       width: 100%;
-      height: 83vh;
+      height: 85vh;
       margin: 24px;
       overflow: auto;
-
-      background-color: blue;
   }
 
   .template-title {
