@@ -106,7 +106,7 @@
         />
       </div>
 
-      <div class="d-flex bg-secondary justify-content-end">
+      <div class="">
         <button
           class="btn btn-sm btn-dark"
           v-if="isEditable"
