@@ -9,7 +9,9 @@
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <h5 class="mt-1" style="text-align: center">{{ userData.userlevel }}</h5>
+        <h5 class="mt-1" style="text-align: center">
+          {{ userData.userlevel }}
+        </h5>
       </div>
       <div class="profile-details">
         <h2>{{ userData.name }}</h2>
@@ -115,8 +117,12 @@
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
         <p>Are you sure you want to save changes?</p>
-        <button @click="saveChanges">Save</button>
-        <button @click="closeModal">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="saveChanges">
+          Save
+        </button>
+        <button class="btn btn-sm btn-danger mt-1" @click="closeModal">
+          Cancel
+        </button>
       </div>
     </div>
 
@@ -127,6 +133,7 @@
         <div>
           <label for="profile-picture">Profile Picture:</label>
           <input
+            class="form-control"
             type="file"
             id="profile-picture"
             name="profile-picture"
@@ -134,8 +141,12 @@
           />
         </div>
         <p>Choose an option:</p>
-        <button @click="uploadPhoto">Upload Photo</button>
-        <button @click="deletePhoto">Delete Photo</button>
+        <button class="btn btn-sm btn-primary" @click="uploadPhoto">
+          Upload Photo
+        </button>
+        <button class="btn btn-sm btn-danger mt-1" @click="deletePhoto">
+          Delete Photo
+        </button>
       </div>
     </div>
   </div>
