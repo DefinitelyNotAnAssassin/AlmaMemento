@@ -547,7 +547,7 @@ watch(
 
 .menu-container {
   position: absolute;
-  top: 40px;
+  top: 35px;
   right: 0;
 }
 
