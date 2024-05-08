@@ -112,7 +112,7 @@
         <span class="close" @click="closeModal">&times;</span>
         <div
           style="height: 60vh; overflow-y: auto"
-          class="d-flex flex-column align-items-center mt-5"
+          class="d-flex flex-column align-items-center mt-3"
         >
           <div
             class="m-1"
