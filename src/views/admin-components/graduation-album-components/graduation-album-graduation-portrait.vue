@@ -32,7 +32,10 @@
             alt="Adviser Image"
             @click="openImageModal(adviserImageUrl)"
           />
-          <button class="btn btn-sm btn-light btn-togglemenu" @click="toggleAdviserMenu">
+          <button
+            class="btn btn-sm btn-light btn-togglemenu"
+            @click="toggleAdviserMenu"
+          >
             <i class="bi bi-list"></i>
           </button>
           <div v-if="showAdviserMenu" class="bg-light p-1 menu-container">
@@ -546,5 +549,12 @@ watch(
   position: absolute;
   top: 40px;
   right: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-container button {
+  font-size: 12px;
+  padding: 0;
 }
 </style>
