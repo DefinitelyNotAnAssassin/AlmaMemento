@@ -95,30 +95,59 @@
     <div v-if="isModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeModal" class="close">&times;</span>
-        <h2>Upload Image</h2>
-        <input type="file" @change="uploadImage" ref="imageInput" />
-        <label for="role">Role:</label>
-        <select id="role" v-model="selectedRole">
-          <option value="adviser" :disabled="isAdviserDisabled">Adviser</option>
-          <option value="student">Student</option>
-        </select>
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="nameInput" />
-        <label for="address" v-if="selectedRole === 'student'">Address:</label>
+        <h4 class="text-center">Upload Image</h4>
         <input
-          type="text"
-          id="address"
-          v-model="addressInput"
-          v-if="selectedRole === 'student'"
+          class="form-control"
+          type="file"
+          @change="uploadImage"
+          ref="imageInput"
         />
-        <label for="quotes" v-if="selectedRole === 'student'">Quotes:</label>
-        <input
-          type="text"
-          id="quotes"
-          v-model="quotesInput"
-          v-if="selectedRole === 'student'"
-        />
-        <button @click="uploadData" class="upload-button">Upload</button>
+        <div>
+          <label for="role">Role:</label>
+          <select class="form-control" id="role" v-model="selectedRole">
+            <option value="adviser" :disabled="isAdviserDisabled">
+              Adviser
+            </option>
+            <option value="student">Student</option>
+          </select>
+        </div>
+        <div>
+          <label for="name">Name:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="name"
+            v-model="nameInput"
+          />
+        </div>
+        <div>
+          <label for="address" v-if="selectedRole === 'student'"
+            >Address:</label
+          >
+          <input
+            class="form-control"
+            type="text"
+            id="address"
+            v-model="addressInput"
+            v-if="selectedRole === 'student'"
+          />
+        </div>
+        <div>
+          <label for="quotes" v-if="selectedRole === 'student'">Quotes:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="quotes"
+            v-model="quotesInput"
+            v-if="selectedRole === 'student'"
+          />
+        </div>
+        <button
+          @click="uploadData"
+          class="upload-button btn btn-sm btn-success"
+        >
+          Upload
+        </button>
       </div>
     </div>
 
