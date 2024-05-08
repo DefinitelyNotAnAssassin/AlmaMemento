@@ -15,15 +15,9 @@
       </button>
     </div>
 
-    <div
-      class="d-flex flex-column align-items-center"
-      style="font-size: 12px"
-    >
+    <div class="d-flex flex-column align-items-center" style="font-size: 12px">
       <div class="adviser-container">
-        <div
-          class="image-container wh-150px p-0"
-          style="position: relative"
-        >
+        <div class="image-container wh-150px p-0" style="position: relative">
           <img
             class="wh-150px m-0"
             style="cursor: pointer"
@@ -56,26 +50,27 @@
 
     <div class="students-container d-flex flex-wrap">
       <div
-        class="width-150px student-container m-2 picture-container p-0"
+        class="student-container m-2"
         v-for="student in students"
         :key="student.id"
       >
-        <div class="image-container">
+        <div class="image-container wh-150px p-0" style="position: relative">
           <img
-            style="height: 150px; width: 150px !important; cursor: pointer"
+            class="wh-150px m-0"
+            style="cursor: pointer"
             :src="student.imageUrl"
             alt="Student Image"
             @click="openImageModal(student.imageUrl)"
           />
           <button
-            class="btn btn-sm btn-light btn-menu"
+            class="btn btn-sm btn-light btn-togglemenu"
             @click="toggleStudentMenu(student.id)"
           >
             <i class="bi bi-list"></i>
           </button>
           <div
             v-if="showStudentMenu === student.id"
-            class="menu-options card bg-light"
+            class="bg-light p-1 menu-container"
           >
             <button class="btn btn-sm" @click="editStudent(student)">
               Edit
