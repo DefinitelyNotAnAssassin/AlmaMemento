@@ -15,33 +15,28 @@
       </button>
     </div>
 
-    <div class="d-flex justify-content-center picture-container">
-      <div class="adviser-container text-center" style="font-size: 12px">
-        <button
-          class="btn btn-sm btn-light btn-menu"
-          @click="toggleAdviserMenu"
-        >
-          <i class="bi bi-list"></i>
-        </button>
-        <div v-if="showAdviserMenu" class="menu-options card bg-light">
-          <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
-          <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
-        </div>
-        <div class="image-container">
-          <img
-            style="height: 150px; width: 150px; cursor: pointer"
-            v-if="adviserImageUrl"
-            :src="adviserImageUrl"
-            alt="Adviser Image"
-            @click="openImageModal(adviserImageUrl)"
-          />
-        </div>
-        <div class="text-center">
-          <span v-if="adviserName">
-            <div>{{ adviserName }}</div>
-            <div>Adviser</div>
-          </span>
-        </div>
+    <div class="adviser-container text-center" style="font-size: 12px">
+      <button class="btn btn-sm btn-light btn-menu" @click="toggleAdviserMenu">
+        <i class="bi bi-list"></i>
+      </button>
+      <div v-if="showAdviserMenu" class="menu-options card bg-light">
+        <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
+        <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+      </div>
+      <div class="image-container">
+        <img
+          style="height: 150px; width: 150px; cursor: pointer"
+          v-if="adviserImageUrl"
+          :src="adviserImageUrl"
+          alt="Adviser Image"
+          @click="openImageModal(adviserImageUrl)"
+        />
+      </div>
+      <div class="text-center">
+        <span v-if="adviserName">
+          <div>{{ adviserName }}</div>
+          <div>Adviser</div>
+        </span>
       </div>
     </div>
 
@@ -57,9 +52,14 @@
         >
           <i class="bi bi-list"></i>
         </button>
-        <div v-if="showStudentMenu === student.id" class="menu-options card bg-light">
+        <div
+          v-if="showStudentMenu === student.id"
+          class="menu-options card bg-light"
+        >
           <button class="btn btn-sm" @click="editStudent(student)">Edit</button>
-          <button class="btn btn-sm" @click="deleteStudent(student.id)">Delete</button>
+          <button class="btn btn-sm" @click="deleteStudent(student.id)">
+            Delete
+          </button>
         </div>
         <div class="image-container">
           <img
