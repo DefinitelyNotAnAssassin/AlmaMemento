@@ -80,7 +80,7 @@
             </button>
           </div>
         </div>
-        <div class="text-center" style="font-size: 12px">
+        <div class="text-center" style="width: 150px; font-size: 12px">
           <div class="bg-dark text-light">{{ student.name }}</div>
           <div v-if="student.address">{{ student.address }}</div>
           <div style="height: 30px; overflow-y: auto" v-if="student.quotes">
