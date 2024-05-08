@@ -32,16 +32,14 @@
             alt="Adviser Image"
             @click="openImageModal(adviserImageUrl)"
           />
-          <div class="menu-container w-150px">
-            <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
-              <i class="bi bi-list"></i>
+          <button class="btn btn-sm btn-light btn-togglemenu" @click="toggleAdviserMenu">
+            <i class="bi bi-list"></i>
+          </button>
+          <div v-if="showAdviserMenu" class="bg-light p-1 menu-container">
+            <button class="btn btn-sm" @click="editAdviser(adviser)">
+              Edit
             </button>
-            <div v-if="showAdviserMenu" class="bg-light p-1">
-              <button class="btn btn-sm" @click="editAdviser(adviser)">
-                Edit
-              </button>
-              <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
-            </div>
+            <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
           </div>
         </div>
         <div class="text-center">
@@ -532,14 +530,23 @@ watch(
   cursor: pointer;
 }
 
+/* -- */
 .wh-150px {
   width: 150px;
   height: 150px;
 }
 
+.btn-togglemenu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 20px;
+  width: 20px;
+}
+
 .menu-container {
-  background-color: red;
-  display: flex;
-  justify-content: right;
+  position: absolute;
+  top: 20px;
+  right: 0;
 }
 </style>
