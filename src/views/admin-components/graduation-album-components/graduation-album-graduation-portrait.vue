@@ -16,7 +16,7 @@
     </div>
 
     <div
-      class="adviser-container d-flex flex-column align-items-center"
+      class="adviser-container d-flex flex-column align-items-center bg-dark"
       style="font-size: 12px"
     >
       <div class="image-container" style="position: relative">
@@ -531,6 +531,7 @@ watch(
 
 .menu-container{
   position: absolute;
+  background-color: red;
 }
 
 /* .ad-btn-menu {
