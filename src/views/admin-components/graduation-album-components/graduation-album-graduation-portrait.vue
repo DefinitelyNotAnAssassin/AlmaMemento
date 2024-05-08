@@ -27,15 +27,19 @@
           alt="Adviser Image"
           @click="openImageModal(adviserImageUrl)"
         />
-        <button
-          class="btn btn-sm btn-light ad-btn-menu"
-          @click="toggleAdviserMenu"
-        >
-          <i class="bi bi-list"></i>
-        </button>
-        <div v-if="showAdviserMenu" class="ad-menu-options card bg-light">
-          <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
-          <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+        <div class="menu-container">
+          <button
+            class="btn btn-sm btn-light"
+            @click="toggleAdviserMenu"
+          >
+            <i class="bi bi-list"></i>
+          </button>
+          <div v-if="showAdviserMenu" class="bg-light p-1">
+            <button class="btn btn-sm" @click="editAdviser(adviser)">
+              Edit
+            </button>
+            <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+          </div>
         </div>
       </div>
       <div class="text-center">
@@ -525,23 +529,11 @@ watch(
   cursor: pointer;
 }
 
-.width-150px {
-  width: 150px;
+.menu-container{
+  position: absolute;
 }
 
-.width-150px img {
-  width: 150px;
-}
-
-.width-150px div {
-  width: 150px;
-}
-
-.picture-container {
-  position: relative;
-}
-
-.ad-btn-menu {
+/* .ad-btn-menu {
   position: absolute;
   top: 10px !important;
   right: 10px !important;
@@ -567,5 +559,5 @@ watch(
   position: absolute;
   top: 30px;
   right: 0;
-}
+} */
 </style>
