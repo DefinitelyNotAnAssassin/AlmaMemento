@@ -540,13 +540,11 @@ watch(
   position: absolute;
   top: 0;
   right: 0;
-  height: 20px;
-  width: 20px;
 }
 
 .menu-container {
   position: absolute;
-  top: 20px;
+  top: 40px;
   right: 0;
 }
 </style>
