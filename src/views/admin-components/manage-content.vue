@@ -110,7 +110,7 @@
     <div v-if="imagePreview" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <div class="d-flex flex-row">
+        <div class="d-flex flex-column">
           <div
             class="m-1"
             v-for="(imageUrl, index) in imagePreview"
