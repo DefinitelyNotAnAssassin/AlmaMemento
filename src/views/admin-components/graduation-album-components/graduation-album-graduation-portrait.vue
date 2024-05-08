@@ -96,7 +96,7 @@
       <div class="modal-content">
         <span @click="closeModal" class="close">&times;</span>
         <h5 class="text-center">Upload Image</h5>
-        <div class="mt-3 text-center">
+        <div class="mt-3">
           <input
             class="form-control"
             type="file"
@@ -170,7 +170,7 @@
       <div class="modal-content">
         <span @click="closeAdviserModal" class="close">&times;</span>
         <h5 class="text-center">Edit Adviser</h5>
-        <div class="mt-3 text-center">
+        <div class="mt-3">
           <div>
             <label for="adviserName">Name:</label>
             <input
@@ -190,12 +190,14 @@
               @change="uploadAdviserImage"
             />
           </div>
-          <button
-            @click="saveAdviserChanges"
-            class="upload-button btn btn-sm btn-success"
-          >
-            Save Changes
-          </button>
+          <div class="text-center">
+            <button
+              @click="saveAdviserChanges"
+              class="upload-button btn btn-sm btn-success"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -204,7 +206,7 @@
       <div class="modal-content">
         <span @click="closeStudentModal" class="close">&times;</span>
         <h5 class="text-center">Edit Student</h5>
-        <div class="mt-3 text-center">
+        <div class="mt-3">
           <div>
             <label for="studentName">Name:</label>
             <input
@@ -242,12 +244,14 @@
               @change="uploadStudentImage"
             />
           </div>
-          <button
-            @click="saveStudentChanges"
-            class="upload-button btn btn-sm btn-success"
-          >
-            Save Changes
-          </button>
+          <div class="text-center">
+            <button
+              @click="saveStudentChanges"
+              class="upload-button btn btn-sm btn-success"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -255,15 +259,17 @@
     <div v-if="isDeleteAdviserModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeDeleteAdviserModal" class="close">&times;</span>
-        <h5>Delete Adviser</h5>
-        <div class="mt-3 text-center">
+        <h5 class="text-center">Delete Adviser</h5>
+        <div class="mt-3">
           <p>Are you sure you want to delete?</p>
-          <button
-            @click="deleteAdviserNow"
-            class="upload-button btn btn-sm btn-danger"
-          >
-            Delete
-          </button>
+          <div class="text-center">
+            <button
+              @click="deleteAdviserNow"
+              class="upload-button btn btn-sm btn-danger"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -271,15 +277,17 @@
     <div v-if="isDeleteStudentModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeDeleteStudentModal" class="close">&times;</span>
-        <h5>Delete Student</h5>
-        <div class="mt-3 text-center">
+        <h5 class="text-center">Delete Student</h5>
+        <div class="mt-3">
           <p>Are you sure you want to delete?</p>
-          <button
-            @click="deleteStudentNow"
-            class="upload-button btn btn-sm btn-danger"
-          >
-            Delete
-          </button>
+          <div class="text-center">
+            <button
+              @click="deleteStudentNow"
+              class="upload-button btn btn-sm btn-danger"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
