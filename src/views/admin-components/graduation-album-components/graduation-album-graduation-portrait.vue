@@ -19,7 +19,7 @@
       class="adviser-container d-flex flex-column align-items-center"
       style="font-size: 12px"
     >
-      <div class="image-container" style="position: relative;">
+      <div class="image-container" style="position: relative">
         <img
           style="height: 150px; width: 150px; cursor: pointer"
           v-if="adviserImageUrl"
@@ -52,21 +52,6 @@
         v-for="student in students"
         :key="student.id"
       >
-        <button
-          class="btn btn-sm btn-light btn-menu"
-          @click="toggleStudentMenu(student.id)"
-        >
-          <i class="bi bi-list"></i>
-        </button>
-        <div
-          v-if="showStudentMenu === student.id"
-          class="menu-options card bg-light"
-        >
-          <button class="btn btn-sm" @click="editStudent(student)">Edit</button>
-          <button class="btn btn-sm" @click="deleteStudent(student.id)">
-            Delete
-          </button>
-        </div>
         <div class="image-container">
           <img
             style="height: 150px; cursor: pointer"
@@ -74,6 +59,23 @@
             alt="Student Image"
             @click="openImageModal(student.imageUrl)"
           />
+          <button
+            class="btn btn-sm btn-light btn-menu"
+            @click="toggleStudentMenu(student.id)"
+          >
+            <i class="bi bi-list"></i>
+          </button>
+          <div
+            v-if="showStudentMenu === student.id"
+            class="menu-options card bg-light"
+          >
+            <button class="btn btn-sm" @click="editStudent(student)">
+              Edit
+            </button>
+            <button class="btn btn-sm" @click="deleteStudent(student.id)">
+              Delete
+            </button>
+          </div>
         </div>
         <div class="width-150px text-center" style="font-size: 12px">
           <div class="bg-dark text-light">{{ student.name }}</div>
