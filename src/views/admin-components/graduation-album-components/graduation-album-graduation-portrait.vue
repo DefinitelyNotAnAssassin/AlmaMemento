@@ -16,12 +16,12 @@
     </div>
 
     <div
-      class="d-flex flex-column align-items-center bg-dark"
+      class="d-flex flex-column align-items-center"
       style="font-size: 12px"
     >
-      <div class="adviser-container bg-primary">
+      <div class="adviser-container">
         <div
-          class="image-container bg-secondary wh-150px p-0"
+          class="image-container wh-150px p-0"
           style="position: relative"
         >
           <img
@@ -45,7 +45,7 @@
             <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
           </div>
         </div>
-        <div class="text-center">
+        <div class="text-center mt-1">
           <span v-if="adviserName">
             <div>{{ adviserName }}</div>
             <div>Adviser</div>
