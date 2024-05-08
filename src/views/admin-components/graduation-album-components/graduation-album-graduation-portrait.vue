@@ -19,8 +19,8 @@
       class="d-flex flex-column align-items-center bg-dark"
       style="font-size: 12px"
     >
-      <div class="adviser-container bg-primary w-150px">
-        <div class="image-container" style="position: relative">
+      <div class="adviser-container bg-primary">
+        <div class="image-container bg-secondary wh-150px" style="position: relative">
           <img
             style="cursor: pointer"
             v-if="adviserImageUrl"
@@ -528,8 +528,9 @@ watch(
   cursor: pointer;
 }
 
-.w-150px {
+.wh-150px {
   width: 150px;
+  height: 150px;
 }
 
 .menu-container {
