@@ -96,7 +96,7 @@
       <div class="modal-content">
         <span @click="closeModal" class="close">&times;</span>
         <h5 class="text-center">Upload Image</h5>
-        <div class="mt-3">
+        <div class="mt-3 text-center">
           <input
             class="form-control"
             type="file"
@@ -169,8 +169,8 @@
     <div v-if="isAdviserModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeAdviserModal" class="close">&times;</span>
-        <h5>Edit Adviser</h5>
-        <div class="mt-3">
+        <h5 class="text-center">Edit Adviser</h5>
+        <div class="mt-3 text-center">
           <div>
             <label for="adviserName">Name:</label>
             <input
@@ -203,8 +203,8 @@
     <div v-if="isStudentModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeStudentModal" class="close">&times;</span>
-        <h5>Edit Student</h5>
-        <div class="mt-3">
+        <h5 class="text-center">Edit Student</h5>
+        <div class="mt-3 text-center">
           <div>
             <label for="studentName">Name:</label>
             <input
@@ -256,7 +256,7 @@
       <div class="modal-content">
         <span @click="closeDeleteAdviserModal" class="close">&times;</span>
         <h5>Delete Adviser</h5>
-        <div class="mt-3">
+        <div class="mt-3 text-center">
           <p>Are you sure you want to delete?</p>
           <button
             @click="deleteAdviserNow"
@@ -272,7 +272,7 @@
       <div class="modal-content">
         <span @click="closeDeleteStudentModal" class="close">&times;</span>
         <h5>Delete Student</h5>
-        <div class="mt-3">
+        <div class="mt-3 text-center">
           <p>Are you sure you want to delete?</p>
           <button
             @click="deleteStudentNow"
