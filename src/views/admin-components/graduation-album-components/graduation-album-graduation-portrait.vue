@@ -16,37 +16,36 @@
     </div>
 
     <div
-      class="adviser-container d-flex flex-column align-items-center bg-dark"
+      class="d-flex flex-column align-items-center bg-dark"
       style="font-size: 12px"
     >
-      <div class="image-container" style="position: relative">
-        <img
-          style="height: 150px; width: 150px !important; cursor: pointer"
-          v-if="adviserImageUrl"
-          :src="adviserImageUrl"
-          alt="Adviser Image"
-          @click="openImageModal(adviserImageUrl)"
-        />
-        <div class="menu-container">
-          <button
-            class="btn btn-sm btn-light"
-            @click="toggleAdviserMenu"
-          >
-            <i class="bi bi-list"></i>
-          </button>
-          <div v-if="showAdviserMenu" class="bg-light p-1">
-            <button class="btn btn-sm" @click="editAdviser(adviser)">
-              Edit
+      <div class="adviser-container bg-primary w-150px">
+        <div class="image-container" style="position: relative">
+          <img
+            style="cursor: pointer"
+            v-if="adviserImageUrl"
+            :src="adviserImageUrl"
+            alt="Adviser Image"
+            @click="openImageModal(adviserImageUrl)"
+          />
+          <div class="menu-container">
+            <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
+              <i class="bi bi-list"></i>
             </button>
-            <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+            <div v-if="showAdviserMenu" class="bg-light p-1">
+              <button class="btn btn-sm" @click="editAdviser(adviser)">
+                Edit
+              </button>
+              <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="text-center">
-        <span v-if="adviserName">
-          <div>{{ adviserName }}</div>
-          <div>Adviser</div>
-        </span>
+        <div class="text-center">
+          <span v-if="adviserName">
+            <div>{{ adviserName }}</div>
+            <div>Adviser</div>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -529,36 +528,12 @@ watch(
   cursor: pointer;
 }
 
-.menu-container{
+.w-150px {
+  width: 150px;
+}
+
+.menu-container {
   position: absolute;
   background-color: red;
 }
-
-/* .ad-btn-menu {
-  position: absolute;
-  top: 10px !important;
-  right: 10px !important;
-}
-
-.ad-menu-options {
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  top: 30px;
-  right: 10px;
-}
-
-.btn-menu {
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-}
-
-.menu-options {
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  top: 30px;
-  right: 0;
-} */
 </style>
