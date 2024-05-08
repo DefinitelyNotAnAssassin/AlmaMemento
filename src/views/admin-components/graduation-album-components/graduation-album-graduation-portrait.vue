@@ -16,7 +16,7 @@
     </div>
 
     <div
-      class="adviser-container d-flex flex-column align-items-center picture-container"
+      class="adviser-container d-flex flex-column align-items-center"
       style="font-size: 12px"
     >
       <div class="image-container">
