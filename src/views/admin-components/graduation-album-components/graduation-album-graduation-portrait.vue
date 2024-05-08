@@ -54,7 +54,7 @@
       >
         <div class="image-container">
           <img
-            style="height: 150px; cursor: pointer"
+            style="height: 150px; width: 150px; cursor: pointer"
             :src="student.imageUrl"
             alt="Student Image"
             @click="openImageModal(student.imageUrl)"
