@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div class="adviser-container text-center" style="font-size: 12px">
+    <div class="adviser-container d-flex flex-column align-items-center" style="font-size: 12px">
       <button class="btn btn-sm btn-light btn-menu" @click="toggleAdviserMenu">
         <i class="bi bi-list"></i>
       </button>
