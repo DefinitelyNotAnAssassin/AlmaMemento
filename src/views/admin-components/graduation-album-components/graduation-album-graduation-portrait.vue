@@ -553,6 +553,5 @@ watch(
 
 .menu-container button {
   font-size: 12px;
-  padding: 0;
 }
 </style>
