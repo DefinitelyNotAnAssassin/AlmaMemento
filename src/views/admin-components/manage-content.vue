@@ -107,14 +107,13 @@
         </li>
       </ul>
     </div>
-    <div v-if="imagePreview" class="modal mt-5">
-      <div class="modal-content pb-5">
-        <span
-          class="close"
-          @click="closeModal"
-          >&times;</span
+    <div v-if="imagePreview" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <div
+          style="height: 60vh; overflow-y: auto"
+          class="d-flex flex-column align-items-center mt-5"
         >
-        <div class="d-flex flex-column align-items-center mt-5">
           <div
             class="m-1"
             v-for="(imageUrl, index) in imagePreview"
