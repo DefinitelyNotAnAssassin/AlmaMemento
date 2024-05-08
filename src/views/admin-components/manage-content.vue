@@ -116,7 +116,7 @@
             v-for="(imageUrl, index) in imagePreview"
             :key="index"
           >
-            <img style="max-width: 300px" :src="imageUrl" alt="Image Preview" />
+            <img style="max-width: 250px" :src="imageUrl" alt="Image Preview" />
           </div>
         </div>
       </div>
