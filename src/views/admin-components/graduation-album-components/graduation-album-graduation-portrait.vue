@@ -550,7 +550,7 @@ watch(
   top: 40px;
   right: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row !important;
 }
 
 .menu-container button {
