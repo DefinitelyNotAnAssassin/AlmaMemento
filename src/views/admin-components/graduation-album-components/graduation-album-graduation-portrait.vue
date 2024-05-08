@@ -20,7 +20,10 @@
       style="font-size: 12px"
     >
       <div class="adviser-container bg-primary">
-        <div class="image-container bg-secondary wh-150px p-0" style="position: relative">
+        <div
+          class="image-container bg-secondary wh-150px p-0"
+          style="position: relative"
+        >
           <img
             class="wh-150px m-0"
             style="cursor: pointer"
@@ -29,7 +32,7 @@
             alt="Adviser Image"
             @click="openImageModal(adviserImageUrl)"
           />
-          <div class="menu-container">
+          <div class="menu-container w-150px">
             <button class="btn btn-sm btn-light" @click="toggleAdviserMenu">
               <i class="bi bi-list"></i>
             </button>
@@ -537,5 +540,7 @@ watch(
 .menu-container {
   position: absolute;
   background-color: red;
+  display: flex;
+  justify-content: right;
 }
 </style>
