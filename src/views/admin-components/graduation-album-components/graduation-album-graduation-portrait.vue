@@ -549,8 +549,6 @@ watch(
   position: absolute;
   top: 40px;
   right: 0;
-  display: flex;
-  flex-direction: column !important;
 }
 
 .menu-container button {
