@@ -15,14 +15,10 @@
       </button>
     </div>
 
-    <div class="adviser-container d-flex flex-column align-items-center picture-container" style="font-size: 12px">
-      <button class="btn btn-sm btn-light btn-menu" @click="toggleAdviserMenu">
-        <i class="bi bi-list"></i>
-      </button>
-      <div v-if="showAdviserMenu" class="menu-options card bg-light">
-        <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
-        <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
-      </div>
+    <div
+      class="adviser-container d-flex flex-column align-items-center picture-container"
+      style="font-size: 12px"
+    >
       <div class="image-container">
         <img
           style="height: 150px; width: 150px; cursor: pointer"
@@ -31,6 +27,16 @@
           alt="Adviser Image"
           @click="openImageModal(adviserImageUrl)"
         />
+        <button
+          class="btn btn-sm btn-light btn-menu"
+          @click="toggleAdviserMenu"
+        >
+          <i class="bi bi-list"></i>
+        </button>
+        <div v-if="showAdviserMenu" class="menu-options card bg-light">
+          <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
+          <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
+        </div>
       </div>
       <div class="text-center">
         <span v-if="adviserName">
