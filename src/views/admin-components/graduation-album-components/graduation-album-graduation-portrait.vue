@@ -96,58 +96,62 @@
       <div class="modal-content">
         <span @click="closeModal" class="close">&times;</span>
         <h5 class="text-center">Upload Image</h5>
-        <input
-          class="form-control"
-          type="file"
-          @change="uploadImage"
-          ref="imageInput"
-        />
-        <div>
-          <label for="role">Role:</label>
-          <select class="form-control" id="role" v-model="selectedRole">
-            <option value="adviser" :disabled="isAdviserDisabled">
-              Adviser
-            </option>
-            <option value="student">Student</option>
-          </select>
-        </div>
-        <div>
-          <label for="name">Name:</label>
+        <div class="mt-3">
           <input
             class="form-control"
-            type="text"
-            id="name"
-            v-model="nameInput"
+            type="file"
+            @change="uploadImage"
+            ref="imageInput"
           />
-        </div>
-        <div>
-          <label for="address" v-if="selectedRole === 'student'"
-            >Address:</label
+          <div>
+            <label for="role">Role:</label>
+            <select class="form-control" id="role" v-model="selectedRole">
+              <option value="adviser" :disabled="isAdviserDisabled">
+                Adviser
+              </option>
+              <option value="student">Student</option>
+            </select>
+          </div>
+          <div>
+            <label for="name">Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="name"
+              v-model="nameInput"
+            />
+          </div>
+          <div>
+            <label for="address" v-if="selectedRole === 'student'"
+              >Address:</label
+            >
+            <input
+              class="form-control"
+              type="text"
+              id="address"
+              v-model="addressInput"
+              v-if="selectedRole === 'student'"
+            />
+          </div>
+          <div>
+            <label for="quotes" v-if="selectedRole === 'student'"
+              >Quotes:</label
+            >
+            <input
+              class="form-control"
+              type="text"
+              id="quotes"
+              v-model="quotesInput"
+              v-if="selectedRole === 'student'"
+            />
+          </div>
+          <button
+            @click="uploadData"
+            class="upload-button btn btn-sm btn-success"
           >
-          <input
-            class="form-control"
-            type="text"
-            id="address"
-            v-model="addressInput"
-            v-if="selectedRole === 'student'"
-          />
+            Upload
+          </button>
         </div>
-        <div>
-          <label for="quotes" v-if="selectedRole === 'student'">Quotes:</label>
-          <input
-            class="form-control"
-            type="text"
-            id="quotes"
-            v-model="quotesInput"
-            v-if="selectedRole === 'student'"
-          />
-        </div>
-        <button
-          @click="uploadData"
-          class="upload-button btn btn-sm btn-success"
-        >
-          Upload
-        </button>
       </div>
     </div>
 
@@ -166,31 +170,33 @@
       <div class="modal-content">
         <span @click="closeAdviserModal" class="close">&times;</span>
         <h5>Edit Adviser</h5>
-        <div>
-          <label for="adviserName">Name:</label>
-          <input
-            class="form-control"
-            type="text"
-            id="adviserName"
-            v-model="editedAdviserName"
-          />
+        <div class="mt-3">
+          <div>
+            <label for="adviserName">Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="adviserName"
+              v-model="editedAdviserName"
+            />
+          </div>
+          <div>
+            <label for="adviserImage">Image:</label>
+            <input
+              class="form-control"
+              type="file"
+              id="adviserImage"
+              ref="adviserImageInput"
+              @change="uploadAdviserImage"
+            />
+          </div>
+          <button
+            @click="saveAdviserChanges"
+            class="upload-button btn btn-sm btn-success"
+          >
+            Save Changes
+          </button>
         </div>
-        <div>
-          <label for="adviserImage">Image:</label>
-          <input
-            class="form-control"
-            type="file"
-            id="adviserImage"
-            ref="adviserImageInput"
-            @change="uploadAdviserImage"
-          />
-        </div>
-        <button
-          @click="saveAdviserChanges"
-          class="upload-button btn btn-sm btn-success"
-        >
-          Save Changes
-        </button>
       </div>
     </div>
 
@@ -198,46 +204,51 @@
       <div class="modal-content">
         <span @click="closeStudentModal" class="close">&times;</span>
         <h5>Edit Student</h5>
-        <div>
-          <label for="studentName">Name:</label>
-          <input
-            class="form-control"
-            type="text"
-            id="studentName"
-            v-model="editedStudentName"
-          />
+        <div class="mt-3">
+          <div>
+            <label for="studentName">Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="studentName"
+              v-model="editedStudentName"
+            />
+          </div>
+          <div>
+            <label for="studentAddress">Address:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="studentAddress"
+              v-model="editedStudentAddress"
+            />
+          </div>
+          <div>
+            <label for="studentQuotes">Quotes:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="studentQuotes"
+              v-model="editedStudentQuotes"
+            />
+          </div>
+          <div>
+            <label for="studentImage">Image:</label>
+            <input
+              class="form-control"
+              type="file"
+              id="studentImage"
+              ref="studentImageInput"
+              @change="uploadStudentImage"
+            />
+          </div>
+          <button
+            @click="saveStudentChanges"
+            class="upload-button btn btn-sm btn-success"
+          >
+            Save Changes
+          </button>
         </div>
-        <div>
-          <label for="studentAddress">Address:</label>
-          <input
-            class="form-control"
-            type="text"
-            id="studentAddress"
-            v-model="editedStudentAddress"
-          />
-        </div>
-        <div>
-          <label for="studentQuotes">Quotes:</label>
-          <input
-            class="form-control"
-            type="text"
-            id="studentQuotes"
-            v-model="editedStudentQuotes"
-          />
-        </div>
-        <div>
-          <label for="studentImage">Image:</label>
-          <input
-            class="form-control"
-            type="file"
-            id="studentImage"
-            ref="studentImageInput"
-            @change="uploadStudentImage"
-          />
-        </div>
-        <button @click="saveStudentChanges" class="upload-button btn btn-sm btn-success">
-          Save Changes
-        </button>
       </div>
     </div>
 
@@ -245,8 +256,15 @@
       <div class="modal-content">
         <span @click="closeDeleteAdviserModal" class="close">&times;</span>
         <h5>Delete Adviser</h5>
-        <p>Are you sure you want to delete?</p>
-        <button @click="deleteAdviserNow" class="upload-button btn btn-sm btn-danger">Delete</button>
+        <div class="mt-3">
+          <p>Are you sure you want to delete?</p>
+          <button
+            @click="deleteAdviserNow"
+            class="upload-button btn btn-sm btn-danger"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
 
@@ -254,8 +272,15 @@
       <div class="modal-content">
         <span @click="closeDeleteStudentModal" class="close">&times;</span>
         <h5>Delete Student</h5>
-        <p>Are you sure you want to delete?</p>
-        <button @click="deleteStudentNow" class="upload-button btn btn-sm btn-danger">Delete</button>
+        <div class="mt-3">
+          <p>Are you sure you want to delete?</p>
+          <button
+            @click="deleteStudentNow"
+            class="upload-button btn btn-sm btn-danger"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
