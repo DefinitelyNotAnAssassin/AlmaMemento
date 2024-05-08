@@ -28,12 +28,12 @@
           @click="openImageModal(adviserImageUrl)"
         />
         <button
-          class="btn btn-sm btn-light btn-menu"
+          class="btn btn-sm btn-light ad-btn-menu"
           @click="toggleAdviserMenu"
         >
           <i class="bi bi-list"></i>
         </button>
-        <div v-if="showAdviserMenu" class="menu-options card bg-light">
+        <div v-if="showAdviserMenu" class="ad-menu-options card bg-light">
           <button class="btn btn-sm" @click="editAdviser(adviser)">Edit</button>
           <button class="btn btn-sm" @click="deleteAdviser">Delete</button>
         </div>
@@ -539,6 +539,20 @@ watch(
 
 .picture-container {
   position: relative;
+}
+
+.ad-btn-menu {
+  position: absolute;
+  top: 10px !important;
+  right: 10px !important;
+}
+
+.ad-menu-options {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 30px;
+  right: 10px;
 }
 
 .btn-menu {
