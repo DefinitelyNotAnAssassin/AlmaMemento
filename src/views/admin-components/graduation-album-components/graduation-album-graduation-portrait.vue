@@ -538,7 +538,6 @@ watch(
 }
 
 .menu-container {
-  position: absolute;
   background-color: red;
   display: flex;
   justify-content: right;
