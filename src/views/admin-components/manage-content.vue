@@ -37,7 +37,7 @@
           <td>{{ item.schoolYear }}</td>
           <td>{{ item.event }}</td>
           <td>{{ item.caption }}</td>
-          <td><a class="btn-view-image" @click="showImagePreview(item.imageUrl)">View Image</a></td>
+          <td><a class="btn-view-image" @click="showImagePreview(item.imageUrls)">View Image</a></td>
           <td>
             <template class="d-flex flex-wrap" v-if="item.status === 'pending'">
               <button class="btn btn-sm btn-success" @click="approvePost(item, index)">Approve</button>
@@ -71,7 +71,9 @@
     <div v-if="imagePreview" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <img :src="imagePreview" alt="Image Preview">
+        <div v-for="(imageUrl, index) in imagePreview" :key="index">
+          <img :src="imageUrl" alt="Image Preview">
+        </div>
       </div>
     </div>
     <div v-if="isModalVisible" class="modal">
@@ -149,8 +151,9 @@ const userIdToName = async (adminId) => {
 async function approvePost(item, index) {
   const postRef = doc(db, 'posts', item.id);
   const adminName = await userIdToName(adminId);
+  const approvalTime = new Date();
   if (adminName) {
-    await updateDoc(postRef, { status: 'approved', history: [...(item.history || []), { admin: adminName, status: 'approved' }] });
+    await updateDoc(postRef, { status: 'approved', history: [...(item.history || []), { admin: adminName, status: 'approved', time: approvalTime }] });
     items.value[index].status = 'approved';
   }
 }
@@ -158,14 +161,23 @@ async function approvePost(item, index) {
 async function rejectPost(item, index) {
   const postRef = doc(db, 'posts', item.id);
   const adminName = await userIdToName(adminId);
+  const approvalTime = new Date();
   if (adminName) {
-    await updateDoc(postRef, { status: 'rejected', history: [...(item.history || []), { admin: adminName, status: 'rejected' }] });
+    await updateDoc(postRef, { status: 'rejected', history: [...(item.history || []), { admin: adminName, status: 'rejected', time: approvalTime }] });
     items.value[index].status = 'rejected';
   }
 }
 
-function showImagePreview(imageUrl) {
-  imagePreview.value = imageUrl;
+function showImagePreview(imageUrls) {
+  if (typeof imageUrls === 'string') {
+    imageUrls = [imageUrls];
+  }
+
+  if (Array.isArray(imageUrls) && imageUrls.length > 0) {
+    imagePreview.value = imageUrls;
+  } else {
+    console.error('Invalid imageUrls:', imageUrls);
+  }
 }
 
 function closeModal() {

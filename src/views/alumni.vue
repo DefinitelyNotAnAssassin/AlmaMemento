@@ -43,9 +43,9 @@
               <div class="d-flex flex-column justify-content-between">
                 <div class="modal-main-content-container">
                   <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
-                  <input class="form-control mt-2" type="file" @change="uploadImage" />
-                  <div class="image-preview mt-2" v-if="imageUrl">
-                    <img :src="imageUrl" alt="Preview" />
+                  <input class="form-control mt-2" type="file" multiple @change="uploadImages" />
+                  <div v-for="(progress, index) in progressBars" :key="index" class="progress mt-2">
+                    <div class="progress-bar" role="progressbar" :style="{width: progress + '%'}" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
                   </div>
                 </div>
                 <div class="container mt-3">
@@ -59,7 +59,10 @@
             <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <img :src="post.imageUrl" alt="Post Image" />
+              <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
+                <img v-if="index < 5 || showAllImages" :src="imageUrl" alt="Post Image" />
+                <button v-else @click="showAllImages = true">View More Images</button>
+              </div>
               <hr class="pt-1">
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
             </div>
@@ -76,8 +79,8 @@ import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
 import { db, storage} from '../firebase/index.js';
 import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore'
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useRouter } from 'vue-router'
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useRouter } from 'vue-router';
 
 const showModal = ref(false);
 const showImageModal = ref(false);
@@ -86,12 +89,13 @@ const events = ref([]);
 const selectedSchoolYear = ref("");
 const selectedEvent = ref("");
 const caption = ref("");
-const imageUrl = ref("");
+const selectedImages = ref([]);
+const progressBars = ref([]);
 const router = useRouter()
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
-const isImageSelected = computed(() => !!imageUrl.value);
-
+const isImageSelected = computed(() => selectedImages.value.length > 0);
+const showAllImages = ref(false);
 const posts = ref([]);
 const approvedPosts = ref([]);
 
@@ -113,22 +117,36 @@ function closeImageModal() {
   selectedSchoolYear.value = "";
   selectedEvent.value = "";
   caption.value = "";
-  imageUrl.value = "";
+  selectedImages.value = [];
+  progressBars.value = [];
 }
 
-function uploadImage(event) {
-  const file = event.target.files[0];
-  const storageReference = storageRef(storage, `images/${file.name}`);
-  uploadBytes(storageReference, file).then(() => {
-    getDownloadURL(storageReference).then(url => {
-      imageUrl.value = url;
-    }).catch(error => {
-      console.error('Error getting download URL:', error);
-    });
-  }).catch((error) => {
-    console.error('Error uploading image:', error);
-  });
+function uploadImages(event) {
+  for (let i = 0; i < event.target.files.length; i++) {
+    const file = event.target.files[i];
+    const storageReference = storageRef(storage, `images/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageReference, file);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        progressBars.value[i] = progress;
+      },
+      (error) => {
+        console.error('Error uploading image:', error);
+      },
+      () => {
+        getDownloadURL(storageReference).then(url => {
+          selectedImages.value.push(url);
+          progressBars.value[i] = 100;
+        }).catch(error => {
+          console.error('Error getting download URL:', error);
+        });
+      }
+    );
+  }
 }
+
 
 async function savePost() {
   if (!isImageSelected.value) {
@@ -146,10 +164,11 @@ async function savePost() {
     schoolYear: selectedSchoolYear.value,
     event: selectedEvent.value,
     caption: caption.value,
-    imageUrl: imageUrl.value,
+    imageUrls: selectedImages.value,
     status: "pending"
   };
   await addDoc(collection(db, 'posts'), post);
+
   closeImageModal();
 }
 
