@@ -108,7 +108,7 @@
       </ul>
     </div>
     <div v-if="imagePreview" class="modal">
-      <div class="modal-content">
+      <div class="modal-content" style="overflow-y: auto">
         <span class="close" @click="closeModal">&times;</span>
         <div class="d-flex flex-column">
           <div
