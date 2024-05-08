@@ -20,8 +20,9 @@
       style="font-size: 12px"
     >
       <div class="adviser-container bg-primary">
-        <div class="image-container bg-secondary wh-150px" style="position: relative">
+        <div class="image-container bg-secondary wh-150px p-0" style="position: relative">
           <img
+            class="wh-150px"
             style="cursor: pointer"
             v-if="adviserImageUrl"
             :src="adviserImageUrl"
