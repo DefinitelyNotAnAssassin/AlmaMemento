@@ -108,10 +108,9 @@
       </ul>
     </div>
     <div v-if="imagePreview" class="modal">
-      <div class="modal-content" style="overflow-y: auto">
+      <div class="modal-content mt-5">
         <span
           class="close"
-          style="position: absolute !important; top: 10px; right: 10px"
           @click="closeModal"
           >&times;</span
         >
