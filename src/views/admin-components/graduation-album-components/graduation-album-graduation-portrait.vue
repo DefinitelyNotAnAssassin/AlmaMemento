@@ -22,7 +22,7 @@
       <div class="adviser-container bg-primary">
         <div class="image-container bg-secondary wh-150px p-0" style="position: relative">
           <img
-            class="wh-150px"
+            class="wh-150px m-0"
             style="cursor: pointer"
             v-if="adviserImageUrl"
             :src="adviserImageUrl"
