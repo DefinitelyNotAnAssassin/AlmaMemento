@@ -21,7 +21,7 @@
     >
       <div class="image-container" style="position: relative">
         <img
-          style="height: 150px; width: 150px; cursor: pointer"
+          style="height: 150px; width: 150px !important; cursor: pointer"
           v-if="adviserImageUrl"
           :src="adviserImageUrl"
           alt="Adviser Image"
