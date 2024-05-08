@@ -107,8 +107,8 @@
         </li>
       </ul>
     </div>
-    <div v-if="imagePreview" class="modal">
-      <div class="modal-content mt-5">
+    <div v-if="imagePreview" class="modal mt-5">
+      <div class="modal-content pb-5">
         <span
           class="close"
           @click="closeModal"
