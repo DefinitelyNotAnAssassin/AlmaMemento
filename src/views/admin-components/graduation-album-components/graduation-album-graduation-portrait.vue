@@ -95,7 +95,7 @@
     <div v-if="isModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeModal" class="close">&times;</span>
-        <h4 class="text-center">Upload Image</h4>
+        <h5 class="text-center">Upload Image</h5>
         <input
           class="form-control"
           type="file"
@@ -165,17 +165,30 @@
     <div v-if="isAdviserModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeAdviserModal" class="close">&times;</span>
-        <h2>Edit Adviser</h2>
-        <label for="adviserName">Name:</label>
-        <input type="text" id="adviserName" v-model="editedAdviserName" />
-        <label for="adviserImage">Image:</label>
-        <input
-          type="file"
-          id="adviserImage"
-          ref="adviserImageInput"
-          @change="uploadAdviserImage"
-        />
-        <button @click="saveAdviserChanges" class="upload-button">
+        <h5>Edit Adviser</h5>
+        <div>
+          <label for="adviserName">Name:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="adviserName"
+            v-model="editedAdviserName"
+          />
+        </div>
+        <div>
+          <label for="adviserImage">Image:</label>
+          <input
+            class="form-control"
+            type="file"
+            id="adviserImage"
+            ref="adviserImageInput"
+            @change="uploadAdviserImage"
+          />
+        </div>
+        <button
+          @click="saveAdviserChanges"
+          class="upload-button btn btn-sm btn-success"
+        >
           Save Changes
         </button>
       </div>
@@ -184,21 +197,45 @@
     <div v-if="isStudentModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeStudentModal" class="close">&times;</span>
-        <h2>Edit Student</h2>
-        <label for="studentName">Name:</label>
-        <input type="text" id="studentName" v-model="editedStudentName" />
-        <label for="studentAddress">Address:</label>
-        <input type="text" id="studentAddress" v-model="editedStudentAddress" />
-        <label for="studentQuotes">Quotes:</label>
-        <input type="text" id="studentQuotes" v-model="editedStudentQuotes" />
-        <label for="studentImage">Image:</label>
-        <input
-          type="file"
-          id="studentImage"
-          ref="studentImageInput"
-          @change="uploadStudentImage"
-        />
-        <button @click="saveStudentChanges" class="upload-button">
+        <h5>Edit Student</h5>
+        <div>
+          <label for="studentName">Name:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="studentName"
+            v-model="editedStudentName"
+          />
+        </div>
+        <div>
+          <label for="studentAddress">Address:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="studentAddress"
+            v-model="editedStudentAddress"
+          />
+        </div>
+        <div>
+          <label for="studentQuotes">Quotes:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="studentQuotes"
+            v-model="editedStudentQuotes"
+          />
+        </div>
+        <div>
+          <label for="studentImage">Image:</label>
+          <input
+            class="form-control"
+            type="file"
+            id="studentImage"
+            ref="studentImageInput"
+            @change="uploadStudentImage"
+          />
+        </div>
+        <button @click="saveStudentChanges" class="upload-button btn btn-sm btn-success">
           Save Changes
         </button>
       </div>
@@ -207,18 +244,18 @@
     <div v-if="isDeleteAdviserModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeDeleteAdviserModal" class="close">&times;</span>
-        <h2>Delete Adviser</h2>
+        <h5>Delete Adviser</h5>
         <p>Are you sure you want to delete?</p>
-        <button @click="deleteAdviserNow" class="upload-button">Delete</button>
+        <button @click="deleteAdviserNow" class="upload-button btn btn-sm btn-danger">Delete</button>
       </div>
     </div>
 
     <div v-if="isDeleteStudentModalOpen" class="modal">
       <div class="modal-content">
         <span @click="closeDeleteStudentModal" class="close">&times;</span>
-        <h2>Delete Student</h2>
+        <h5>Delete Student</h5>
         <p>Are you sure you want to delete?</p>
-        <button @click="deleteStudentNow" class="upload-button">Delete</button>
+        <button @click="deleteStudentNow" class="upload-button btn btn-sm btn-danger">Delete</button>
       </div>
     </div>
   </div>
@@ -544,7 +581,7 @@ watch(
   text-decoration: none;
   cursor: pointer;
 }
-
+/* 
 .upload-button {
   background-color: #4caf50;
   color: white;
@@ -555,7 +592,7 @@ watch(
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-}
+} */
 
 /* -- */
 .wh-150px {
