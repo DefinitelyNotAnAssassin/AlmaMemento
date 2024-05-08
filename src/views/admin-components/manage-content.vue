@@ -109,14 +109,19 @@
     </div>
     <div v-if="imagePreview" class="modal">
       <div class="modal-content" style="overflow-y: auto">
-        <span class="close" @click="closeModal">&times;</span>
+        <span
+          class="close"
+          style="position: absolute !important; top: 10px; right: 10px"
+          @click="closeModal"
+          >&times;</span
+        >
         <div class="d-flex flex-column align-items-center mt-5">
           <div
             class="m-1"
             v-for="(imageUrl, index) in imagePreview"
             :key="index"
           >
-            <img style="max-width: 250px" :src="imageUrl" alt="Image Preview" />
+            <img style="width: 280px" :src="imageUrl" alt="Image Preview" />
           </div>
         </div>
       </div>
