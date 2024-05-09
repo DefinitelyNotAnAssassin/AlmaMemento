@@ -20,8 +20,38 @@
             </th>
             <th>Name</th>
             <th>ID Number</th>
-            <th>Course <button class="btn btn-sm btn-light" @click="addCourse"><i class="bi bi-plus-lg"></i></button></th>
-            <th>Class Year <button class="btn btn-sm btn-light" @click="addClassYear"><i class="bi bi-plus-lg"></i></button></th>
+            <th>
+                Program & Block
+                <button class="btn btn-sm btn-light" @click="addProgramAndBlock"><i class="bi bi-plus-lg"></i></button>
+                <div class="dropdown" style="display: inline-block;">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="programBlockDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filters
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="programBlockDropdown">
+                        <li v-for="pab in pabs" :key="pab.id">
+                            <label class="dropdown-item" style="display: flex; align-items: center;">
+                                <input type="checkbox" v-model="selectedProgramsAndBlocks" :value="pab.name"> {{ pab.name }}
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+            <th>
+                Class Year
+                <button class="btn btn-sm btn-light" @click="addClassYear"><i class="bi bi-plus-lg"></i></button>
+                <div class="dropdown" style="display: inline-block;">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="classYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filters
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="classYearDropdown">
+                        <li v-for="year in classYears" :key="year.id">
+                            <label class="dropdown-item" style="display: flex; align-items: center;">
+                                <input type="checkbox" v-model="selectedClassYears" :value="year.name"> {{ year.name }}
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </th>
             <th>Email</th>
             <th>Phone</th>
             <th>Address</th>
@@ -33,7 +63,7 @@
                 <td><input type="checkbox" v-model="selectedItems" :value="item.id"></td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.alumnaID }}</td>
-                <td>{{ item.course }}</td>
+                <td>{{ item.pab }}</td>
                 <td>{{ item.classYear }}</td>
                 <td>{{ item.alumna_email }}</td>
                 <td>{{ item.phone }}</td>
@@ -67,9 +97,9 @@
                 <input class="form-control" type="text" id="lName" name="lName" v-model="lName">
               </div>
               <div>
-                <label>Course</label>
-                <select class="form-control" v-model="selectedCourse">
-                  <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
+                <label>Program & Block</label>
+                <select class="form-control" v-model="selectedProgramAndBlock">
+                  <option v-for="pab in pabs" :key="pab.id" :value="pab.name">{{ pab.name }}</option>
                 </select>
               </div>
             </div>
@@ -117,9 +147,9 @@
                 <input class="form-control" type="text" id="lName" name="lName" v-model="lName">
               </div>
               <div>
-                <label>Course</label>
-                <select class="form-control" v-model="selectedCourse">
-                    <option v-for="course in courses" :key="course.id" :value="course.name">{{ course.name }}</option>
+                <label>Program & Block</label>
+                <select class="form-control" v-model="selectedProgramAndBlock">
+                    <option v-for="pab in pabs" :key="pab.id" :value="pab.name">{{ pab.name }}</option>
                 </select>
               </div>
             </div>
@@ -148,14 +178,18 @@
               </div>
             </div>
           </div>
-          <div v-else-if="isAddingCourse">
+          <div v-else-if="isAddingProgramAndBlock">
             <div>
-              <label for="course_name">Course</label>
-              <input class="form-control" type="text" id="course_name" name="course_name" v-model="course_name">
+              <label for="pabName">Program</label>
+              <input class="form-control" type="text" id="pabName" name="pabName" v-model="pabName">
             </div>
             <div>
               <label for="major">Major</label>
               <input class="form-control" type="text" id="major" name="major" v-model="major">
+            </div>
+            <div>
+              <label for="blck">Block</label>
+              <input class="form-control" type="text" id="blck" name="blck" v-model="blck">
             </div>
           </div>
           <div v-else-if="isAddingClassYear">
@@ -188,12 +222,12 @@ const selectedItems = ref([])
 const isModalVisible = ref(false)
 const isAdding = ref(false)
 const isEditing = ref(false)
-const isAddingCourse = ref(false)
+const isAddingProgramAndBlock = ref(false)
 const isAddingClassYear = ref(false)
 const isDeleteConfirmationVisible = ref(false)
-const selectedCourse = ref(null)
+const selectedProgramAndBlock = ref(null)
 const selectedClassYear = ref(null)
-const courses = ref([])
+const pabs = ref([])
 const classYears = ref([])
 const alumnaID = ref('');
 const fName = ref('');
@@ -206,15 +240,21 @@ const alumna_password = ref('');
 const users = ref([]);
 const searchQuery = ref('');
 const selectAllChecked = ref(false); 
+const selectedProgramsAndBlocks = ref([]);
+const selectedClassYears = ref([]);
 
 const filteredItems = computed(() => {
-  const query = searchQuery.value.toLowerCase();
-  return sortedItems.value.filter(item => {
-    return (
-      (typeof item.alumnaID === 'string' && item.alumnaID.toLowerCase().includes(query)) ||
-      item.name.toLowerCase().includes(query)
-    );
-  });
+    const query = searchQuery.value.toLowerCase();
+    return sortedItems.value.filter(item => {
+        const matchesSearch = 
+            (typeof item.alumnaID === 'string' && item.alumnaID.toLowerCase().includes(query)) ||
+            item.name.toLowerCase().includes(query);
+
+        const matchesProgramBlock = !selectedProgramsAndBlocks.length || selectedProgramsAndBlocks.includes(item.pab);
+        const matchesClassYear = !selectedClassYears.length || selectedClassYears.includes(item.classYear);
+
+        return matchesSearch && matchesProgramBlock && matchesClassYear;
+    });
 });
   
 const fetchData = async () => {
@@ -229,13 +269,16 @@ const fetchData = async () => {
       };
     });
   });
-  fetchCoursesAndClassYears();
+  fetchProgramAndBlockAndClassYears();
 }
 
-
-const fetchCoursesAndClassYears = async () => {
-    const coursesSnapshot = await getDocs(collection(db, 'courses'));
-    courses.value = coursesSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+const fetchProgramAndBlockAndClassYears = async () => {
+  const pabsSnapshot = await getDocs(collection(db, 'pabs'));
+    pabs.value = pabsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      const name = `${data.program} Major in ${data.major} - Block ${data.blck}`;
+      return { id: doc.id, name };
+    });
 
     const classYearsSnapshot = await getDocs(collection(db, 'classYears'));
     classYears.value = classYearsSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
@@ -251,7 +294,7 @@ const addUser = () => {
     fName.value = '';
     mInitial.value = '';
     lName.value = '';
-    selectedCourse.value = null;
+    selectedProgramAndBlock.value = null;
     selectedClassYear.value = null;
     alumna_email.value = '';
     phone.value = '';
@@ -259,9 +302,9 @@ const addUser = () => {
     alumna_password.value = '';
 }
   
-const addCourse = () => {
+const addProgramAndBlock = () => {
     isModalVisible.value = true
-    isAddingCourse.value = true
+    isAddingProgramAndBlock.value = true
 }
   
 const addClassYear = () => {
@@ -278,7 +321,7 @@ const closeModal = () => {
     isModalVisible.value = false
     isAdding.value = false
     isEditing.value = false
-    isAddingCourse.value = false
+    isAddingProgramAndBlock.value = false
     isAddingClassYear.value = false
     isDeleteConfirmationVisible.value = false
 }
@@ -300,7 +343,7 @@ const submitModal = async () => {
             fName: fName.value,
             mInitial: mInitial.value,
             lName: lName.value,
-            course: selectedCourse.value,
+            pab: selectedProgramAndBlock.value,
             classYear: selectedClassYear.value,
             alumna_email: alumna_email.value,
             phone: phone.value,
@@ -319,7 +362,7 @@ const submitModal = async () => {
                 fName: fName.value,
                 mInitial: mInitial.value,
                 lName: lName.value,
-                course: selectedCourse.value,
+                pab: selectedProgramAndBlock.value,
                 classYear: selectedClassYear.value,
                 alumna_email: alumna_email.value,
                 phone: phone.value,
@@ -329,12 +372,13 @@ const submitModal = async () => {
         } else {
             console.error('Selected item not found');
         }
-    } else if (isAddingCourse.value === true) {
+    } else if (isAddingProgramAndBlock.value === true) {
         const data = {
-            name: course_name.value,
-            major: major.value
+            program: pabName.value,
+            major: major.value,
+            blck: blck.value
         };
-        await addDoc(collection(db, 'courses'), data);
+        await addDoc(collection(db, 'pabs'), data);
     } else if (isAddingClassYear.value == true) {
         const data = {
             name: year.value
@@ -353,7 +397,7 @@ const editItem = (selectedItem) => {
     fName.value = selectedItem.fName;
     mInitial.value = selectedItem.mInitial;
     lName.value = selectedItem.lName;
-    selectedCourse.value = selectedItem.course;
+    selectedProgramAndBlock.value = selectedItem.pab;
     selectedClassYear.value = selectedItem.classYear;
     alumna_email.value = selectedItem.alumna_email;
     phone.value = selectedItem.phone;
@@ -409,14 +453,14 @@ const importUsers = (event) => {
     const usersData = utils.sheet_to_json(worksheet, { header: 2 });
 
     for (const user of usersData) {
-      const { alumnaID, fName, mInitial, lName, course, classYear, alumna_email, phone, address, alumna_password } = user;
+      const { alumnaID, fName, mInitial, lName, pab, classYear, alumna_email, phone, address, alumna_password } = user;
       console.log(usersData);
       await addDoc(collection(db, 'users'), {
         alumnaID,
         fName,
         mInitial,
         lName,
-        course,
+        pab,
         classYear,
         alumna_email,
         phone,
