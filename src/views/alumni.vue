@@ -8,44 +8,90 @@
           <p>
             <button @click="showPostModal" class="btn">Add Post</button>
           </p>
-          
+
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
-              <div class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown">
+              <div
+                class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
+              >
                 <span>Select year and event to proceed</span>
                 <span class="close" @click="closeModal">&times;</span>
               </div>
               <div class="input-container mt-5 pt-5">
                 <label for="schoolYear">Year:</label>
-                <select id="schoolYear" v-model="selectedSchoolYear" class="form-control">
-                  <option v-for="year in schoolYears" :key="year.id" :value="year.name">{{ year.name }}</option>
+                <select
+                  id="schoolYear"
+                  v-model="selectedSchoolYear"
+                  class="form-control"
+                >
+                  <option
+                    v-for="year in schoolYears"
+                    :key="year.id"
+                    :value="year.name"
+                  >
+                    {{ year.name }}
+                  </option>
                 </select>
               </div>
               <div class="input-container mt-2">
                 <label for="event">Event:</label>
                 <select id="event" v-model="selectedEvent" class="form-control">
-                  <option v-for="event in events" :key="event.id" :value="event.name">{{ event.name }}</option>
+                  <option
+                    v-for="event in events"
+                    :key="event.id"
+                    :value="event.name"
+                  >
+                    {{ event.name }}
+                  </option>
                 </select>
               </div>
               <div class="d-flex justify-content-end mt-3">
-                <button class="btn btn-secondary m-1" @click="closeModal">Cancel</button>
-                <button class="btn btn-primary m-1" @click="continueModal">Continue</button>
+                <button class="btn btn-secondary m-1" @click="closeModal">
+                  Cancel
+                </button>
+                <button class="btn btn-primary m-1" @click="continueModal">
+                  Continue
+                </button>
               </div>
             </div>
           </div>
-          
+
           <div v-if="showImageModal" class="modal">
             <div class="modal-content">
-              <div class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown">
+              <div
+                class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
+              >
                 <span>Username / Name Here</span>
                 <span class="close" @click="closeImageModal">&times;</span>
               </div>
               <div class="d-flex flex-column justify-content-between">
                 <div class="modal-main-content-container">
-                  <textarea class="form-control mt-2" v-model="caption" placeholder="Enter caption"></textarea>
-                  <input class="form-control mt-2" type="file" multiple @change="uploadImages" />
-                  <div v-for="(progress, index) in progressBars" :key="index" class="progress mt-2">
-                    <div class="progress-bar" role="progressbar" :style="{width: progress + '%'}" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+                  <textarea
+                    class="form-control mt-2"
+                    v-model="caption"
+                    placeholder="Enter caption"
+                  ></textarea>
+                  <input
+                    class="form-control mt-2"
+                    type="file"
+                    multiple
+                    @change="uploadImages"
+                  />
+                  <div
+                    v-for="(progress, index) in progressBars"
+                    :key="index"
+                    class="progress mt-2"
+                  >
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      :style="{ width: progress + '%' }"
+                      :aria-valuenow="progress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      {{ progress }}%
+                    </div>
                   </div>
                 </div>
                 <div class="container mt-3">
@@ -55,16 +101,28 @@
             </div>
           </div>
 
-          <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
-            <h3>{{ post.name }}</h3>
-            <h5>{{ post.caption }}</h5>
-            <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
-              <img v-if="index < 5 || showAllImages" :src="imageUrl" alt="Post Image" />
-              <button v-else @click="showAllImages = true">View More Images</button>
+          <div class="bg-secondary" style="width: calc(100% - 400px)">
+            <div
+              v-for="post in approvedPosts"
+              :key="post.id"
+              class="container card p-3 background-color-brown text-light mt-2"
+            >
+              <h3>{{ post.name }}</h3>
+              <h5>{{ post.caption }}</h5>
+              <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
+                <img
+                  v-if="index < 5 || showAllImages"
+                  :src="imageUrl"
+                  alt="Post Image"
+                />
+                <button v-else @click="showAllImages = true">
+                  View More Images
+                </button>
+              </div>
+              <hr class="pt-1" />
+              <p>{{ post.schoolYear }} - {{ post.event }}</p>
+              <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
             </div>
-            <hr class="pt-1">
-            <p>{{ post.schoolYear }} - {{ post.event }}</p>
-            <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
           </div>
         </div>
       </div>
@@ -76,10 +134,14 @@
 import { ref, onMounted, computed, watch } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
-import { db, storage} from '../firebase/index.js';
-import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore'
-import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { useRouter } from 'vue-router';
+import { db, storage } from "../firebase/index.js";
+import { collection, getDocs, addDoc, onSnapshot } from "firebase/firestore";
+import {
+  ref as storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { useRouter } from "vue-router";
 
 const showModal = ref(false);
 const showImageModal = ref(false);
@@ -90,7 +152,7 @@ const selectedEvent = ref("");
 const caption = ref("");
 const selectedImages = ref([]);
 const progressBars = ref([]);
-const router = useRouter()
+const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 const isImageSelected = computed(() => selectedImages.value.length > 0);
@@ -125,26 +187,29 @@ function uploadImages(event) {
     const storageReference = storageRef(storage, `images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
 
-    uploadTask.on('state_changed',
+    uploadTask.on(
+      "state_changed",
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         progressBars.value[i] = progress;
       },
       (error) => {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       },
       () => {
-        getDownloadURL(storageReference).then(url => {
-          selectedImages.value.push(url);
-          progressBars.value[i] = 100;
-        }).catch(error => {
-          console.error('Error getting download URL:', error);
-        });
+        getDownloadURL(storageReference)
+          .then((url) => {
+            selectedImages.value.push(url);
+            progressBars.value[i] = 100;
+          })
+          .catch((error) => {
+            console.error("Error getting download URL:", error);
+          });
       }
     );
   }
 }
-
 
 async function savePost() {
   if (!isImageSelected.value) {
@@ -152,8 +217,10 @@ async function savePost() {
     return;
   }
 
-  const userSnapshot = await getDocs(collection(db, 'users'));
-  const userData = userSnapshot.docs.find(doc => doc.id === userId.value)?.data();
+  const userSnapshot = await getDocs(collection(db, "users"));
+  const userData = userSnapshot.docs
+    .find((doc) => doc.id === userId.value)
+    ?.data();
   const userName = `${userData.lName}, ${userData.fName}`;
 
   const post = {
@@ -164,18 +231,21 @@ async function savePost() {
     caption: caption.value,
     imageUrls: selectedImages.value,
     status: "pending",
-    history: []
+    history: [],
   };
-  await addDoc(collection(db, 'posts'), post);
+  await addDoc(collection(db, "posts"), post);
 
   closeImageModal();
 }
 
 const approvedPosts = computed(() => {
   return posts.value
-    .filter(post => post.status === 'approved')
+    .filter((post) => post.status === "approved")
     .sort((a, b) => {
-      const aLatestTime = a.history.reduce((latest, entry) => entry.time > latest ? entry.time : latest, a.history[0].time);
+      const aLatestTime = a.history.reduce(
+        (latest, entry) => (entry.time > latest ? entry.time : latest),
+        a.history[0].time
+      );
       return new Date(aLatestTime);
     });
 });
@@ -197,32 +267,39 @@ watch(approvedPosts, (newPosts, oldPosts) => {
 });
 
 onMounted(async () => {
-  const coursesSnapshot = await getDocs(collection(db, 'classYears'));
-  schoolYears.value = coursesSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+  const coursesSnapshot = await getDocs(collection(db, "classYears"));
+  schoolYears.value = coursesSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    name: doc.data().name,
+  }));
 
-  const classYearsSnapshot = await getDocs(collection(db, 'events'));
-  events.value = classYearsSnapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+  const classYearsSnapshot = await getDocs(collection(db, "events"));
+  events.value = classYearsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    name: doc.data().name,
+  }));
 
-  onSnapshot(collection(db, 'posts'), (snapshot) => {
-    posts.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    approvedPosts.value = posts.value.filter(post => post.status === 'approved');
+  onSnapshot(collection(db, "posts"), (snapshot) => {
+    posts.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    approvedPosts.value = posts.value.filter(
+      (post) => post.status === "approved"
+    );
   });
 });
 </script>
 
-
 <style>
 .modal {
-  display: flex; 
-  position: fixed; 
-  z-index: 1; 
+  display: flex;
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* Modal content */
@@ -265,7 +342,7 @@ onMounted(async () => {
 
 .image-preview img {
   max-width: 300px;
-  max-height: 200px; 
+  max-height: 200px;
   margin-top: 10px;
 }
 
