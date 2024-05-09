@@ -28,7 +28,7 @@
         </tr>
       </table>
     </div>
-    <button @click="logout" class="logout-button"><i class="fas fa-power-off"></i>  Logout</button>
+    <button @click="logout" class="logout-butto btn btn-sm btn-dark mt-5"><i class="fas fa-power-off"></i>  Logout</button>
   </aside>
 </template>
 
