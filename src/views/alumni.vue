@@ -6,7 +6,7 @@
         <SideBar />
         <div class="main-content">
           <p>
-            <button @click="showPostModal" class="btn">Add Post</button>
+            <button @click="showPostModal" class="btn btn-dark m-2">Add Post</button>
           </p>
 
           <div v-if="showModal" class="modal">
@@ -310,7 +310,6 @@ onMounted(async () => {
 
 /* Modal content */
 .main-content {
-  background-color: red;
   width: calc(100% - 400px);
 }
 
