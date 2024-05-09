@@ -308,7 +308,7 @@ onMounted(async () => {
 /* Modal content */
 .main-content {
   background-color: red;
-  widows: calc(100% - 400px);
+  width: calc(100% - 400px);
 }
 
 .modal-content {
