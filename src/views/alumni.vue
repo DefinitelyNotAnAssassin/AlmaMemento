@@ -101,7 +101,14 @@
             </div>
           </div>
 
-          <div class="bg-secondary" style="width: calc(100% - 400px); height: calc(100vh - 60px);">
+          <div
+            class="bg-secondary"
+            style="
+              width: calc(100% - 400px);
+              height: calc(100vh - 100px);
+              overflow-y: auto;
+            "
+          >
             <div
               v-for="post in approvedPosts"
               :key="post.id"
