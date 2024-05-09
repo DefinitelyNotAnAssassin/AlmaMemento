@@ -105,7 +105,7 @@
             class="bg-secondary"
             style="
               width: calc(100% - 400px);
-              height: calc(100vh - 200px);
+              height: calc(100vh - 100px);
               overflow-y: auto;
             "
           >
