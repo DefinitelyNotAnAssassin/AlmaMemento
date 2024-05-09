@@ -41,17 +41,6 @@
       </div>
 
       <div>
-        <label for="birthday">Birthday:</label>
-        <input
-          :disabled="!isEditable"
-          type="date"
-          id="birthday"
-          name="birthday"
-          v-model="userData.birthday"
-        />
-      </div>
-
-      <div>
         <label for="name">Name:</label>
         <input
           :disabled="!isEditable"
@@ -174,7 +163,6 @@ const userData = ref({
   alumna_email: "",
   userlevel: "",
   alumnaID: "",
-  birthday: "",
   phone: "",
   address: "",
   year: "",

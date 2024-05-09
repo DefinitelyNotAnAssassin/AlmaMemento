@@ -55,17 +55,16 @@
             </div>
           </div>
 
-          <div class="posts-container card-container container p-3">
-            <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
-              <h3>{{ post.name }}</h3>
-              <h5>{{ post.caption }}</h5>
-              <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
-                <img v-if="index < 5 || showAllImages" :src="imageUrl" alt="Post Image" />
-                <button v-else @click="showAllImages = true">View More Images</button>
-              </div>
-              <hr class="pt-1">
-              <p>{{ post.schoolYear }} - {{ post.event }}</p>
+          <div v-for="post in approvedPosts" :key="post.id" class="container card p-3 background-color-brown text-light mt-2">
+            <h3>{{ post.name }}</h3>
+            <h5>{{ post.caption }}</h5>
+            <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
+              <img v-if="index < 5 || showAllImages" :src="imageUrl" alt="Post Image" />
+              <button v-else @click="showAllImages = true">View More Images</button>
             </div>
+            <hr class="pt-1">
+            <p>{{ post.schoolYear }} - {{ post.event }}</p>
+            <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
           </div>
         </div>
       </div>
@@ -97,7 +96,6 @@ const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
-const approvedPosts = ref([]);
 
 function showPostModal() {
   showModal.value = true;
@@ -165,11 +163,33 @@ async function savePost() {
     event: selectedEvent.value,
     caption: caption.value,
     imageUrls: selectedImages.value,
-    status: "pending"
+    status: "pending",
+    history: []
   };
   await addDoc(collection(db, 'posts'), post);
 
   closeImageModal();
+}
+
+const approvedPosts = computed(() => {
+  return posts.value
+    .filter(post => post.status === 'approved')
+    .sort((a, b) => {
+      const aLatestTime = a.history.reduce((latest, entry) => entry.time > latest ? entry.time : latest, a.history[0].time);
+      return new Date(aLatestTime);
+    });
+});
+
+function getLatestApprovalDate(post) {
+  if (!post.history || post.history.length === 0) {
+    return "No approval date available";
+  }
+
+  const latestTime = post.history.reduce((latest, entry) => {
+    return entry.time > latest ? entry.time : latest;
+  }, post.history[0].time);
+
+  return latestTime;
 }
 
 watch(approvedPosts, (newPosts, oldPosts) => {

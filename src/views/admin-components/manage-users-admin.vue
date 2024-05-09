@@ -7,19 +7,17 @@
             <div>
               <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete</button>
               <button class="btn btn-sm btn-success mx-1" @click="addUser">Add User</button>
-              <label class="btn btn-sm btn-dark">
-                <i class="bi bi-upload"></i> Import Users <input type="file" style="display: none;" @change="importUsers" accept=".xlsx,.xls">
-              </label>
             </div>
           </div>
         <table class="table table-striped">
           <thead>
             <tr>
-              <th></th>
+              <th>
+                <input type="checkbox" v-model="selectAllChecked" @click="checkAllItems" />
+              </th>
               <th>Name</th>
               <th>Administrator ID</th>
               <th>Email</th>
-              <th>Birthday</th>
               <th>Phone</th>
               <th>Address</th>
               <th>Year of Administratorship</th>
@@ -33,7 +31,6 @@
                   <td>{{ item.name }}</td>
                   <td>{{ item.alumnaID }}</td>
                   <td>{{ item.alumna_email }}</td>
-                  <td>{{ item.birthday }}</td>
                   <td>{{ item.phone }}</td>
                   <td>{{ item.address }}</td>
                   <td>{{ item.yearAppointed }}</td>
@@ -80,10 +77,6 @@
                 <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
               </div>
               <div>
-                <label for="birthday">Birthday</label>
-                <input class="form-control" type="text" id="birthday" name="birthday" v-model="birthday">
-              </div>
-              <div>
                 <label for="phone">Phone</label>
                 <input class="form-control" type="tel" id="phone" name="phone" v-model="phone">
               </div>
@@ -120,10 +113,6 @@
               <div>
                 <label for="alumna_password">Password</label>
                 <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-              </div>
-              <div>
-                <label for="birthday">Birthday</label>
-                <input class="form-control" type="text" id="birthday" name="birthday" v-model="birthday">
               </div>
               <div>
                 <label for="phone">Phone</label>
@@ -166,11 +155,10 @@ const mInitial = ref('');
 const lName = ref('');
 const alumna_email = ref('');
 const alumna_password = ref('');
-const birthday = ref('');
 const phone = ref('');
 const address = ref('');
 const yearAppointed = ref(new Date().getFullYear().toString());
-
+const selectAllChecked = ref(false); 
 const searchQuery = ref('');
 
 const filteredItems = computed(() => {
@@ -210,7 +198,6 @@ const addUser = () => {
     lName.value = '';
     alumna_email.value = '';
     alumna_password.value = '';
-    birthday.value = '';
     phone.value = '';
     address.value = '';
 }
@@ -246,7 +233,6 @@ const submitModal = async () => {
             lName: lName.value,
             alumna_email: alumna_email.value,
             alumna_password: alumna_password.value,
-            birthday: birthday.value,
             phone: phone.value,
             address: address.value,
             yearAppointed: yearAppointed.value,
@@ -266,7 +252,6 @@ const submitModal = async () => {
                 lName: lName.value,
                 alumna_email: alumna_email.value,
                 alumna_password: alumna_password.value,
-                birthday: birthday.value,
                 phone: phone.value,
                 address: address.value,
             })
@@ -288,7 +273,6 @@ const editItem = (selectedItem) => {
     lName.value = selectedItem.lName;
     alumna_email.value = selectedItem.alumna_email;
     alumna_password.value = selectedItem.alumna_password;
-    birthday.value = selectedItem.birthday;
     phone.value = selectedItem.phone;
     address.value = selectedItem.address;
 }
@@ -313,51 +297,25 @@ const deleteSelected = async () => {
     const docRef = doc(db, 'users', id);
     await deleteDoc(docRef);
   }
-  isDeleteConfirmationVisible.value = false
-  selectedItems.value = []
+  isDeleteConfirmationVisible.value = false;
+  selectedItems.value = [];
+  selectAllChecked.value = false;
 }
+
+const checkAllItems = (event) => {
+  const isChecked = event.target.checked;
+  if (isChecked) {
+    selectedItems.value = filteredItems.value.map(item => item.id);
+  } else {
+    selectedItems.value = [];
+  }
+  selectAllChecked.value = isChecked;
+};
 
 const changeStatus = async (userId, status) => {
   const docRef = doc(db, 'users', userId);
   await updateDoc(docRef, { status });
 }
-
-const importUsers = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const data = new Uint8Array(e.target.result);
-    const workbook = read(data, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const usersData = utils.sheet_to_json(worksheet, { header: 2 });
-
-    for (const user of usersData) {
-      const { alumnaID, fName, mInitial, lName, alumna_email, alumna_password, birthday, phone, address, yearAppointed } = user;
-      console.log(usersData);
-      await addDoc(collection(db, 'users'), {
-        alumnaID,
-        fName,
-        mInitial,
-        lName,
-        alumna_email,
-        alumna_password,
-        birthday,
-        phone,
-        address,
-        yearAppointed,
-        userlevel: 'administrator',
-        status: 'active',
-      });
-    }
-
-    alert('Users imported successfully');
-    fetchData();
-  };
-  reader.readAsArrayBuffer(file);
-};
 
 </script>
   

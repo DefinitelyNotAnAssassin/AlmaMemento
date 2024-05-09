@@ -15,9 +15,6 @@
       <button type="button" class="btn-notification">
         N<i class="fa-solid fa-bell"></i>
       </button>
-      <button type="button" class="btn-profile">
-        P<i class="fa-solid fa-user"></i>
-      </button>
     </div>
   </nav>
 </template>

@@ -10,11 +10,6 @@
             <i class="fas fa-bell"></i>
           </span>
         </a>
-        <a class="navbar-item text-light" @click="toggleProfile">
-          <span class="icon">
-            <i class="fas fa-user"></i>
-          </span>
-        </a>
       </div>
     </nav>
   </template>

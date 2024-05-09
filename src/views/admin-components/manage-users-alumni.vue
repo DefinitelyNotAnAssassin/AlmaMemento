@@ -7,7 +7,6 @@
           <div>
             <button class="btn btn-sm btn-danger mx-1" v-if="selectedItems.length > 0" @click="confirmDelete">Delete</button>
             <button class="btn btn-sm btn-success mx-1" @click="addUser">Add User</button>
-            <!-- <input class="btn btn-dark" type="file" @change="importUsers" accept=".xlsx,.xls" /> -->
             <label class="btn btn-sm btn-dark">
               <i class="bi bi-upload"></i> Import Users <input type="file" style="display: none;" @change="importUsers" accept=".xlsx,.xls">
             </label>
@@ -16,7 +15,9 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th></th>
+            <th>
+              <input type="checkbox" v-model="selectAllChecked" @click="checkAllItems" />
+            </th>
             <th>Name</th>
             <th>ID Number</th>
             <th>Course <button class="btn btn-sm btn-light" @click="addCourse"><i class="bi bi-plus-lg"></i></button></th>
@@ -204,6 +205,7 @@ const address = ref('');
 const alumna_password = ref('');
 const users = ref([]);
 const searchQuery = ref('');
+const selectAllChecked = ref(false); 
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -379,9 +381,20 @@ const deleteSelected = async () => {
     const docRef = doc(db, 'users', id);
     await deleteDoc(docRef);
   }
-  isDeleteConfirmationVisible.value = false
-  selectedItems.value = []
+  isDeleteConfirmationVisible.value = false;
+  selectedItems.value = [];
+  selectAllChecked.value = false;
 }
+
+const checkAllItems = (event) => {
+  const isChecked = event.target.checked;
+  if (isChecked) {
+    selectedItems.value = filteredItems.value.map(item => item.id);
+  } else {
+    selectedItems.value = [];
+  }
+  selectAllChecked.value = isChecked;
+};
 
 const importUsers = (event) => {
   const file = event.target.files[0];

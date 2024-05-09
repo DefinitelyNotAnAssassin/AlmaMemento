@@ -5,7 +5,7 @@
     </div>
     <div class="d-flex justify-content-between">
       <select class="select-status form-control" v-model="filterStatus">
-        <option value="all">All</option>
+        <option value="pending">Pending</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
         <option value="history">History</option>
@@ -15,6 +15,7 @@
         type="text"
         v-model="searchQuery"
         placeholder="Search by ID or Name"
+        v-if="filterStatus !== 'history'"
       />
     </div>
     <div class="d-flex justify-content-end mt-1 mb-1">
@@ -29,7 +30,9 @@
     <table class="table table-striped">
       <thead v-show="filterStatus !== 'history'">
         <tr>
-          <th></th>
+          <th>
+            <input type="checkbox" v-model="selectAllChecked" @click="checkAllItems" />
+          </th>
           <th>ID Number</th>
           <th>Name</th>
           <th>Year</th>
@@ -87,7 +90,7 @@
             <template v-if="item.history && item.history.length > 0">
               <ul>
                 <li v-for="historyItem in item.history" :key="historyItem.id">
-                  {{ historyItem.admin }} - {{ historyItem.status }}
+                  {{ historyItem.admin }} - {{ historyItem.status }} 
                 </li>
               </ul>
             </template>
@@ -102,25 +105,28 @@
         <li v-for="item in filteredHistory" :key="item.id">
           <template v-for="(historyItem, historyIndex) in item.history">
             <span v-if="historyIndex > 0">, </span>
-            <span>{{ historyItem.admin }} - {{ historyItem.status }}</span>
+            <span>{{ historyItem.admin }} {{ historyItem.status }} the post of {{ item.name }} on {{ historyItem.time }} </span>
           </template>
         </li>
       </ul>
     </div>
     <div v-if="imagePreview" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
-        <div
-          style="height: 60vh; overflow-y: auto"
-          class="d-flex flex-column align-items-center mt-3"
-        >
-          <div
-            class="m-1"
-            v-for="(imageUrl, index) in imagePreview"
-            :key="index"
-          >
-            <img style="width: 280px" :src="imageUrl" alt="Image Preview" />
+    <div class="modal-content">
+      <span class="close" @click="closeModal">&times;</span>
+      <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div v-for="(imageUrl, index) in imagePreview" :key="index" :class="{ 'carousel-item': true, 'active': index === currentIndex }">
+            <img :src="imageUrl" class="d-block w-100" alt="Image Preview">
           </div>
+        </div>
+          <button class="carousel-control-prev" type="button" @click="prevImage">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" @click="nextImage">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
       </div>
     </div>
@@ -147,7 +153,7 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
-  getDoc,
+  getDoc
 } from "firebase/firestore";
 
 const items = ref([]);
@@ -156,8 +162,10 @@ const imagePreview = ref(null);
 const schoolYear = ref([]);
 const event = ref([]);
 const userId = ref([]);
-const filterStatus = ref("all");
+const filterStatus = ref("pending");
 const isModalVisible = ref(false);
+const selectAllChecked = ref(false); 
+const currentIndex = ref(0);
 
 const router = useRouter();
 const adminId = router.currentRoute.value.query.userId;
@@ -170,11 +178,12 @@ const fetchUsersAndClassYearsAndEvents = async () => {
     name: doc.data().name,
   }));
 
-  const querySnapshot = await getDocs(collection(db, "posts"));
+  const querySnapshot = await getDocs(collection(db, "posts").where("status", "==", "pending"));
   items.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
+
 
   const classYearsSnapshot = await getDocs(collection(db, "classYears"));
   schoolYear.value = classYearsSnapshot.docs.map((doc) => ({
@@ -260,8 +269,21 @@ function showImagePreview(imageUrls) {
 
   if (Array.isArray(imageUrls) && imageUrls.length > 0) {
     imagePreview.value = imageUrls;
+    currentIndex.value = 0;
   } else {
     console.error("Invalid imageUrls:", imageUrls);
+  }
+}
+
+function nextImage() {
+  if (currentIndex.value < imagePreview.value.length - 1) {
+    currentIndex.value++;
+  }
+}
+
+function prevImage() {
+  if (currentIndex.value > 0) {
+    currentIndex.value--;
   }
 }
 
@@ -271,9 +293,24 @@ function closeModal() {
 
 const filteredHistory = computed(() => {
   if (filterStatus.value === "history") {
-    return items.value.filter(
-      (item) => item.history && item.history.length > 0
-    );
+    return items.value
+      .filter((item) => item.history && item.history.length > 0)
+      .map((item) => {
+        const historyItem = item.history[0];
+        const timestamp = historyItem.time ? historyItem.time.toDate() : null;
+        const formattedDate = timestamp ? timestamp.toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }) : "";
+        return {
+          ...item,
+          history: [{ ...historyItem, time: formattedDate }],
+        };
+      });
   } else {
     return [];
   }
@@ -309,6 +346,17 @@ const deleteSelected = async () => {
   }
   isModalVisible.value = false;
   selectedItems.value = [];
+  selectAllChecked.value = false;
+};
+
+const checkAllItems = (event) => {
+  const isChecked = event.target.checked;
+  if (isChecked) {
+    selectedItems.value = filteredItems.value.map(item => item.id);
+  } else {
+    selectedItems.value = [];
+  }
+  selectAllChecked.value = isChecked;
 };
 
 onMounted(async () => {
