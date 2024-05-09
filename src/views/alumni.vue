@@ -102,7 +102,7 @@
           </div>
 
           <div
-            class="bg-secondary d-flex flex-column align-items-center"
+            class="d-flex flex-column align-items-center"
             style="height: calc(100vh - 130px); overflow-y: auto"
           >
             <div
@@ -115,6 +115,8 @@
               <h5>{{ post.caption }}</h5>
               <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
                 <img
+                  class="m-1"
+                  style="width: 300px"
                   v-if="index < 5 || showAllImages"
                   :src="imageUrl"
                   alt="Post Image"
