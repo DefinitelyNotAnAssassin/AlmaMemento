@@ -113,7 +113,7 @@
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <div v-for="(imageUrl, index) in post.imageUrls" :key="index">
+              <div class="d-flex flex-column align-items-center" v-for="(imageUrl, index) in post.imageUrls" :key="index">
                 <img
                   class="m-1"
                   style="width: 300px"
