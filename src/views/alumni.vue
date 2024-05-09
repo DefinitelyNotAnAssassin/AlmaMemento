@@ -103,11 +103,7 @@
 
           <div
             class="bg-secondary"
-            style="
-              width: calc(100% - 400px);
-              height: calc(100vh - 130px);
-              overflow-y: auto;
-            "
+            style="height: calc(100vh - 130px); overflow-y: auto"
           >
             <div
               v-for="post in approvedPosts"
@@ -310,6 +306,11 @@ onMounted(async () => {
 }
 
 /* Modal content */
+.main-content {
+  background-color: red;
+  widows: calc(100% - 400px);
+}
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
