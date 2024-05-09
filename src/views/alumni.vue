@@ -102,7 +102,7 @@
           </div>
 
           <div
-            class="bg-secondary d-flex justify-content-center"
+            class="bg-secondary d-flex flex-row align-items-center"
             style="height: calc(100vh - 130px); overflow-y: auto"
           >
             <div
