@@ -102,10 +102,11 @@
           </div>
 
           <div
-            class="bg-secondary"
+            class="bg-secondary d-flex justify-content-center"
             style="height: calc(100vh - 130px); overflow-y: auto"
           >
             <div
+              style="width: 400px"
               v-for="post in approvedPosts"
               :key="post.id"
               class="container card p-3 background-color-brown text-light mt-2"
