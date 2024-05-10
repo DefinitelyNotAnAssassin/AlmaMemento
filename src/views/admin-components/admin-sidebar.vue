@@ -4,7 +4,7 @@
     <ul class="mt-3">
       <li v-for="(item, index) in sidebarItems" :key="index">
         <a class="text-light" @click="handleSidebarItemClick(item)">
-          {{ sideBarItemsIcons[index] + item }}
+          <i :class="sideBarItemsIcons[index]"></i> {{ item }}
           <span
             v-if="item === 'Manage Users' || item === 'Yearbook'"
             class="dropdown-arrow"
@@ -43,11 +43,11 @@ import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 const currentPage = ref("Dashboard");
 
 const sideBarItemsIcons = [
-  '<i class="bi bi-speedometer2"></i>',
-  '<i class="bi bi-person-circle"></i>',
-  '<i class="bi bi-people"></i>',
-  '<i class="bi bi-body-text"></i>',
-  '<i class="bi bi-book"></i>',
+  "bi bi-speedometer2",
+  "bi bi-person-circle",
+  "bi bi-people",
+  "bi bi-body-text",
+  "bi bi-book",
 ];
 
 const sidebarItems = [
