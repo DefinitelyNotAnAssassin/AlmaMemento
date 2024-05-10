@@ -7,8 +7,8 @@
       <input class="form-control" style="width: 250px" type="text" v-model="searchQuery" placeholder="Search Folder" />
     </div>
     <div class="d-flex justify-content-end">
+      <button class="btn btn-sm btn-dark mx-1" @click="backToEvent"><i class="bi bi-arrow-return-left"></i></button>
       <button class="btn btn-sm btn-success" @click="showModal = true"> Add Folder </button>
-      <button @click="backToEvent">Back</button>
     </div>
     <div class="folders d-flex flex-wrap">
       <div

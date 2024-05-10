@@ -1,38 +1,71 @@
 <template>
-  <div>
-      {{ props.subfolderName }} -{{ props.folderName }}
-    <button @click="showModal = true">Upload Image</button>
-    <button @click="backToEvent">Back</button>
+  <div class="components-page-main-container p-3">
+    <div class="text-center">
+      <h3>{{ props.subfolderName }}</h3>
+      <h4>{{ props.folderName }}</h4>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-sm btn-dark mx-1" @click="backToEvent">
+        <i class="bi bi-arrow-return-left"></i>
+      </button>
+      <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
+        Upload Image
+      </button>
+    </div>
+
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
-        <input type="file" ref="imageInput" @change="handleFileUpload">
-        <button @click="uploadImage">Upload</button>
+        <input
+          class="form-control"
+          type="file"
+          ref="imageInput"
+          @change="handleFileUpload"
+        />
+        <button class="btn btn-sm btn-success" @click="uploadImage">
+          Upload
+        </button>
       </div>
     </div>
     <div class="image-container">
-      <img v-for="image in images" :key="image.id" :src="image.url" alt="Uploaded Image">
+      <img
+        v-for="image in images"
+        :key="image.id"
+        :src="image.url"
+        alt="Uploaded Image"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps } from 'vue';
-import { uploadBytes, getDownloadURL, ref as storageRef } from 'firebase/storage';
-import { addDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
-import { db, storage } from '../../../firebase/index.js';
+import { ref, defineEmits, defineProps } from "vue";
+import {
+  uploadBytes,
+  getDownloadURL,
+  ref as storageRef,
+} from "firebase/storage";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
+import { db, storage } from "../../../firebase/index.js";
 
-const props = defineProps(['folderName', 'subfolderName']);
-const emit = defineEmits(['update:currentPage']);
+const props = defineProps(["folderName", "subfolderName"]);
+const emit = defineEmits(["update:currentPage"]);
 
-const currentAlbumPage = ref('Event Gallery');
+const currentAlbumPage = ref("Event Gallery");
 const showModal = ref(false);
 let selectedFile = null;
 const images = ref([]);
 
 const backToEvent = async () => {
-  currentAlbumPage.value = 'Event';
-  emit('update:currentPage', 'Event');
+  currentAlbumPage.value = "Event";
+  emit("update:currentPage", "Event");
 };
 
 const handleFileUpload = (event) => {
@@ -46,19 +79,25 @@ const uploadImage = async () => {
   await uploadBytes(imageRef, selectedFile);
   const imageUrl = await getDownloadURL(imageRef);
 
-  await addDoc(collection(db, 'eventgallery'), {
+  await addDoc(collection(db, "eventgallery"), {
     eventfolder: props.folderName,
     url: imageUrl,
   });
 };
 
-onSnapshot(query(collection(db, 'eventgallery'), where('eventfolder', '==', props.folderName)), (snapshot) => {
-  images.value = [];
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    images.value.push({ id: doc.id, url: data.url });
-  });
-});
+onSnapshot(
+  query(
+    collection(db, "eventgallery"),
+    where("eventfolder", "==", props.folderName)
+  ),
+  (snapshot) => {
+    images.value = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      images.value.push({ id: doc.id, url: data.url });
+    });
+  }
+);
 </script>
 
 <style>
@@ -71,8 +110,8 @@ onSnapshot(query(collection(db, 'eventgallery'), where('eventfolder', '==', prop
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
