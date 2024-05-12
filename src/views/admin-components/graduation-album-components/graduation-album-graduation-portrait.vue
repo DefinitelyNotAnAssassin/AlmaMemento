@@ -351,8 +351,8 @@ const studentImageUrl = ref("");
 const emit = defineEmits(["update:currentPage"]);
 
 const backToGrad = async () => {
-  currentAlbumPage.value = "Chosen Course";
-  emit("update:currentPage", "Chosen Course");
+  currentAlbumPage.value = "Chosen PAB";
+  emit("update:currentPage", "Chosen PAB");
 };
 
 const openImageModal = (url) => {
@@ -499,7 +499,7 @@ const uploadData = async () => {
 
   await addDoc(collection(db, "gradportrait"), {
     year: props.folderName,
-    course: props.subfolderName,
+    pab: props.subfolderName,
     folderIn: props.gradsubfolderName,
     role: selectedRole.value,
     name: nameInput.value,
@@ -520,7 +520,7 @@ const checkAdviserExists = async () => {
   const q = query(
     collection(db, "gradportrait"),
     where("year", "==", props.folderName),
-    where("course", "==", props.subfolderName),
+    where("pab", "==", props.subfolderName),
     where("role", "==", "adviser")
   );
   const querySnapshot = await getDocs(q);
@@ -531,7 +531,7 @@ const fetchStudentsAndAdviser = async () => {
   const q = query(
     collection(db, "gradportrait"),
     where("year", "==", props.folderName),
-    where("course", "==", props.subfolderName)
+    where("pab", "==", props.subfolderName)
   );
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -559,7 +559,7 @@ const unsubscribe = onSnapshot(
   query(
     collection(db, "gradportrait"),
     where("year", "==", props.folderName),
-    where("course", "==", props.subfolderName),
+    where("pab", "==", props.subfolderName),
     where("role", "==", "adviser")
   ),
   () => {

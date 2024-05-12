@@ -1,7 +1,7 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>Course</h3>
+      <h3>Program & Block</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input
@@ -85,7 +85,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firebase/index.js";
 
-const currentAlbumPage = ref("Course");
+const currentAlbumPage = ref("PAB");
 
 const folders = ref([]);
 const showModal = ref(false);
@@ -99,7 +99,7 @@ const searchQuery = ref("");
 const props = defineProps(["folderName"]);
 
 const fetchFolders = async () => {
-  if (currentAlbumPage.value === "Course" && props.folderName) {
+  if (currentAlbumPage.value === "PAB" && props.folderName) {
     const querySnapshot = await getDocs(
       query(collection(db, "subfolders"), where("year", "==", props.folderName))
     );
@@ -109,7 +109,7 @@ const fetchFolders = async () => {
         name: doc.data().name,
         type: doc.data().type,
       }))
-      .filter((folder) => folder.type === "course");
+      .filter((folder) => folder.type === "pab");
   } else {
     folders.value = [];
   }
@@ -131,15 +131,18 @@ const addFolder = async () => {
     return;
   }
 
-  console.log(currentAlbumPage.value);
-  const selectedYear =
-    currentAlbumPage.value === "Course" ? props.folderName : "";
-  console.log(selectedYear);
+  const selectedYear = currentAlbumPage.value === "PAB" ? props.folderName : "";
 
   await addDoc(collection(db, "subfolders"), {
     name: newFolderName.value,
     year: selectedYear,
-    type: "course",
+    type: "pab",
+  });
+
+  await addDoc(collection(db, "pab"), {
+    name: newFolderName.value,
+    year: selectedYear,
+    type: "pab",
   });
 
   const subfolderName = `Graduation Portrait`;
@@ -158,8 +161,8 @@ const addFolder = async () => {
 const emit = defineEmits(["update:currentPage"]);
 
 const changeAlbumPage = (subfolderName) => {
-  currentAlbumPage.value = "Chosen Course";
-  emit("update:currentPage", "Chosen Course");
+  currentAlbumPage.value = "Chosen PAB";
+  emit("update:currentPage", "Chosen PAB");
   emit("subfolder-name", subfolderName);
 };
 

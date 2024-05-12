@@ -81,14 +81,17 @@ const uploadImage = async () => {
 
   await addDoc(collection(db, "eventgallery"), {
     eventfolder: props.folderName,
+    eventsubfolder: props.subfolderName,
     url: imageUrl,
   });
+  showModal.value = false;
 };
 
 onSnapshot(
   query(
     collection(db, "eventgallery"),
-    where("eventfolder", "==", props.folderName)
+    where("eventfolder", "==", props.folderName),
+    where("eventsubfolder", "==", props.subfolderName)
   ),
   (snapshot) => {
     images.value = [];

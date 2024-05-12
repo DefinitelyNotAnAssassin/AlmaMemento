@@ -148,8 +148,8 @@ const addFolder = async () => {
 const emit = defineEmits(["update:currentPage"]);
 
 const changeAlbumPage = (folderName) => {
-  currentAlbumPage.value = "Course";
-  emit("update:currentPage", "Course");
+  currentAlbumPage.value = "PAB";
+  emit("update:currentPage", "PAB");
   emit("folder-name", folderName);
 };
 
@@ -208,7 +208,8 @@ const cancelDeleteFolder = () => {
 const filteredFolders = computed(() => {
   return folders.value.filter((folder) =>
     folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+  )
+  .sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>
 

@@ -13,7 +13,7 @@
       />
     </div>
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-dark mx-1" @click="backToCourse">
+      <button class="btn btn-sm btn-dark mx-1" @click="backToPAB">
         <i class="bi bi-arrow-return-left"></i>
       </button>
       <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
@@ -86,7 +86,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firebase/index.js";
 
-const currentAlbumPage = ref("Chosen Course");
+const currentAlbumPage = ref("Chosen PAB");
 
 const folders = ref([]);
 const subfolders = ref([]);
@@ -102,7 +102,7 @@ const props = defineProps(["folderName", "subfolderName"]);
 
 const fetchFolders = async () => {
   if (
-    currentAlbumPage.value === "Chosen Course" &&
+    currentAlbumPage.value === "Chosen PAB" &&
     props.folderName &&
     props.subfolderName
   ) {
@@ -142,15 +142,15 @@ const addFolder = async () => {
   }
 
   const selectedYear =
-    currentAlbumPage.value === "Chosen Course" ? props.folderName : "";
-  const selectedCourse =
-    currentAlbumPage.value === "Chosen Course" ? props.subfolderName : "";
+    currentAlbumPage.value === "Chosen PAB" ? props.folderName : "";
+  const selectedPAB =
+    currentAlbumPage.value === "Chosen PAB" ? props.subfolderName : "";
 
   await addDoc(collection(db, "subfolders"), {
     name: newFolderName.value,
     year: selectedYear,
     type: "subfolder",
-    parentFolder: selectedCourse,
+    parentFolder: selectedPAB,
   });
 
   newFolderName.value = "";
@@ -161,7 +161,7 @@ const addFolder = async () => {
 const emit = defineEmits(["update:currentPage"]);
 
 const changeAlbumPage = (gradsubfolderName) => {
-  currentAlbumPage.value = "Chosen Course";
+  currentAlbumPage.value = "Chosen PAB";
   if (gradsubfolderName !== "Graduation Portrait") {
     emit("update:currentPage", "Gallery");
   } else {
@@ -169,9 +169,9 @@ const changeAlbumPage = (gradsubfolderName) => {
   }
   emit("grad-subfolder-name", gradsubfolderName);
 };
-const backToCourse = () => {
-  currentAlbumPage.value = "Course";
-  emit("update:currentPage", "Course");
+const backToPAB = () => {
+  currentAlbumPage.value = "PAB";
+  emit("update:currentPage", "PAB");
 };
 
 const showFolderOptions = (index) => {

@@ -67,8 +67,8 @@ let selectedFile = null;
 const images = ref([]);
 
 const backToGrad = async () => {
-  currentAlbumPage.value = "Chosen Course";
-  emit("update:currentPage", "Chosen Course");
+  currentAlbumPage.value = "Chosen PAB";
+  emit("update:currentPage", "Chosen PAB");
 };
 
 const handleFileUpload = (event) => {

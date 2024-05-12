@@ -2,11 +2,11 @@
     <div v-if="currentAlbumPage === 'Main'">
         <MainPage :currentAlbumPage="currentAlbumPage" @update:currentPage="currentAlbumPage = $event" @folder-name="updateSelectedFolder"/>
     </div>
-    <div v-if="currentAlbumPage === 'Course'">
-        <Course :folderName="selectedFolderName"  @update:currentPage="currentAlbumPage = $event" @subfolder-name="updateSelectedSubFolder"/>
+    <div v-if="currentAlbumPage === 'PAB'">
+        <PAB :folderName="selectedFolderName"  @update:currentPage="currentAlbumPage = $event" @subfolder-name="updateSelectedSubFolder"/>
     </div>
-    <div v-if="currentAlbumPage === 'Chosen Course'">
-        <ChosenCourse :folderName="selectedFolderName" :subfolderName="selectedSubFolderName" @update:currentPage="currentAlbumPage = $event" @grad-subfolder-name="updateSelectedGradSubFolder"/>
+    <div v-if="currentAlbumPage === 'Chosen PAB'">
+        <ChosenPAB :folderName="selectedFolderName" :subfolderName="selectedSubFolderName" @update:currentPage="currentAlbumPage = $event" @grad-subfolder-name="updateSelectedGradSubFolder"/>
     </div>
     <div v-if="currentAlbumPage === 'Graduation Portrait'">
         <GraduationPortrait :folderName="selectedFolderName" :subfolderName="selectedSubFolderName" :gradsubfolderName="selectedGradSubFolderName" @update:currentPage="currentAlbumPage = $event" />
@@ -19,8 +19,8 @@
 <script setup>
 import { ref } from 'vue'
 import MainPage from './graduation-album-components/graduation-album-main.vue'
-import Course from './graduation-album-components/graduation-album-course.vue'
-import ChosenCourse from './graduation-album-components/graduation-album-chosen-course.vue'
+import PAB from './graduation-album-components/graduation-album-pab.vue'
+import ChosenPAB from './graduation-album-components/graduation-album-chosen-pab.vue'
 import GraduationPortrait from './graduation-album-components/graduation-album-graduation-portrait.vue'
 import Gallery from './graduation-album-components/graduation-album-gallery.vue'
 
@@ -32,13 +32,13 @@ const selectedGradSubFolderName = ref('');
 const updateSelectedFolder = (folderName) => {
   console.log('Folder name selected:', folderName);
   selectedFolderName.value = folderName;
-  currentAlbumPage.value = 'Course';
+  currentAlbumPage.value = 'PAB';
 };
 
 const updateSelectedSubFolder = (subfolderName) => {
   console.log('Folder name selected:', subfolderName);
   selectedSubFolderName.value = subfolderName;
-  currentAlbumPage.value = 'Chosen Course';
+  currentAlbumPage.value = 'Chosen PAB';
 };
 
 const updateSelectedGradSubFolder = (gradsubfolderName) => {
