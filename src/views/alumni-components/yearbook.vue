@@ -11,7 +11,7 @@
     <button
       class="btn"
       @click="setCurrentAlbumPage('SE Main')"
-      :class="{ 'btn-light': currentAlbumPage === 'SE Main' }"
+      :class="currentAlbumPage === 'SE Main' ? 'btn-secondary' : 'btn-light'"
     >
       School Events
     </button>
