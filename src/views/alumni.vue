@@ -110,7 +110,7 @@
               style="width: 400px"
               v-for="post in approvedPosts"
               :key="post.id"
-              class="container card p-3 background-color-brown text-light mt-2"
+              class="container card p-3 background-color-brown text-light my-2"
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
