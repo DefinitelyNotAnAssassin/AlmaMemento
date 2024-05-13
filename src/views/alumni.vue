@@ -7,7 +7,7 @@
         <div class="main-content">
           <p>
             <button @click="showPostModal" class="btn btn-dark m-2">
-              Add Post
+              Add Posts
             </button>
           </p>
           <div v-if="showModal" class="modal">
