@@ -32,7 +32,7 @@
         /><br />
       </div>
       <div class="mt-3">
-        <button class="btn btn-sm btn-primary" type="submit">Upload</button>
+        <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i> Submit</button>
       </div>
     </form>
     <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
