@@ -3,7 +3,7 @@
   <div class="container card bg-light mt-5 p-5">
     <h3 class="text-center">What can we help you with?</h3>
     <form @submit.prevent="uploadImage" class="mt-5">
-      <div class="mt-5">
+      <div class="mt-3">
         <label for="subject">Subject:</label>
         <input
           class="form-control"
@@ -12,7 +12,7 @@
           v-model="subject"
         />
       </div>
-      <div class="mt-3">
+      <div class="mt-4">
         <label for="message">Message:</label>
         <textarea
           class="form-control"
@@ -22,7 +22,7 @@
           v-model="message"
         ></textarea>
       </div>
-      <div class="mt-3"> 
+      <div class="mt-4"> 
         <label for="file">Select an image to upload:</label><br />
         <input
           class="form-control"
