@@ -3,8 +3,8 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="#"> </a>
     </div>
-    <div class="navbar-end">
-      <a class="navbar-item text-light" @click="toggleNotifications">
+    <div class="navbar-end bg-secondary">
+      <a class="navbar-item text-light bg-secondary" @click="toggleNotifications">
         <span class="icon">
           <i class="fas fa-bell"></i>
         </span>
