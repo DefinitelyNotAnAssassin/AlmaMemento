@@ -104,6 +104,7 @@ onMounted(() => {
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   font-size: 12px !important;
+  z-index: 100000 !important;
 }
 .notification-panel ul {
   list-style-type: none;
