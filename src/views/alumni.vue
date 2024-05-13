@@ -114,7 +114,7 @@
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <div
+              <!-- <div
                 class="d-flex flex-column align-items-center"
                 v-for="(imageUrl, index) in post.imageUrls"
                 :key="index"
@@ -129,7 +129,53 @@
                 <button v-else @click="showAllImages = true">
                   View More Images
                 </button>
+              </div> -->
+
+              <div
+                id="imageCarousel"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div
+                    v-for="(imageUrl, index) in post.imageUrls"
+                    :key="index"
+                    :class="{
+                      'carousel-item': true,
+                      active: index === currentIndex,
+                    }"
+                  >
+                    <img
+                      :src="imageUrl"
+                      class="d-block w-100"
+                      alt="Image Preview"
+                    />
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  @click="prevImage"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  @click="nextImage"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
               </div>
+
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
               <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
@@ -255,7 +301,7 @@ async function savePost() {
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",
-    for: "administrator"
+    for: "administrator",
   };
   await addDoc(collection(db, "notifications"), notification);
 
