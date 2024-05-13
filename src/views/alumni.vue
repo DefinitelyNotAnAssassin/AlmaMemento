@@ -302,10 +302,7 @@ async function savePost() {
     date: new Date().toLocaleDateString(),
     status: "unread",
     for: "administrator",
-<<<<<<< HEAD
     type: "newpost"
-=======
->>>>>>> 67db6cf50017dd590d72a690d6218f88f761bbac
   };
   await addDoc(collection(db, "notifications"), notification);
 
