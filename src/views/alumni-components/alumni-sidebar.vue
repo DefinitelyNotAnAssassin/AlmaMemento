@@ -114,7 +114,6 @@ fetchUserData();
 aside {
   height: calc(100vh - 70px);
   width: 400px;
-  border-right: 10px solid #861b23;
 }
 
 aside img {
