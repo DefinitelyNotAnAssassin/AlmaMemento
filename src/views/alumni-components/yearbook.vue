@@ -1,10 +1,18 @@
 <template>
   <NavBar />
   <div class="p-3">
-    <button class="btn" @click="setCurrentAlbumPage('Grad Main')">
+    <button
+      class="btn"
+      :class="{ 'btn-light': currentAlbumPage === 'Grad Main' }"
+      @click="setCurrentAlbumPage('Grad Main')"
+    >
       Graduation Album
     </button>
-    <button class="btn" @click="setCurrentAlbumPage('SE Main')">
+    <button
+      class="btn"
+      @click="setCurrentAlbumPage('SE Main')"
+      :class="{ 'btn-light': currentAlbumPage === 'SE Main' }"
+    >
       School Events
     </button>
   </div>
