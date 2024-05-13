@@ -9,7 +9,7 @@
         <span class="icon">
           <i class="fas fa-bell"></i>
         </span>
-        <span v-if="unreadPostsCount > 0" class="tag is-danger">{{ unreadPostsCount }}</span>
+        <span v-if="unreadPostsCount > 0" class="tag is-danger badge rounded-pill bg-danger">{{ unreadPostsCount }}</span>
       </a>
     </div>
     <div v-if="notificationsVisible" class="notification-panel">
