@@ -4,7 +4,7 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h3>School Eventss</h3>
+      <h3>School Events</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input

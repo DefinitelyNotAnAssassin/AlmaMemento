@@ -70,7 +70,7 @@ const fetchFolders = async () => {
         name: doc.data().name,
         type: doc.data().type,
       }))
-      .filter((folder) => folder.type === "events");
+      .filter((folder) => folder.type === "event");
   } else {
     folders.value = [];
   }

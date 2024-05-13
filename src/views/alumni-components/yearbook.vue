@@ -68,6 +68,13 @@
       @subfolder-name="updateSelectedEventSubFolder"
     />
   </div>
+  <div v-if="currentAlbumPage === 'School Events Gallery'">
+    <SchoolEventGallery
+      :folderName="selectedFolderName"
+      :subfolderName="selectedSubFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -80,6 +87,7 @@ import GraduationPortrait from "./yearbook-components/yearbook-grad-portrait.vue
 import Gallery from "./yearbook-components/yearbook-gallery.vue";
 import SchoolEventMain from "./yearbook-components/yearbook-school-event-main.vue";
 import SchoolEvents from "./yearbook-components/yearbook-school-event.vue";
+import SchoolEventGallery from "./yearbook-components/yearbook-school-event-gallery.vue";
 
 const currentAlbumPage = ref("");
 const selectedFolderName = ref("");
@@ -122,6 +130,6 @@ const updateSelectedEventFolder = (folderName) => {
 const updateSelectedEventSubFolder = (subfolderName) => {
   console.log("Folder name selected:", subfolderName);
   selectedSubFolderName.value = subfolderName;
-  currentAlbumPage.value = "School Event Gallery";
+  currentAlbumPage.value = "School Events Gallery";
 };
 </script>
