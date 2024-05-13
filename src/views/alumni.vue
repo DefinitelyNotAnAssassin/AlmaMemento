@@ -121,7 +121,6 @@
               >
                 <div class="carousel-inner bg-primary">
                   <div
-                    style="height: 200px; width: 200px"
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
                     :class="{
@@ -129,11 +128,7 @@
                       active: index === currentIndex,
                     }"
                   >
-                    <img
-                      style="height: 200px; width: 200px"
-                      :src="imageUrl"
-                      alt="Image Preview"
-                    />
+                    <img :src="imageUrl" alt="Image Preview" />
                   </div>
                 </div>
                 <button
