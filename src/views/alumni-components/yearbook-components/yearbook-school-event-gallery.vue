@@ -46,8 +46,6 @@ const props = defineProps(["folderName", "subfolderName"]);
 const emit = defineEmits(["update:currentPage"]);
 
 const currentAlbumPage = ref("School Events Gallery");
-const showModal = ref(false);
-let selectedFile = null;
 const images = ref([]);
 
 const backToGrad = async () => {
@@ -57,9 +55,9 @@ const backToGrad = async () => {
 
 onSnapshot(
   query(
-    collection(db, "gallery"),
-    where("subfolder", "==", props.subfolderName),
-    where("folder", "==", props.folderName)
+    collection(db, "eventgallery"),
+    where("eventsubfolder", "==", props.subfolderName),
+    where("eventfolder", "==", props.folderName)
   ),
   (snapshot) => {
     images.value = [];
