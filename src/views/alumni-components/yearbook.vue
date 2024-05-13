@@ -3,7 +3,7 @@
   <div class="p-3">
     <button
       class="btn"
-      :class="{ 'btn-light': currentAlbumPage === 'Grad Main' }"
+      :class="currentAlbumPage === 'Grad Main' ? 'btn-secondary' : 'btn-light'"
       @click="setCurrentAlbumPage('Grad Main')"
     >
       Graduation Album
