@@ -3,8 +3,8 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="#"> </a>
     </div>
-    <div class="navbar-end bg-secondary">
-      <a class="navbar-item text-light bg-secondary" @click="toggleNotifications">
+    <div class="navbar-end">
+      <a class="notif-main navbar-item text-light bg-secondary" @click="toggleNotifications">
         <span class="icon">
           <i class="fas fa-bell"></i>
         </span>
@@ -102,10 +102,14 @@ onMounted(() => {
   border-bottom: none;
 }
 
+.notif-main {
+  position: relative;
+}
+
 .notif-badge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: 10px;
   padding: 2px !important;
 }
 </style>
