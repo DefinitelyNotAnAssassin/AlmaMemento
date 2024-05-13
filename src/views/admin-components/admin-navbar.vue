@@ -108,8 +108,8 @@ onMounted(() => {
 
 .notif-badge {
   position: absolute;
-  top: 0px;
-  right: 10px;
+  top: 5px;
+  right: 15px;
   padding: 3px !important;
   font-size: 10px;
 }
