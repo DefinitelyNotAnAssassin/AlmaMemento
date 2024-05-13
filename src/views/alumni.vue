@@ -116,10 +116,10 @@
               <h5>{{ post.caption }}</h5>
               <div
                 id="imageCarousel"
-                class="carousel slide bg-secondary"
+                class="carousel slide"
                 data-bs-ride="carousel"
               >
-                <div class="carousel-inner bg-primary">
+                <div class="carousel-inner">
                   <div
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
