@@ -124,7 +124,7 @@
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
                     class="carousel-item"
-                    :class="{ active: index === 0 }"
+                    :class="{ active: index == 0 }"
                   >
                     <img
                       :src="imageUrl"
