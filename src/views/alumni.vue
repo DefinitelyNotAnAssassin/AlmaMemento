@@ -147,7 +147,6 @@
                   >
                     <img
                       :src="imageUrl"
-                      class="d-block w-100"
                       alt="Image Preview"
                     />
                   </div>
