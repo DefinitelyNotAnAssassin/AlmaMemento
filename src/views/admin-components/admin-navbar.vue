@@ -23,6 +23,18 @@
             {{ timeDifference(post.time.toDate()) }}</span
           >
         </li>
+        <li v-for="post in newPosts" :key="post.id" @click="viewPost(post)">
+          <span style="color: black">{{ post.name }} added a post </span>
+          <span style="color: black">
+            {{ timeDifference(post.time.toDate()) }}</span
+          >
+        </li>
+        <li v-for="post in newPosts" :key="post.id" @click="viewPost(post)">
+          <span style="color: black">{{ post.name }} added a post </span>
+          <span style="color: black">
+            {{ timeDifference(post.time.toDate()) }}</span
+          >
+        </li>
       </ul>
     </div>
   </nav>
@@ -83,8 +95,10 @@ onMounted(() => {
 .notification-panel {
   position: absolute;
   top: 40px;
-  right: 0;
-  width: 200px;
+  right: 30px;
+  width: 400px;
+  max-height: 400px;
+  overflow-y: auto;
   background-color: #fff;
   border: 1px solid #ccc;
   padding: 10px;
