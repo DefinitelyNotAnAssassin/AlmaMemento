@@ -10,7 +10,6 @@
               Add Post
             </button>
           </p>
-
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
               <div
@@ -194,8 +193,16 @@ function closeImageModal() {
 }
 
 function uploadImages(event) {
-  for (let i = 0; i < event.target.files.length; i++) {
-    const file = event.target.files[i];
+  const maxImages = 10;
+  const files = event.target.files;
+
+  if (selectedImages.value.length + files.length > maxImages) {
+    console.log("Exceeded maximum number of images allowed");
+    return;
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
     const storageReference = storageRef(storage, `images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
 
@@ -248,6 +255,7 @@ async function savePost() {
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",
+    for: "administrator"
   };
   await addDoc(collection(db, "notifications"), notification);
 
