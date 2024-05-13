@@ -114,23 +114,6 @@
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <!-- <div
-                class="d-flex flex-column align-items-center"
-                v-for="(imageUrl, index) in post.imageUrls"
-                :key="index"
-              >
-                <img
-                  class="m-1"
-                  style="width: 300px"
-                  v-if="index < 5 || showAllImages"
-                  :src="imageUrl"
-                  alt="Post Image"
-                />
-                <button v-else @click="showAllImages = true">
-                  View More Images
-                </button>
-              </div> -->
-
               <div
                 id="imageCarousel"
                 class="carousel slide bg-secondary"
@@ -216,6 +199,9 @@ const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
+
+// Edited
+const currentIndex = ref(0);
 
 function showPostModal() {
   showModal.value = true;
@@ -358,6 +344,19 @@ onMounted(async () => {
     );
   });
 });
+
+// Edit
+function nextImage() {
+  if (currentIndex.value < imagePreview.value.length - 1) {
+    currentIndex.value++;
+  }
+}
+
+function prevImage() {
+  if (currentIndex.value > 0) {
+    currentIndex.value--;
+  }
+}
 </script>
 
 <style scoped>
