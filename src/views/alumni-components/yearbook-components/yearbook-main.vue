@@ -1,6 +1,6 @@
 <template>
   <div
-    class="components-page-main-container p-3 photo-album bg-secondary"
+    class="components-page-main-container p-3 photo-album"
     style="width: 100vw !important"
   >
     <div class="text-center">
