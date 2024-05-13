@@ -7,7 +7,7 @@
         <div class="main-content">
           <p>
             <button @click="showPostModal" class="btn btn-dark m-2">
-              Add Posts
+              Add Post
             </button>
           </p>
           <div v-if="showModal" class="modal">
@@ -133,7 +133,7 @@
 
               <div
                 id="imageCarousel"
-                class="carousel slide"
+                class="carousel slide bg-secondary"
                 data-bs-ride="carousel"
               >
                 <div class="carousel-inner bg-primary">
