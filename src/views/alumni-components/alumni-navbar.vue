@@ -33,3 +33,10 @@ const toggleNotifications = () => {
 }
 
 </script>
+
+<style scoped>
+router-link {
+  text-decoration: none;
+  font-size: 15px;
+}
+</style>
