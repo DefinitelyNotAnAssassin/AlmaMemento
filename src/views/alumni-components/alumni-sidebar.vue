@@ -1,5 +1,7 @@
 <template>
-  <aside class="sidebar-container d-flex flex-column align-items-center">
+  <aside
+    class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown"
+  >
     <img class="mt-5" :src="userData.photoURL" alt="profile" />
     <h4 class="mt-2">{{ userData.name }}</h4>
     <p>{{ userData.alumna_email }}</p>
@@ -113,7 +115,6 @@ aside {
   height: calc(100vh - 70px);
   width: 400px;
   border-right: 10px solid #861b23;
-  background-color: #861b23;
 }
 
 aside img {
