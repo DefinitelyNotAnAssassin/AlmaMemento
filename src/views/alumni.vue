@@ -123,18 +123,21 @@
                   <div
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
-                    :class="{
-                      'carousel-item': true,
-                      active: index === currentIndex,
-                    }"
+                    class="carousel-item"
+                    :class="{ active: index === 0 }"
                   >
-                    <img :src="imageUrl" alt="Image Preview" />
+                    <img
+                      :src="imageUrl"
+                      class="d-block w-100"
+                      alt="Image Preview"
+                    />
                   </div>
                 </div>
                 <button
                   class="carousel-control-prev"
                   type="button"
-                  @click="prevImage"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="prev"
                 >
                   <span
                     class="carousel-control-prev-icon"
@@ -145,7 +148,8 @@
                 <button
                   class="carousel-control-next"
                   type="button"
-                  @click="nextImage"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="next"
                 >
                   <span
                     class="carousel-control-next-icon"
