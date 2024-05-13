@@ -195,9 +195,6 @@ const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
 
-// Edited
-const currentIndex = ref(0);
-
 function showPostModal() {
   showModal.value = true;
 }
@@ -339,19 +336,6 @@ onMounted(async () => {
     );
   });
 });
-
-// Edit
-function nextImage() {
-  if (currentIndex.value < post.imageUrls.value.length - 1) {
-    currentIndex.value++;
-  }
-}
-
-function prevImage() {
-  if (currentIndex.value > 0) {
-    currentIndex.value--;
-  }
-}
 </script>
 
 <style scoped>
