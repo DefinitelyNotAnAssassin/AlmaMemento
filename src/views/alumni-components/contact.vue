@@ -1,9 +1,9 @@
 <template>
   <NavBar />
-  <div class="container card bg-light mt-5">
+  <div class="container card bg-light mt-5 p-5">
     <h3 class="text-center">What can we help you with?</h3>
-    <form @submit.prevent="uploadImage">
-      <div>
+    <form @submit.prevent="uploadImage" class="mt-5">
+      <div class="mt-5">
         <label for="subject">Subject:</label>
         <input
           class="form-control"
@@ -12,7 +12,7 @@
           v-model="subject"
         />
       </div>
-      <div>
+      <div class="mt-3">
         <label for="message">Message:</label>
         <textarea
           class="form-control"
@@ -22,7 +22,7 @@
           v-model="message"
         ></textarea>
       </div>
-      <div>
+      <div class="mt-3"> 
         <label for="file">Select an image to upload:</label><br />
         <input
           class="form-control"
@@ -31,7 +31,7 @@
           @change="handleFileUpload"
         /><br />
       </div>
-      <div>
+      <div class="mt-3">
         <button class="btn btn-sm btn-primary" type="submit">Upload</button>
       </div>
     </form>
