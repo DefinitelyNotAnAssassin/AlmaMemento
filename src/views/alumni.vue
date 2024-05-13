@@ -138,6 +138,7 @@
               >
                 <div class="carousel-inner">
                   <div
+                    style="height: 200px; width: 200px"
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
                     :class="{
@@ -302,7 +303,7 @@ async function savePost() {
     date: new Date().toLocaleDateString(),
     status: "unread",
     for: "administrator",
-    type: "newpost"
+    type: "newpost",
   };
   await addDoc(collection(db, "notifications"), notification);
 
