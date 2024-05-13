@@ -218,11 +218,6 @@ function uploadImages(event) {
 }
 
 async function savePost() {
-  if (!isImageSelected.value) {
-    console.log("Please select an image before saving the post.");
-    return;
-  }
-
   const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
@@ -240,6 +235,15 @@ async function savePost() {
     history: [],
   };
   await addDoc(collection(db, "posts"), post);
+
+  const notification = {
+    userId: alumniId.value,
+    name: userName,
+    time: new Date(),
+    date: new Date().toLocaleDateString(),
+    status: 'unread'
+  };
+  await addDoc(collection(db, "notifications"), notification);
 
   closeImageModal();
 }

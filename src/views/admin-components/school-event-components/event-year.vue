@@ -108,7 +108,7 @@
   let folderToDeleteIndex = null;
   
   const fetchFolders = async () => {
-    const querySnapshot = await getDocs(collection(db, "eventfolders"));
+    const querySnapshot = await getDocs(collection(db, "folders"));
     folders.value = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       name: doc.data().name,
@@ -131,7 +131,7 @@
       return;
     }
   
-    await addDoc(collection(db, "eventfolders"), { name: newFolderName.value });
+    await addDoc(collection(db, "folders"), { name: newFolderName.value });
     newFolderName.value = "";
     showModal.value = false;
     fetchFolders();
@@ -156,7 +156,7 @@
   };
   
   const deleteFolder = async (index) => {
-    await deleteDoc(doc(db, "eventfolders", folders.value[index].id));
+    await deleteDoc(doc(db, "folders", folders.value[index].id));
     fetchFolders();
   };
   
@@ -169,7 +169,7 @@
     if (editIndex.value === null) return;
     if (!editFolderName.value.trim()) return;
     const folderId = folders.value[editIndex.value].id;
-    const folderRef = doc(db, "eventfolders", folderId);
+    const folderRef = doc(db, "folders", folderId);
     await updateDoc(folderRef, { name: editFolderName.value });
     editIndex.value = null;
     fetchFolders();

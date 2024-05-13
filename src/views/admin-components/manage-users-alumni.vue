@@ -75,6 +75,12 @@
           </tr>
         </tbody>
       </table>
+      <div v-if="isWarningVisible" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeWarning">&times;</span>
+          <p>{{ warningMessage }}</p>
+        </div>
+      </div>
       <div v-if="isModalVisible" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -249,6 +255,8 @@ const selectedClassYears = ref([]);
 const pabName = ref('');
 const major = ref('');
 const blck = ref('');
+const isWarningVisible = ref(false);
+const warningMessage = ref('');
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -396,26 +404,31 @@ const submitModal = async () => {
           console.error('Selected item not found');
       }
   } else if (isAddingProgramAndBlock.value === true) {
-      const data = {
-          program: pabName.value,
-          major: major.value,
-          blck: blck.value,
-          year: selectedClassYear.value
-      };
-      const subForData = {
-        name: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
-        year: selectedClassYear.value,
-        type: 'pab'
-      };
-      const subFolder = {
-        name: "Graduation Portrait",
-        parentFolder: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
-        year: selectedClassYear.value,
-        type: 'subfolder'
-      };
-      await addDoc(collection(db, 'pabs'), data);
-      await addDoc(collection(db, 'subfolders'), subForData);
-      await addDoc(collection(db, 'subfolders'), subFolder);
+    const programBlockExists = await checkProgramBlockExist(pabName.value, major.value, blck.value, selectedClassYear.value);
+    if (programBlockExists) {
+      console.log("It exists");
+      return;
+    }
+    const data = {
+      program: pabName.value,
+      major: major.value,
+      blck: blck.value,
+      year: selectedClassYear.value
+    };
+    const subForData = {
+      name: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
+      year: selectedClassYear.value,
+      type: 'pab'
+    };
+    const subFolder = {
+      name: "Graduation Portrait",
+      parentFolder: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
+      year: selectedClassYear.value,
+      type: 'subfolder'
+    };
+    await addDoc(collection(db, 'pabs'), data);
+    await addDoc(collection(db, 'subfolders'), subForData);
+    await addDoc(collection(db, 'subfolders'), subFolder);
   } else if (isAddingClassYear.value == true) {
       const yearExists = await checkClassYearExists(year.value);
       if (yearExists) {
@@ -430,6 +443,21 @@ const submitModal = async () => {
   }
   closeModal();
 }
+
+const checkProgramBlockExist = async (program, major, block, year) => {
+  const querySnapshot = await getDocs(query(collection(db, 'pabs'), 
+    where('program', '==', program), 
+    where('major', '==', major), 
+    where('blck', '==', block),
+    where('year', '==', year)
+  ));
+  return querySnapshot.size > 0;
+}
+
+const showWarningModal = (message) => {
+  isWarningVisible.value = true;
+  warningMessage.value = message;
+};
 
 
 const editItem = (selectedItem) => {
@@ -481,6 +509,10 @@ if (isChecked) {
   selectedItems.value = [];
 }
 selectAllChecked.value = isChecked;
+};
+
+const closeWarning = () => {
+  isWarningVisible.value = false;
 };
 
 const importUsers = (event) => {

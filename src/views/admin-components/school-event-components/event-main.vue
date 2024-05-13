@@ -137,7 +137,7 @@ const fetchFolders = async () => {
   if (currentAlbumPage.value === "Event" && props.folderName) {
     const querySnapshot = await getDocs(
       query(
-        collection(db, "eventsubfolders"),
+        collection(db, "subfolders"),
         where("year", "==", props.folderName)
       )
     );
@@ -172,7 +172,7 @@ const addFolder = async () => {
   const selectedYear =
     currentAlbumPage.value === "Event" ? props.folderName : "";
 
-  await addDoc(collection(db, "eventsubfolders"), {
+  await addDoc(collection(db, "subfolders"), {
     name: newFolderName.value,
     year: props.folderName,
     type: "event",
@@ -201,7 +201,7 @@ const showFolderOptions = (index) => {
 };
 
 const deleteFolder = async (index) => {
-  await deleteDoc(doc(db, "eventsubfolders", folders.value[index].id));
+  await deleteDoc(doc(db, "subfolders", folders.value[index].id));
   fetchFolders();
 };
 
@@ -214,7 +214,7 @@ const saveEditFolder = async () => {
   if (editIndex.value === null) return;
   if (!editFolderName.value.trim()) return;
   const folderId = folders.value[editIndex.value].id;
-  const folderRef = doc(db, "eventsubfolders", folderId);
+  const folderRef = doc(db, "subfolders", folderId);
   await updateDoc(folderRef, { name: editFolderName.value });
   editIndex.value = null;
   fetchFolders();
