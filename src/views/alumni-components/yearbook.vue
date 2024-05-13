@@ -1,62 +1,64 @@
 <template>
   <NavBar />
-  <div class="container">
-    <div class="p-3">
-        <button class="btn" @click="setCurrentAlbumPage('Grad Main')">Graduation Album</button>
-        <button class="btn" @click="setCurrentAlbumPage('SE Main')">School Events</button>
-    </div>
-    <div v-if="currentAlbumPage === 'Grad Main'">
-      <MainPage
-        :currentAlbumPage="currentAlbumPage"
-        @update:currentPage="currentAlbumPage = $event"
-        @folder-name="updateSelectedFolder"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'PAB'">
-      <PAB
-        :folderName="selectedFolderName"
-        @update:currentPage="currentAlbumPage = $event"
-        @subfolder-name="updateSelectedSubFolder"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'Chosen PAB'">
-      <ChosenPAB
-        :folderName="selectedFolderName"
-        :subfolderName="selectedSubFolderName"
-        @update:currentPage="currentAlbumPage = $event"
-        @grad-subfolder-name="updateSelectedGradSubFolder"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'Graduation Portrait'">
-      <GraduationPortrait
-        :folderName="selectedFolderName"
-        :subfolderName="selectedSubFolderName"
-        :gradsubfolderName="selectedGradSubFolderName"
-        @update:currentPage="currentAlbumPage = $event"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'Gallery'">
-      <Gallery
-        :folderName="selectedFolderName"
-        :subfolderName="selectedSubFolderName"
-        :gradsubfolderName="selectedGradSubFolderName"
-        @update:currentPage="currentAlbumPage = $event"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'SE Main'">
-      <SchoolEventMain
-        :currentAlbumPage="currentAlbumPage"
-        @update:currentPage="currentAlbumPage = $event"
-        @folder-name="updateSelectedEventFolder"
-      />
-    </div>
-    <div v-if="currentAlbumPage === 'School Events'">
-      <SchoolEvents
-        :folderName="selectedFolderName"
-        @update:currentPage="currentAlbumPage = $event"
-        @subfolder-name="updateSelectedEventSubFolder"
-      />
-    </div>
+  <div class="p-3">
+    <button class="btn" @click="setCurrentAlbumPage('Grad Main')">
+      Graduation Album
+    </button>
+    <button class="btn" @click="setCurrentAlbumPage('SE Main')">
+      School Events
+    </button>
+  </div>
+  <div v-if="currentAlbumPage === 'Grad Main'">
+    <MainPage
+      :currentAlbumPage="currentAlbumPage"
+      @update:currentPage="currentAlbumPage = $event"
+      @folder-name="updateSelectedFolder"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'PAB'">
+    <PAB
+      :folderName="selectedFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+      @subfolder-name="updateSelectedSubFolder"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'Chosen PAB'">
+    <ChosenPAB
+      :folderName="selectedFolderName"
+      :subfolderName="selectedSubFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+      @grad-subfolder-name="updateSelectedGradSubFolder"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'Graduation Portrait'">
+    <GraduationPortrait
+      :folderName="selectedFolderName"
+      :subfolderName="selectedSubFolderName"
+      :gradsubfolderName="selectedGradSubFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'Gallery'">
+    <Gallery
+      :folderName="selectedFolderName"
+      :subfolderName="selectedSubFolderName"
+      :gradsubfolderName="selectedGradSubFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'SE Main'">
+    <SchoolEventMain
+      :currentAlbumPage="currentAlbumPage"
+      @update:currentPage="currentAlbumPage = $event"
+      @folder-name="updateSelectedEventFolder"
+    />
+  </div>
+  <div v-if="currentAlbumPage === 'School Events'">
+    <SchoolEvents
+      :folderName="selectedFolderName"
+      @update:currentPage="currentAlbumPage = $event"
+      @subfolder-name="updateSelectedEventSubFolder"
+    />
   </div>
 </template>
 
