@@ -106,5 +106,6 @@ onMounted(() => {
   position: absolute;
   top: 0;
   right: 0;
+  padding: 2px !important;
 }
 </style>
