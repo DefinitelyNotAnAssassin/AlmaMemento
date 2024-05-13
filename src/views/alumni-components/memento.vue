@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-import NavBar from "./alumni-components/alumni-navbar.vue";
-import SideBar from "./alumni-components/alumni-sidebar.vue";
+import NavBar from "./alumni-navbar.vue";
+import SideBar from "./alumni-sidebar.vue";
 </script>
 
 <style scoped>
