@@ -6,7 +6,9 @@
         <SideBar />
         <div class="main-content">
           <p>
-            <button @click="showPostModal" class="btn btn-dark m-2">Add Post</button>
+            <button @click="showPostModal" class="btn btn-dark m-2">
+              Add Post
+            </button>
           </p>
 
           <div v-if="showModal" class="modal">
@@ -113,7 +115,11 @@
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <div class="d-flex flex-column align-items-center" v-for="(imageUrl, index) in post.imageUrls" :key="index">
+              <div
+                class="d-flex flex-column align-items-center"
+                v-for="(imageUrl, index) in post.imageUrls"
+                :key="index"
+              >
                 <img
                   class="m-1"
                   style="width: 300px"
@@ -241,7 +247,7 @@ async function savePost() {
     name: userName,
     time: new Date(),
     date: new Date().toLocaleDateString(),
-    status: 'unread'
+    status: "unread",
   };
   await addDoc(collection(db, "notifications"), notification);
 
@@ -298,7 +304,7 @@ onMounted(async () => {
 });
 </script>
 
-<style>
+<style scoped>
 .modal {
   display: flex;
   position: fixed;
