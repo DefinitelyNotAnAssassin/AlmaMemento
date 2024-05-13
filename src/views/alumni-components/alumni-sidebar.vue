@@ -1,10 +1,6 @@
 <template>
   <aside class="sidebar-container d-flex flex-column align-items-center">
-    <img
-      class="mt-5"
-      :src="userData.photoURL"
-      alt="profile"
-    />
+    <img class="mt-5" :src="userData.photoURL" alt="profile" />
     <h4 class="mt-2">{{ userData.name }}</h4>
     <p>{{ userData.alumna_email }}</p>
     <div class="mt-5 profile-table-container">
@@ -28,80 +24,88 @@
         </tr>
       </table>
     </div>
-    <button @click="logout" class="logout-butto btn btn-sm btn-dark mt-5"><i class="fas fa-power-off"></i>  Logout</button>
+    <button @click="logout" class="logout-butto btn btn-sm btn-dark mt-5">
+      <i class="fas fa-power-off"></i> Logout
+    </button>
   </aside>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from 'vue-router'
-import { db } from '../../firebase/index.js'
-import { collection, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore'
+import { useRouter } from "vue-router";
+import { db } from "../../firebase/index.js";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
-const router = useRouter()
+const router = useRouter();
 
 const userData = ref({
-  name: '',
-  email: '',
-  idNumber: '',
-  course: '',
-  classYear: '',
-  phone: '',
-  photoURL: ''
-})
+  name: "",
+  email: "",
+  idNumber: "",
+  course: "",
+  classYear: "",
+  phone: "",
+  photoURL: "",
+});
 
 const logout = async () => {
-    try {
-      console.log("Logging out...")
-  
-      const q = collection(db, "users")
-      const querySnapshot = await getDocs(q)
-      const userId = router.currentRoute.value.query.userId
-      console.log("UserID:", userId)
-  
-      const user = querySnapshot.docs.find(doc => doc.id === userId && doc.data().loggedIn === true)
-  
-      if (user) {
-        console.log("User found:", user.data())
-  
-        await updateDoc(doc(db, 'users', user.id), {
-          loggedIn: false
-        });
-  
-        router.push({ name: 'login' })
-        console.log("Logout successful. Redirecting to login page...");
-        console.log("Current URL:", window.location.href);
-      } else {
-        console.log("No logged in user found")
-        errMsg.value = "No logged in user found"
-      }
-    } catch (error) {
-      console.error("Error:", error.message)
-      errMsg.value = "An error occurred"
-    }
-  }
+  try {
+    console.log("Logging out...");
 
-  const fetchUserData = async () => {
-  const userId = router.currentRoute.value.query.userId
-  const userDocRef = doc(db, 'users', userId)
-  const userDocSnap = await getDoc(userDocRef)
+    const q = collection(db, "users");
+    const querySnapshot = await getDocs(q);
+    const userId = router.currentRoute.value.query.userId;
+    console.log("UserID:", userId);
+
+    const user = querySnapshot.docs.find(
+      (doc) => doc.id === userId && doc.data().loggedIn === true
+    );
+
+    if (user) {
+      console.log("User found:", user.data());
+
+      await updateDoc(doc(db, "users", user.id), {
+        loggedIn: false,
+      });
+
+      router.push({ name: "login" });
+      console.log("Logout successful. Redirecting to login page...");
+      console.log("Current URL:", window.location.href);
+    } else {
+      console.log("No logged in user found");
+      errMsg.value = "No logged in user found";
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    errMsg.value = "An error occurred";
+  }
+};
+
+const fetchUserData = async () => {
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
   if (userDocSnap.exists()) {
-    const user = userDocSnap.data()
-    const name = `${user.fName} ${user.mInitial} ${user.lName}`
+    const user = userDocSnap.data();
+    const name = `${user.fName} ${user.mInitial} ${user.lName}`;
 
     userData.value = {
       ...user,
-      name: name.trim(), 
-      photoURL: user.profilePicture
-    }
+      name: name.trim(),
+      photoURL: user.profilePicture,
+    };
   } else {
-    console.log('User not found')
+    console.log("User not found");
   }
-}
+};
 
-
-fetchUserData()
-
+fetchUserData();
 </script>
 
 <style scoped>
@@ -109,6 +113,7 @@ aside {
   height: calc(100vh - 70px);
   width: 400px;
   border-right: 10px solid #861b23;
+  background-color: #861b23;
 }
 
 aside img {
