@@ -136,7 +136,7 @@
                 class="carousel slide"
                 data-bs-ride="carousel"
               >
-                <div class="carousel-inner">
+                <div class="carousel-inner bg-primary">
                   <div
                     style="height: 200px; width: 200px"
                     v-for="(imageUrl, index) in post.imageUrls"
