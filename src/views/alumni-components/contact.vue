@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <div class="container">
+  <div class="container card bg-light mt-5">
     <h3 class="text-center">What can we help you with?</h3>
     <form @submit.prevent="uploadImage">
       <div>
