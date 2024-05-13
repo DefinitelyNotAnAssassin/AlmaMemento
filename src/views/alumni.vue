@@ -342,7 +342,7 @@ onMounted(async () => {
 
 // Edit
 function nextImage() {
-  if (currentIndex.value < imagePreview.value.length - 1) {
+  if (currentIndex.value < post.imageUrls.value.length - 1) {
     currentIndex.value++;
   }
 }
