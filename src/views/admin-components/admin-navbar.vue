@@ -4,7 +4,7 @@
       <a class="navbar-item" href="#"> </a>
     </div>
     <div class="navbar-end">
-      <a class="notif-main navbar-item text-light bg-secondary" @click="toggleNotifications">
+      <a class="notif-main navbar-item text-light" @click="toggleNotifications">
         <span class="icon">
           <i class="fas fa-bell"></i>
         </span>
