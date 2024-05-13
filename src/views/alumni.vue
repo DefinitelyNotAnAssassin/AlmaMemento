@@ -146,6 +146,7 @@
                     }"
                   >
                     <img
+                      style="height: 200px; width: 200px"
                       :src="imageUrl"
                       alt="Image Preview"
                     />
