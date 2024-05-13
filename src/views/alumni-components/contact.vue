@@ -1,41 +1,45 @@
 <template>
   <NavBar />
-  <div class="container card bg-light mt-5 p-5">
-    <h3 class="text-center">What can we help you with?</h3>
-    <form @submit.prevent="uploadImage" class="mt-5">
-      <div class="mt-3">
-        <label for="subject">Subject:</label>
-        <input
-          class="form-control"
-          type="text"
-          id="subject"
-          v-model="subject"
-        />
-      </div>
-      <div class="mt-4">
-        <label for="message">Message:</label>
-        <textarea
-          class="form-control"
-          id="message"
-          rows="4"
-          cols="50"
-          v-model="message"
-        ></textarea>
-      </div>
-      <div class="mt-4"> 
-        <label for="file">Select an image to upload:</label><br />
-        <input
-          class="form-control"
-          type="file"
-          id="file"
-          @change="handleFileUpload"
-        /><br />
-      </div>
-      <div class="mt-3">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i> Submit</button>
-      </div>
-    </form>
-    <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+  <div class="container px-5">
+    <div class="container card bg-light mt-5 p-5">
+      <h3 class="text-center">What can we help you with?</h3>
+      <form @submit.prevent="uploadImage" class="mt-5">
+        <div class="mt-3">
+          <label for="subject">Subject:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="subject"
+            v-model="subject"
+          />
+        </div>
+        <div class="mt-4">
+          <label for="message">Message:</label>
+          <textarea
+            class="form-control"
+            id="message"
+            rows="4"
+            cols="50"
+            v-model="message"
+          ></textarea>
+        </div>
+        <div class="mt-4">
+          <label for="file">Select an image to upload:</label><br />
+          <input
+            class="form-control"
+            type="file"
+            id="file"
+            @change="handleFileUpload"
+          /><br />
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" type="submit">
+            <i class="bi bi-send"></i> Submit
+          </button>
+        </div>
+      </form>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+    </div>
   </div>
 </template>
 
