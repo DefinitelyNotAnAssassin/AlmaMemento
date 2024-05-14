@@ -372,8 +372,8 @@ const deletePhoto = async () => {
 
 .btn-edit-profile {
   position: absolute;
-  bottom: 50px;
-  right: 20px;
+  bottom: 30px;
+  right: 10px;
   font-size: 20px;
 }
 </style>
