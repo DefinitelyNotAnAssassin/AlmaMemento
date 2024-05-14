@@ -140,17 +140,17 @@
         </tbody>
       </table>
       <div v-if="isSuccessVisible" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 500px">
           <p>{{ successMessage }}</p>
         </div>
       </div>
       <div v-if="isWarningVisible" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 500px">
           <p>{{ warningMessage }}</p>
         </div>
       </div>
       <div v-if="isModalVisible" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 500px">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
             <div class="mx-1">
@@ -162,6 +162,7 @@
                   id="alumnaID"
                   name="alumnaID"
                   v-model="alumnaID"
+                  placeholder="ID Number"
                 />
               </div>
               <div>
@@ -172,6 +173,7 @@
                   id="fName"
                   name="fName"
                   v-model="fName"
+                  placeholder="First Name"
                 />
               </div>
               <div>
@@ -182,6 +184,7 @@
                   id="mInitial"
                   name="mInitial"
                   v-model="mInitial"
+                  placeholder="Middle Initial"
                 />
               </div>
               <div>
@@ -192,6 +195,7 @@
                   id="lName"
                   name="lName"
                   v-model="lName"
+                  placeholder="Last Name"
                 />
               </div>
               <div>
@@ -224,6 +228,7 @@
                   id="alumna_email"
                   name="alumna_email"
                   v-model="alumna_email"
+                  placeholder="Email"
                 />
               </div>
               <div>
@@ -234,6 +239,7 @@
                   id="phone"
                   name="phone"
                   v-model="phone"
+                  placeholder="Phone"
                 />
               </div>
               <div>
@@ -244,6 +250,7 @@
                   id="address"
                   name="address"
                   v-model="address"
+                  placeholder="Address"
                 />
               </div>
             </div>
@@ -258,6 +265,7 @@
                   id="alumnaID"
                   name="alumnaID"
                   v-model="alumnaID"
+                  placeholder="ID Number"
                 />
               </div>
               <div>
@@ -268,6 +276,7 @@
                   id="fName"
                   name="fName"
                   v-model="fName"
+                  placeholder="First Name"
                 />
               </div>
               <div>
@@ -278,6 +287,7 @@
                   id="mInitial"
                   name="mInitial"
                   v-model="mInitial"
+                  placeholder="Middle Initial"
                 />
               </div>
               <div>
@@ -288,6 +298,7 @@
                   id="lName"
                   name="lName"
                   v-model="lName"
+                  placeholder="Last Name"
                 />
               </div>
               <div>
@@ -320,6 +331,7 @@
                   id="alumna_email"
                   name="alumna_email"
                   v-model="alumna_email"
+                  placeholder="Email"
                 />
               </div>
               <div>
@@ -330,6 +342,7 @@
                   id="phone"
                   name="phone"
                   v-model="phone"
+                  placeholder="Phone"
                 />
               </div>
               <div>
@@ -340,6 +353,7 @@
                   id="address"
                   name="address"
                   v-model="address"
+                  placeholder="Address"
                 />
               </div>
             </div>
@@ -353,6 +367,7 @@
                 id="pabName"
                 name="pabName"
                 v-model="pabName"
+                placeholder="Program"
               />
             </div>
             <div>
@@ -363,6 +378,7 @@
                 id="major"
                 name="major"
                 v-model="major"
+                placeholder="Major"
               />
             </div>
             <div>
@@ -373,6 +389,7 @@
                 id="blck"
                 name="blck"
                 v-model="blck"
+                placeholder="Block"
               />
             </div>
             <label for="year">Class Year</label>
@@ -395,6 +412,7 @@
                 id="year"
                 name="year"
                 v-model="year"
+                placeholder="Class Year"
               />
             </div>
           </div>
