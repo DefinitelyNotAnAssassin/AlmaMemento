@@ -9,7 +9,7 @@
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <button @click="editProfile" class="btn-edit-profile btn btn-sm btn-light">
+        <button @click="editProfile" class="btn-edit-profile btn btn-sm">
           <i class="bi bi-pencil-square"></i>
         </button>
         <h5 class="mt-1" style="text-align: center">
