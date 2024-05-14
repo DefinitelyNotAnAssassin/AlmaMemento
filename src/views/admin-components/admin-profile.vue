@@ -9,7 +9,7 @@
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <button @click="editProfile" class="btn-edit-profile btn btn-sm">
+        <button @click="editProfile" class="btn-edit-profile btn btn-sm btn-light">
           <i class="bi bi-pencil-square"></i>
         </button>
         <h5 class="mt-1" style="text-align: center">
@@ -367,7 +367,6 @@ const deletePhoto = async () => {
 
 .profile-pic-container {
   position: relative;
-  background-color: red;
 }
 
 .btn-edit-profile {
