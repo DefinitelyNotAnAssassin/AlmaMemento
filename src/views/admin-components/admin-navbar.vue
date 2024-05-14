@@ -19,7 +19,7 @@
       <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">
         All
       </button>
-      <button class="btn btn-sm btn-light mx-1" @click="filterBy('Unread')">
+      <button class="btn btn-sm btn-light" @click="filterBy('Unread')">
         Unread
       </button>
       <ul>
