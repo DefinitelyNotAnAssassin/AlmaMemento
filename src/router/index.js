@@ -6,6 +6,7 @@ import alumniDashboard from '../views/alumni.vue'
 import yearbook from '../views/alumni-components/yearbook.vue'
 import memento from '../views/alumni-components/memento.vue'
 import contact from '../views/alumni-components/contact.vue'
+import modDashboard from '../views/mod.vue'
 
 const routes = [
   { path: '/', component: Home,  name: 'home' },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/yearbook', component: yearbook, name: 'yearbook' },
   { path: '/memento', component: memento, name: 'memento' },
   { path: '/contact', component: contact, name: 'contact' },
+  { path: '/modDashboard', component: modDashboard, name: 'modDashboard' },
 ]
 
 const router = createRouter({

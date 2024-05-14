@@ -53,6 +53,8 @@
             router.push({ name: 'adminDashboard', query: { userId: user.id } })
           } else if(user.data().userlevel === 'alumni') {
             router.push({ name: 'alumniDashboard', query: { userId: user.id, alumniId: user.data().alumnaID } })
+          } else if(user.data().userlevel === 'moderator') {
+            router.push({ name: 'modDashboard', query: { userId: user.id } })
           }
   
           console.log("Current URL:", window.location.href);

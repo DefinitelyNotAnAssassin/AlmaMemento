@@ -1,0 +1,1 @@
+<template>Copy mo yung admin.vue</template>
