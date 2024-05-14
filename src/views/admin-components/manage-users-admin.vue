@@ -94,6 +94,7 @@
                   id="alumnaID"
                   name="alumnaID"
                   v-model="alumnaID"
+                  placeholder="ID Number"
                 />
               </div>
               <div>
@@ -104,6 +105,7 @@
                   id="fName"
                   name="fName"
                   v-model="fName"
+                  placeholder="First Name"
                 />
               </div>
               <div>
@@ -114,6 +116,7 @@
                   id="mInitial"
                   name="mInitial"
                   v-model="mInitial"
+                  placeholder="Middle Initial"
                 />
               </div>
               <div>
@@ -124,6 +127,7 @@
                   id="lName"
                   name="lName"
                   v-model="lName"
+                  placeholder="Last Name"
                 />
               </div>
               <div>
@@ -134,6 +138,7 @@
                   id="alumna_email"
                   name="alumna_email"
                   v-model="alumna_email"
+                  placeholder="Email"
                 />
               </div>
             </div>
@@ -146,6 +151,7 @@
                   id="alumna_password"
                   name="alumna_password"
                   v-model="alumna_password"
+                  placeholder="Password"
                 />
               </div>
               <div>
@@ -156,6 +162,7 @@
                   id="phone"
                   name="phone"
                   v-model="phone"
+                  placeholder="Phone"
                 />
               </div>
               <div>
@@ -166,6 +173,7 @@
                   id="address"
                   name="address"
                   v-model="address"
+                  placeholder="Address"
                 />
               </div>
             </div>
@@ -180,6 +188,7 @@
                   id="alumnaID"
                   name="alumnaID"
                   v-model="alumnaID"
+                  placeholder="ID Numbe"
                 />
               </div>
               <div>
@@ -190,6 +199,7 @@
                   id="fName"
                   name="fName"
                   v-model="fName"
+                  placeholder="First Name"
                 />
               </div>
               <div>
@@ -200,6 +210,7 @@
                   id="mInitial"
                   name="mInitial"
                   v-model="mInitial"
+                  placeholder="Middle Initial"
                 />
               </div>
               <div>
@@ -210,6 +221,7 @@
                   id="lName"
                   name="lName"
                   v-model="lName"
+                  placeholder="Last Name"
                 />
               </div>
               <div>
@@ -220,6 +232,7 @@
                   id="alumna_email"
                   name="alumna_email"
                   v-model="alumna_email"
+                  placeholder="Email"
                 />
               </div>
             </div>
@@ -232,6 +245,7 @@
                   id="alumna_password"
                   name="alumna_password"
                   v-model="alumna_password"
+                  placeholder="Password"
                 />
               </div>
               <div>
@@ -242,6 +256,7 @@
                   id="phone"
                   name="phone"
                   v-model="phone"
+                  placeholder="Phone"
                 />
               </div>
               <div>
@@ -252,6 +267,7 @@
                   id="address"
                   name="address"
                   v-model="address"
+                  placeholder="Address"
                 />
               </div>
             </div>
