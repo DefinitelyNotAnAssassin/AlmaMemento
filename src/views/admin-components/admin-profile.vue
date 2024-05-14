@@ -9,6 +9,9 @@
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
+        <button @click="editProfile" class="btn-edit-profile btn btn-sm">
+          <i class="bi bi-pencil-square"></i>
+        </button>
         <h5 class="mt-1" style="text-align: center">
           {{ userData.userlevel }}
         </h5>
@@ -18,13 +21,13 @@
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
           <h4 style="margin-right: 10px">{{ userData.address }}</h4>
-          <img
+          <!-- <img
             @click="editProfile"
             width="25"
             height="25"
             src="https://img.icons8.com/ios/100/create-new.png"
             alt="create-new"
-          />
+          /> -->
         </div>
       </div>
     </div>
@@ -96,7 +99,11 @@
       </div>
 
       <div class="btn-save-container">
-        <button class="btn btn-sm btn-dark" v-if="isEditable" @click="showModal">
+        <button
+          class="btn btn-sm btn-dark"
+          v-if="isEditable"
+          @click="showModal"
+        >
           Save Changes
         </button>
       </div>
@@ -356,5 +363,11 @@ const deletePhoto = async () => {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.btn-edit-profile {
+  position: absolute;
+  bottom: 10px;
+  right: 0px;
 }
 </style>
