@@ -16,10 +16,19 @@
       </a>
     </div>
     <div v-if="notificationsVisible" class="notification-panel">
-      <button @click="filterBy('All')">All</button>
-      <button @click="filterBy('Unread')">Unread</button>
+      <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">
+        All
+      </button>
+      <button class="btn btn-sm btn-light mx-1" @click="filterBy('Unread')">
+        Unread
+      </button>
       <ul>
-        <li v-for="post in filteredPosts" :key="post.id" @click="viewPost(post)" :class="{ 'unread': post.status === 'unread' }">
+        <li
+          v-for="post in filteredPosts"
+          :key="post.id"
+          @click="viewPost(post)"
+          :class="{ unread: post.status === 'unread' }"
+        >
           <span style="color: black">{{ post.name }} added a post </span>
           <span style="color: black">
             {{ timeDifference(post.time.toDate()) }}</span
@@ -33,8 +42,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { db } from "../../firebase/index.js";
-import { collection, onSnapshot, updateDoc, doc, query, where, getDocs } from "firebase/firestore";
-
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const notificationsVisible = ref(false);
 const profileVisible = ref(false);
@@ -47,7 +63,9 @@ const toggleNotifications = async () => {
   unreadPostsCount.value = 0;
 
   if (!notificationsVisible.value) {
-    const newNotifications = newPosts.value.filter((notification) => notification.type === "newpost");
+    const newNotifications = newPosts.value.filter(
+      (notification) => notification.type === "newpost"
+    );
 
     try {
       for (const notification of newNotifications) {
@@ -88,7 +106,9 @@ const filterBy = (status) => {
   if (status === "All") {
     filteredPosts.value = newPosts.value;
   } else if (status === "Unread") {
-    filteredPosts.value = newPosts.value.filter((post) => post.status === "unread");
+    filteredPosts.value = newPosts.value.filter(
+      (post) => post.status === "unread"
+    );
   }
 };
 
@@ -106,7 +126,9 @@ onMounted(() => {
       .filter((notification) => notification.for !== "alumni");
 
     newPosts.value = allNotifications;
-    unreadPostsCount.value = allNotifications.filter((notification) => notification.status === "unread").length;
+    unreadPostsCount.value = allNotifications.filter(
+      (notification) => notification.status === "unread"
+    ).length;
     filteredPosts.value = newPosts.value; // Set initial filtered posts to all posts
   });
 });
