@@ -2,7 +2,7 @@
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
-      <div class="container-fluid d-flex">
+      <div class="container-fluid p-0 d-flex">
         <SideBar />
         <div class="main-content">
           <p>

@@ -2,7 +2,7 @@
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
-      <div class="container-fluid d-flex">
+      <div class="container-fluid p-0 d-flex">
         <SideBar />
         <div class="main-content">
           <p>
@@ -110,27 +110,10 @@
               style="width: 400px"
               v-for="post in approvedPosts"
               :key="post.id"
-              class="container card p-3 background-color-brown text-light mt-2"
+              class="container card p-3 background-color-brown text-light my-2"
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
-              <!-- <div
-                class="d-flex flex-column align-items-center"
-                v-for="(imageUrl, index) in post.imageUrls"
-                :key="index"
-              >
-                <img
-                  class="m-1"
-                  style="width: 300px"
-                  v-if="index < 5 || showAllImages"
-                  :src="imageUrl"
-                  alt="Post Image"
-                />
-                <button v-else @click="showAllImages = true">
-                  View More Images
-                </button>
-              </div> -->
-
               <div
                 id="imageCarousel"
                 class="carousel slide"
@@ -140,14 +123,12 @@
                   <div
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
-                    :class="{
-                      'carousel-item': true,
-                      active: index === currentIndex,
-                    }"
+                    class="carousel-item"
+                    :class="{ active: index == 0 }"
                   >
                     <img
-                      style="height: 200px; width: 200px"
                       :src="imageUrl"
+                      class="d-block w-100"
                       alt="Image Preview"
                     />
                   </div>
@@ -155,7 +136,8 @@
                 <button
                   class="carousel-control-prev"
                   type="button"
-                  @click="prevImage"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="prev"
                 >
                   <span
                     class="carousel-control-prev-icon"
@@ -166,7 +148,8 @@
                 <button
                   class="carousel-control-next"
                   type="button"
-                  @click="nextImage"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="next"
                 >
                   <span
                     class="carousel-control-next-icon"
@@ -302,7 +285,7 @@ async function savePost() {
     date: new Date().toLocaleDateString(),
     status: "unread",
     for: "administrator",
-    type: "newpost"
+    type: "newpost",
   };
   await addDoc(collection(db, "notifications"), notification);
 
