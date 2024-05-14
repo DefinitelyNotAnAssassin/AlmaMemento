@@ -27,7 +27,7 @@
                 <h1 class="text-white">7</h1>
             </div>
             <div class="bottom-content">
-                <h3 class="dashboard-bottom-title">Courses</h3>
+                <h3 class="dashboard-bottom-title">Program & Block</h3>
                 <i class="fas fa-circle-right"></i>
                 <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </div>

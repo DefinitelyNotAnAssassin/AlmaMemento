@@ -23,18 +23,6 @@
             {{ timeDifference(post.time.toDate()) }}</span
           >
         </li>
-        <li v-for="post in newPosts" :key="post.id" @click="viewPost(post)">
-          <span style="color: black">{{ post.name }} added a post </span>
-          <span style="color: black">
-            {{ timeDifference(post.time.toDate()) }}</span
-          >
-        </li>
-        <li v-for="post in newPosts" :key="post.id" @click="viewPost(post)">
-          <span style="color: black">{{ post.name }} added a post </span>
-          <span style="color: black">
-            {{ timeDifference(post.time.toDate()) }}</span
-          >
-        </li>
       </ul>
     </div>
   </nav>
@@ -84,7 +72,9 @@ onMounted(() => {
     const newNotifications = snapshot
       .docChanges()
       .filter((change) => change.type === "added")
-      .map((change) => change.doc.data());
+      .map((change) => change.doc.data())
+      .filter((notification) => notification.for === "administrator");
+
     newPosts.value = newNotifications;
     unreadPostsCount.value += newNotifications.length;
   });

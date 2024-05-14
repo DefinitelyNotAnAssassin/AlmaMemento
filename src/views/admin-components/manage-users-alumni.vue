@@ -75,6 +75,12 @@
           </tr>
         </tbody>
       </table>
+      <div v-if="isSuccessVisible" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="closeSuccess">&times;</span>
+          <p>{{ successMessage }}</p>
+        </div>
+      </div>
       <div v-if="isWarningVisible" class="modal">
         <div class="modal-content">
           <span class="close" @click="closeWarning">&times;</span>
@@ -257,6 +263,8 @@ const major = ref('');
 const blck = ref('');
 const isWarningVisible = ref(false);
 const warningMessage = ref('');
+const isSuccessVisible = ref(false);
+const successMessage = ref('');
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -291,12 +299,17 @@ const fetchProgramAndBlockAndClassYears = async () => {
   const pabsSnapshot = await query(collection(db, 'pabs'));
   const pabSet = new Set();
   onSnapshot(pabsSnapshot, (snapshot) => {
-      snapshot.docs.forEach(doc => {
-          const data = doc.data();
-          const name = `${data.program} Major in ${data.major} - Block ${data.blck}`;
-          pabSet.add(name);
-      });
-      pabs.value = Array.from(pabSet).map(name => ({ name }));
+    snapshot.docs.forEach(doc => {
+      const data = doc.data();
+      let name;
+      if (data.major === 'N/A' || !data.major) {
+        name = `${data.program} - Block ${data.blck}`;
+      } else {
+        name = `${data.program} Major in ${data.major} - Block ${data.blck}`;
+      }
+      pabSet.add(name);
+    });
+    pabs.value = Array.from(pabSet).map(name => ({ name }));
   });
 
   const classYearsSnapshot = await query(collection(db, 'classYears'));
@@ -362,12 +375,29 @@ const checkClassYearExists = async (year) => {
   return querySnapshot.size > 0;
 }
 
+const hideMessages = () => {
+  isSuccessVisible.value = false;
+  isWarningVisible.value = false;
+};
+
+const showSuccessPopup = (message) => {
+  successMessage.value = message;
+  isSuccessVisible.value = true;
+  setTimeout(hideMessages, 3000);
+};
+
+const showWarningPopup = (message) => {
+  warningMessage.value = message;
+  isWarningVisible.value = true;
+  setTimeout(hideMessages, 3000);
+};
+
 const submitModal = async () => {
   if (isAdding.value === true) {
     const alumnaIDExists = await checkAlumnaIDExists(alumnaID.value);
       if (alumnaIDExists) {
-          console.error('Alumna ID already exists');
-          return;
+        showWarningPopup('Alumna ID already exists!');
+        return;
       }
       const data = {
           alumnaID: alumnaID.value,
@@ -401,38 +431,44 @@ const submitModal = async () => {
               alumna_password: alumna_password.value
           })
       } else {
-          console.error('Selected item not found');
+        showWarningPopup('Selected item not found');
       }
   } else if (isAddingProgramAndBlock.value === true) {
-    const programBlockExists = await checkProgramBlockExist(pabName.value, major.value, blck.value, selectedClassYear.value);
-    if (programBlockExists) {
-      console.log("It exists");
-      return;
-    }
-    const data = {
-      program: pabName.value,
-      major: major.value,
-      blck: blck.value,
-      year: selectedClassYear.value
-    };
-    const subForData = {
-      name: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
-      year: selectedClassYear.value,
-      type: 'pab'
-    };
-    const subFolder = {
-      name: "Graduation Portrait",
-      parentFolder: `${pabName.value} Major in ${major.value} - Block ${blck.value}`,
-      year: selectedClassYear.value,
-      type: 'subfolder'
-    };
-    await addDoc(collection(db, 'pabs'), data);
-    await addDoc(collection(db, 'subfolders'), subForData);
-    await addDoc(collection(db, 'subfolders'), subFolder);
+      const programBlockExists = await checkProgramBlockExist(pabName.value, major.value, blck.value, selectedClassYear.value);
+      if (programBlockExists) {
+        showWarningPopup("Program, Major, Block for that year exists");
+        return;
+      }
+      let name;
+      if (major.value === 'N/A' || !major.value) {
+        name = `${pabName.value} - Block ${blck.value}`;
+      } else {
+        name = `${pabName.value} Major in ${major.value} - Block ${blck.value}`;
+      }
+      const data = {
+        program: pabName.value,
+        major: major.value,
+        blck: blck.value,
+        year: selectedClassYear.value
+      };
+      const subForData = {
+        name: name,
+        year: selectedClassYear.value,
+        type: 'pab'
+      };
+      const subFolder = {
+        name: "Graduation Portrait",
+        parentFolder: name,
+        year: selectedClassYear.value,
+        type: 'subfolder'
+      };
+      await addDoc(collection(db, 'pabs'), data);
+      await addDoc(collection(db, 'subfolders'), subForData);
+      await addDoc(collection(db, 'subfolders'), subFolder);
   } else if (isAddingClassYear.value == true) {
       const yearExists = await checkClassYearExists(year.value);
       if (yearExists) {
-        console.error('Class year already exists');
+        showWarningPopup('Class year already exists');
         return;
       }
       const data = {
@@ -441,6 +477,7 @@ const submitModal = async () => {
       await addDoc(collection(db, 'classYears'), data);
       await addDoc(collection(db, 'folders'), data);
   }
+  showSuccessPopup('Data has been added successfully!');
   closeModal();
 }
 
@@ -453,12 +490,6 @@ const checkProgramBlockExist = async (program, major, block, year) => {
   ));
   return querySnapshot.size > 0;
 }
-
-const showWarningModal = (message) => {
-  isWarningVisible.value = true;
-  warningMessage.value = message;
-};
-
 
 const editItem = (selectedItem) => {
   isModalVisible.value = true;
@@ -509,10 +540,6 @@ if (isChecked) {
   selectedItems.value = [];
 }
 selectAllChecked.value = isChecked;
-};
-
-const closeWarning = () => {
-  isWarningVisible.value = false;
 };
 
 const importUsers = (event) => {
