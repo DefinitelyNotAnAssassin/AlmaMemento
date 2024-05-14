@@ -129,7 +129,7 @@ onMounted(() => {
     unreadPostsCount.value = allNotifications.filter(
       (notification) => notification.status === "unread"
     ).length;
-    filteredPosts.value = newPosts.value; // Set initial filtered posts to all posts
+    filteredPosts.value = newPosts.value;
   });
 });
 </script>
