@@ -45,7 +45,7 @@
             <th>Name</th>
             <th>ID Number</th>
             <th>
-              <div class="d-flex">
+              <div class="d-flex align-items-center">
                 <div class="dropdown">
                   <button
                     class="btn btn-sm dropdown-toggle"
@@ -71,7 +71,7 @@
                     </li>
                   </ul>
                 </div>
-                Program & Block
+                <span class="mx-1">Program & Block</span>
                 <button
                   class="btn btn-sm btn-light"
                   @click="addProgramAndBlock"
@@ -81,7 +81,7 @@
               </div>
             </th>
             <th>
-              <div class="d-flex">
+              <div class="d-flex align-items-center">
                 <div class="dropdown">
                   <button
                     class="btn btn-sm dropdown-toggle"
@@ -104,7 +104,7 @@
                     </li>
                   </ul>
                 </div>
-                Class Year
+                <span class="mx-1">Class Year</span>
                 <button class="btn btn-sm btn-light" @click="addClassYear">
                   <i class="bi bi-plus-lg"></i>
                 </button>
