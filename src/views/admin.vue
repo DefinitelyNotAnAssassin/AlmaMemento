@@ -27,6 +27,9 @@
       <div v-else-if="currentPage === 'School Event'">
         <SchoolEvent />
       </div>
+      <div v-else-if="currentPage === 'Contact'">
+        <Contact />
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +46,7 @@ import ManageUserModerator from './admin-components/manage-users-moderator.vue'
 import ManageContent from './admin-components/manage-content.vue'
 import GraduationAlbum from './admin-components/graduation-album.vue'
 import SchoolEvent from './admin-components/school-event.vue'
+import Contact from './admin-components/admin-contact.vue'
 
 const currentPage = ref('Dashboard')
 

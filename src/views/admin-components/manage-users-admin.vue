@@ -141,7 +141,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { db } from '../../firebase/index.js';
 import { read, utils } from 'xlsx';
-import { collection, query, where, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, addDoc, updateDoc, doc, deleteDoc, onSnapshot, getDocs } from 'firebase/firestore'
   
 const items = ref([])
 const selectedItems = ref([])
