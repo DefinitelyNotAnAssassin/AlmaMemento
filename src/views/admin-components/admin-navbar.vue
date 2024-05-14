@@ -47,13 +47,9 @@ import {
   onSnapshot,
   updateDoc,
   doc,
-  query,
-  where,
-  getDocs,
 } from "firebase/firestore";
 
 const notificationsVisible = ref(false);
-const profileVisible = ref(false);
 const unreadPostsCount = ref(0);
 const newPosts = ref([]);
 const filteredPosts = ref([]);
@@ -104,12 +100,14 @@ const viewPost = (post) => {
 
 const filterBy = (status) => {
   if (status === "All") {
-    filteredPosts.value = newPosts.value;
+    filteredPosts.value = [...newPosts.value];
   } else if (status === "Unread") {
     filteredPosts.value = newPosts.value.filter(
       (post) => post.status === "unread"
     );
   }
+
+  filteredPosts.value.sort((a, b) => b.time.toDate() - a.time.toDate());
 };
 
 onMounted(() => {
@@ -129,7 +127,9 @@ onMounted(() => {
     unreadPostsCount.value = allNotifications.filter(
       (notification) => notification.status === "unread"
     ).length;
-    filteredPosts.value = newPosts.value;
+    filteredPosts.value = [...newPosts.value];
+
+    filteredPosts.value.sort((a, b) => b.time.toDate() - a.time.toDate());
   });
 });
 </script>

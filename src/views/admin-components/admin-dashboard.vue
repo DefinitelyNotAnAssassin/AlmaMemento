@@ -18,7 +18,7 @@
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Contact Support</h3>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToContact"></button>
             </div>
         </div>
         <div class="card-three">
@@ -64,6 +64,11 @@ const goToAlumni = () => {
 const goToManageContent = () => {
   currentPage.value = "Manage Content";
   emit("update:currentPage", "Manage Content");
+};
+
+const goToContact = () => {
+  currentPage.value = "Contact";
+  emit("update:currentPage", "Contact");
 };
 
 const fetchAlumniCount = async () => {

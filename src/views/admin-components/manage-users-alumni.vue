@@ -523,7 +523,7 @@ const fetchProgramAndBlockAndClassYears = async () => {
   onSnapshot(classYearsSnapshot, (snapshot) => {
     classYears.value = snapshot.docs
       .map((doc) => ({ id: doc.id, name: doc.data().name }))
-      .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+      .sort((a, b) => a.name.localeCompare(b.name));
   });
 };
 
