@@ -153,7 +153,9 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
-  getDoc
+  getDoc,
+  query,
+  where
 } from "firebase/firestore";
 
 const items = ref([]);
@@ -178,12 +180,13 @@ const fetchUsersAndClassYearsAndEvents = async () => {
     name: doc.data().name,
   }));
 
-  const querySnapshot = await getDocs(collection(db, "posts").where("status", "==", "pending"));
+  const querySnapshot = await getDocs(
+    query(collection(db, "posts"), where("status", "==", "pending"))
+  );
   items.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
-
 
   const classYearsSnapshot = await getDocs(collection(db, "classYears"));
   schoolYear.value = classYearsSnapshot.docs.map((doc) => ({
@@ -197,6 +200,7 @@ const fetchUsersAndClassYearsAndEvents = async () => {
     name: doc.data().name,
   }));
 };
+
 
 const listenForPostChanges = () => {
   const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {

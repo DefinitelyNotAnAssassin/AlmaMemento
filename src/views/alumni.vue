@@ -284,7 +284,7 @@ async function savePost() {
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",
-    for: "administrator",
+    for: "modandadmin",
     type: "newpost",
   };
   await addDoc(collection(db, "notifications"), notification);

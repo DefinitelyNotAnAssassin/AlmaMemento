@@ -81,8 +81,11 @@ const uploadImage = async () => {
   const userName = `${userData.lName}, ${userData.fName}`;
 
   await addDoc(collection(db, "concerns"), {
+    userId: alumniId.value,
+    name: userName,
     subject: subject.value,
     message: message.value,
+    date: new Date().toLocaleDateString(),
     url: imageUrl,
   });
   await addDoc(collection(db, "notifications"), {

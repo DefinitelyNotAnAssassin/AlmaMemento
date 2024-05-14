@@ -77,13 +77,11 @@
       </table>
       <div v-if="isSuccessVisible" class="modal">
         <div class="modal-content">
-          <span class="close" @click="closeSuccess">&times;</span>
           <p>{{ successMessage }}</p>
         </div>
       </div>
       <div v-if="isWarningVisible" class="modal">
         <div class="modal-content">
-          <span class="close" @click="closeWarning">&times;</span>
           <p>{{ warningMessage }}</p>
         </div>
       </div>
@@ -134,10 +132,6 @@
               <label for="address">Address</label>
               <input class="form-control" type="text" id="address" name="address" v-model="address">
             </div>
-            <div>
-              <label for="alumna_password">Password</label>
-              <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
-            </div>
           </div>
         </div>
         <div class="d-flex" v-else-if="isEditing">
@@ -183,10 +177,6 @@
             <div>
               <label for="address">Address</label>
               <input class="form-control" type="text" id="address" name="address" v-model="address">
-            </div>
-            <div>
-              <label for="alumna_password">Password</label>
-              <input class="form-control" type="password" id="alumna_password" name="alumna_password" v-model="alumna_password">
             </div>
           </div>
         </div>
@@ -252,7 +242,6 @@ const lName = ref('');
 const alumna_email = ref('');
 const phone = ref('');
 const address = ref('');
-const alumna_password = ref('');
 const users = ref([]);
 const searchQuery = ref('');
 const selectAllChecked = ref(false); 
@@ -268,17 +257,24 @@ const successMessage = ref('');
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  return sortedItems.value.filter(item => {
-      const matchesSearch = 
-          (typeof item.alumnaID === 'string' && item.alumnaID.toLowerCase().includes(query)) ||
-          item.name.toLowerCase().includes(query);
+  const filtered = sortedItems.value.filter(item => {
+    const matchesSearch =
+      (typeof item.alumnaID === 'string' && item.alumnaID.toLowerCase().includes(query)) ||
+      item.name.toLowerCase().includes(query);
 
-      const matchesProgramBlock = selectedProgramsAndBlocks.value.length === 0 || selectedProgramsAndBlocks.value.includes(item.pab);
-      const matchesClassYear = selectedClassYears.value.length === 0 || selectedClassYears.value.includes(item.classYear);
+    const matchesProgramBlock =
+      selectedProgramsAndBlocks.value.length === 0 ||
+      selectedProgramsAndBlocks.value.includes(item.pab);
+    const matchesClassYear =
+      selectedClassYears.value.length === 0 ||
+      selectedClassYears.value.includes(item.classYear);
 
-      return matchesSearch && matchesProgramBlock && matchesClassYear;
+    return matchesSearch && matchesProgramBlock && matchesClassYear;
   });
+
+  return filtered.sort((a, b) => a.name.localeCompare(b.name));
 });
+
 
 const fetchData = async () => {
 const querySnapshot = await query(collection(db, 'users'), where('userlevel', '==', 'alumni'));
@@ -309,14 +305,15 @@ const fetchProgramAndBlockAndClassYears = async () => {
       }
       pabSet.add(name);
     });
-    pabs.value = Array.from(pabSet).map(name => ({ name }));
+    pabs.value = Array.from(pabSet).map(name => ({ name })).sort((a, b) => a.name.localeCompare(b.name));
   });
 
   const classYearsSnapshot = await query(collection(db, 'classYears'));
   onSnapshot(classYearsSnapshot, (snapshot) => {
-      classYears.value = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name })).sort((a, b) => a.name.localeCompare(b.name));
+      classYears.value = snapshot.docs.map(doc => ({ id: doc.id, name: doc.data().name })).sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
   });
 }
+
 
 onMounted(fetchData)
 
@@ -333,7 +330,6 @@ const addUser = () => {
   alumna_email.value = '';
   phone.value = '';
   address.value = '';
-  alumna_password.value = '';
 }
 
 const addProgramAndBlock = () => {
@@ -399,6 +395,11 @@ const submitModal = async () => {
         showWarningPopup('Alumna ID already exists!');
         return;
       }
+
+      const lastName = lName.value;
+      const last4Digits = alumnaID.value.slice(-4);
+      const alumna_password = `${lastName}${last4Digits}`;
+
       const data = {
           alumnaID: alumnaID.value,
           fName: fName.value,
@@ -409,7 +410,7 @@ const submitModal = async () => {
           alumna_email: alumna_email.value,
           phone: phone.value,
           address: address.value,
-          alumna_password: alumna_password.value,
+          alumna_password: alumna_password,
           userlevel: 'alumni',
           status: 'active',
       };
@@ -418,6 +419,9 @@ const submitModal = async () => {
       const selectedItem = items.value.find(item => item.alumnaID === alumnaID.value);
       if (selectedItem) {
           const docRef = doc(db, 'users', selectedItem.id);
+          const lastName = lName.value;
+          const last4Digits = alumnaID.value.slice(-4);
+          const alumna_password = `${lastName}${last4Digits}`;
           await updateDoc(docRef, {
               alumnaID: alumnaID.value,
               fName: fName.value,
@@ -428,7 +432,7 @@ const submitModal = async () => {
               alumna_email: alumna_email.value,
               phone: phone.value,
               address: address.value,
-              alumna_password: alumna_password.value
+              alumna_password: alumna_password
           })
       } else {
         showWarningPopup('Selected item not found');
@@ -504,7 +508,6 @@ const editItem = (selectedItem) => {
   alumna_email.value = selectedItem.alumna_email;
   phone.value = selectedItem.phone;
   address.value = selectedItem.address;
-  alumna_password.value = selectedItem.alumna_password;
 }
 
 const deleteItem = async (index) => {
@@ -543,40 +546,44 @@ selectAllChecked.value = isChecked;
 };
 
 const importUsers = (event) => {
-const file = event.target.files[0];
-if (!file) return;
+  const file = event.target.files[0];
+  if (!file) return;
 
-const reader = new FileReader();
-reader.onload = async (e) => {
-  const data = new Uint8Array(e.target.result);
-  const workbook = read(data, { type: 'array' });
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
-  const usersData = utils.sheet_to_json(worksheet, { header: 2 });
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = new Uint8Array(e.target.result);
+    const workbook = read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const usersData = utils.sheet_to_json(worksheet, { header: 2 });
 
-  for (const user of usersData) {
-    const { alumnaID, fName, mInitial, lName, pab, classYear, alumna_email, phone, address, alumna_password } = user;
-    console.log(usersData);
-    await addDoc(collection(db, 'users'), {
-      alumnaID,
-      fName,
-      mInitial,
-      lName,
-      pab,
-      classYear,
-      alumna_email,
-      phone,
-      address,
-      alumna_password,
-      userlevel: 'alumni',
-      status: 'active',
-    });
-  }
+    for (const user of usersData) {
+      const { alumnaID, fName, mInitial, lName, pab, classYear, alumna_email, phone, address } = user;
+      const lastName = lName; // assuming lName is the last name field
+      const last4Digits = alumnaID.slice(-4);
+      const alumna_password = `${lastName}${last4Digits}`;
 
-  alert('Users imported successfully');
-  fetchData();
+      await addDoc(collection(db, 'users'), {
+        alumnaID,
+        fName,
+        mInitial,
+        lName,
+        pab,
+        classYear,
+        alumna_email,
+        phone,
+        address,
+        alumna_password,
+        userlevel: 'alumni',
+        status: 'active',
+      });
+    }
+
+    alert('Users imported successfully');
+    fetchData();
+  };
+  reader.readAsArrayBuffer(file);
 };
-reader.readAsArrayBuffer(file);
-};
+
 
 </script>

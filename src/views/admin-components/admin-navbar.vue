@@ -16,8 +16,10 @@
       </a>
     </div>
     <div v-if="notificationsVisible" class="notification-panel">
+      <button @click="filterBy('All')">All</button>
+      <button @click="filterBy('Unread')">Unread</button>
       <ul>
-        <li v-for="post in newPosts" :key="post.id" @click="viewPost(post)">
+        <li v-for="post in filteredPosts" :key="post.id" @click="viewPost(post)" :class="{ 'unread': post.status === 'unread' }">
           <span style="color: black">{{ post.name }} added a post </span>
           <span style="color: black">
             {{ timeDifference(post.time.toDate()) }}</span
@@ -31,16 +33,32 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { db } from "../../firebase/index.js";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, updateDoc, doc, query, where, getDocs } from "firebase/firestore";
+
 
 const notificationsVisible = ref(false);
 const profileVisible = ref(false);
 const unreadPostsCount = ref(0);
 const newPosts = ref([]);
+const filteredPosts = ref([]);
 
-const toggleNotifications = () => {
+const toggleNotifications = async () => {
   notificationsVisible.value = !notificationsVisible.value;
   unreadPostsCount.value = 0;
+
+  if (!notificationsVisible.value) {
+    const newNotifications = newPosts.value.filter((notification) => notification.type === "newpost");
+
+    try {
+      for (const notification of newNotifications) {
+        const docRef = doc(db, "notifications", notification.id);
+        await updateDoc(docRef, { status: "read" });
+      }
+      console.log("All notifications updated successfully");
+    } catch (error) {
+      console.error("Error updating notifications: ", error);
+    }
+  }
 };
 
 const timeDifference = (timestamp) => {
@@ -66,17 +84,30 @@ const viewPost = (post) => {
   console.log("Viewing post:", post);
 };
 
+const filterBy = (status) => {
+  if (status === "All") {
+    filteredPosts.value = newPosts.value;
+  } else if (status === "Unread") {
+    filteredPosts.value = newPosts.value.filter((post) => post.status === "unread");
+  }
+};
+
 onMounted(() => {
   const notificationsCollection = collection(db, "notifications");
   onSnapshot(notificationsCollection, (snapshot) => {
-    const newNotifications = snapshot
+    const allNotifications = snapshot
       .docChanges()
       .filter((change) => change.type === "added")
-      .map((change) => change.doc.data())
-      .filter((notification) => notification.for === "administrator");
+      .map((change) => {
+        const data = change.doc.data();
+        data.id = change.doc.id;
+        return data;
+      })
+      .filter((notification) => notification.for !== "alumni");
 
-    newPosts.value = newNotifications;
-    unreadPostsCount.value += newNotifications.length;
+    newPosts.value = allNotifications;
+    unreadPostsCount.value = allNotifications.filter((notification) => notification.status === "unread").length;
+    filteredPosts.value = newPosts.value; // Set initial filtered posts to all posts
   });
 });
 </script>
@@ -118,5 +149,9 @@ onMounted(() => {
   right: 13px;
   padding: 3px !important;
   font-size: 10px;
+}
+
+.unread {
+  background-color: lightblue;
 }
 </style>
