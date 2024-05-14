@@ -45,63 +45,70 @@
             <th>Name</th>
             <th>ID Number</th>
             <th>
-              <div class="dropdown">
+              <div class="d-flex">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-sm dropdown-toggle"
+                    type="button"
+                    id="programBlockDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="programBlockDropdown"
+                  >
+                    <li v-for="pab in pabs" :key="pab.id">
+                      <label class="dropdown-item">
+                        <input
+                          type="checkbox"
+                          v-model="selectedProgramsAndBlocks"
+                          :value="pab.name"
+                          @click.stop
+                        />
+                        {{ pab.name }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+                Program & Block
                 <button
-                  class="btn btn-sm dropdown-toggle"
-                  type="button"
-                  id="programBlockDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                ></button>
-                <ul
-                  class="dropdown-menu"
-                  aria-labelledby="programBlockDropdown"
+                  class="btn btn-sm btn-light"
+                  @click="addProgramAndBlock"
                 >
-                  <li v-for="pab in pabs" :key="pab.id">
-                    <label class="dropdown-item">
-                      <input
-                        type="checkbox"
-                        v-model="selectedProgramsAndBlocks"
-                        :value="pab.name"
-                        @click.stop
-                      />
-                      {{ pab.name }}
-                    </label>
-                  </li>
-                </ul>
+                  <i class="bi bi-plus-lg"></i>
+                </button>
               </div>
-              Program & Block
-              <button class="btn btn-sm btn-light" @click="addProgramAndBlock">
-                <i class="bi bi-plus-lg"></i>
-              </button>
             </th>
             <th>
-              <div class="dropdown">
-                <button
-                  class="btn btn-sm dropdown-toggle"
-                  type="button"
-                  id="classYearDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                ></button>
-                <ul class="dropdown-menu" aria-labelledby="classYearDropdown">
-                  <li v-for="year in classYears" :key="year.id">
-                    <label class="dropdown-item">
-                      <input
-                        type="checkbox"
-                        v-model="selectedClassYears"
-                        :value="year.name"
-                        @click.stop
-                      />
-                      {{ year.name }}
-                    </label>
-                  </li>
-                </ul>
+              <div class="d-flex">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-sm dropdown-toggle"
+                    type="button"
+                    id="classYearDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu" aria-labelledby="classYearDropdown">
+                    <li v-for="year in classYears" :key="year.id">
+                      <label class="dropdown-item">
+                        <input
+                          type="checkbox"
+                          v-model="selectedClassYears"
+                          :value="year.name"
+                          @click.stop
+                        />
+                        {{ year.name }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+                Class Year
+                <button class="btn btn-sm btn-light" @click="addClassYear">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
               </div>
-              Class Year
-              <button class="btn btn-sm btn-light" @click="addClassYear">
-                <i class="bi bi-plus-lg"></i>
-              </button>
             </th>
             <th>Email</th>
             <th>Phone</th>
