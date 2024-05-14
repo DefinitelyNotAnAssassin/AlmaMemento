@@ -1,7 +1,7 @@
 <template>
   <div class="components-page-main-container p-3 profile-container container">
     <div class="user-profile mt-2">
-      <div>
+      <div class="profile-pic-container">
         <img
           @click="openImageModal"
           width="150"
@@ -363,6 +363,11 @@ const deletePhoto = async () => {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.profile-pic-container {
+  position: relative;
+  background-color: red;
 }
 
 .btn-edit-profile {
