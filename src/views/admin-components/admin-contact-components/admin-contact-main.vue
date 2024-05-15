@@ -87,6 +87,7 @@ const fetchMessages = async () => {
     id: doc.id,
     name: doc.data().name,
     subject: doc.data().subject,
+    message: doc.data().message,
     date: doc.data().date,
   }));
 };
