@@ -29,7 +29,7 @@
         cols="50"
         placeholder="Enter your reply"
       ></textarea>
-      <button class="btn btn-sm btn-success" @click="sendReply">Send</button>
+      <button class="btn btn-sm btn-success mt-2" @click="sendReply">Send</button>
     </div>
     <button class="btn btn-sm btn-dark mt-2" v-else @click="showReply = true">
       Reply
