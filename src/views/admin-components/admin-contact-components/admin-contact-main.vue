@@ -1,6 +1,6 @@
 <template>
   <div class="components-page-main-container p-3">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
       <input
         class="search-bar form-control"
         style="width: 250px"
@@ -13,7 +13,7 @@
         v-if="selectedMessages.length > 0"
         @click="confirmDelete"
       >
-        Delete
+        <i class="bi bi-trash3"></i>
       </button>
     </div>
     <ul class="list-group">
