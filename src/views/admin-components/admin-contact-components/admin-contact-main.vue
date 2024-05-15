@@ -25,12 +25,20 @@
               v-model="selectedMessages"
               :value="message.id"
             />
-            <div class="mx-2" @click="navigateToMessage(message.id)" style="cursor: pointer">
+            <div
+              class="mx-2"
+              @click="navigateToMessage(message.id)"
+              style="cursor: pointer"
+            >
               {{ message.name }}
             </div>
           </div>
-          <div @click="navigateToMessage(message.id)" style="cursor: pointer">
+          <div
+            @click="navigateToMessage(message.id)"
+            style="cursor: pointer; max-width: 400px"
+          >
             {{ message.subject }}
+            <span class="text-secondary"> - {{ message.message }}</span>
           </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
             {{ message.date }}
