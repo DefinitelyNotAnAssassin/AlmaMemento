@@ -35,14 +35,20 @@
           </div>
           <div
             @click="navigateToMessage(message.id)"
-            style="cursor: pointer; max-width: 300px; background-color: red"
+            style="
+              cursor: pointer;
+              max-width: 300px;
+              background-color: red;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            "
           >
             {{ message.subject }}
             <span class="text-secondary">
               -
               Sampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetttttttttttttttt
-              {{ message.message }}</span
-            >
+            </span>
           </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
             {{ message.date }}
