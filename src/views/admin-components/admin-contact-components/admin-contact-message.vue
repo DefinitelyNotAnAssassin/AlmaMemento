@@ -7,7 +7,7 @@
     <div>
       <div>
         <span style="font-size: 12px"
-          >{{ userName }} - {{ documentData.userId }}</span
+          >{{ documentData.name }} - {{ documentData.userId }}</span
         >
         <span class="text-secondary" style="font-size: 12px"
           >Date: {{ documentData.date }}</span
