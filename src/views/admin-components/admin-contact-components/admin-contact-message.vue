@@ -14,10 +14,10 @@
         >
       </div>
       <div>
-        <h4 style="font-size: 20px">Subject: {{ documentData.subject }}</h4>
+        <h4 style="font-size: 20px">{{ documentData.subject }}</h4>
       </div>
       <div>
-        <p style="font-size: 14px">Message: {{ documentData.message }}</p>
+        <p style="font-size: 14px">{{ documentData.message }}</p>
       </div>
       <img :src="documentData.url" alt="Concern Image" />
     </div>
