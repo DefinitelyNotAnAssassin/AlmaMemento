@@ -35,10 +35,14 @@
           </div>
           <div
             @click="navigateToMessage(message.id)"
-            style="cursor: pointer; max-width: 400px"
+            style="cursor: pointer; max-width: 300px; background-color: red"
           >
             {{ message.subject }}
-            <span class="text-secondary"> - Sampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetttttttttttttttt {{ message.message }}</span>
+            <span class="text-secondary">
+              -
+              Sampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetttttttttttttttt
+              {{ message.message }}</span
+            >
           </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
             {{ message.date }}
