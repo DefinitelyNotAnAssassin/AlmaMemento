@@ -48,7 +48,7 @@
             {{ message.subject }}
             <span class="text-secondary">
               -
-              Sampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetttttttttttttttt
+              {{ message.message }}
             </span>
           </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
