@@ -38,7 +38,7 @@
             style="cursor: pointer; max-width: 400px"
           >
             {{ message.subject }}
-            <span class="text-secondary"> - {{ message.message }}</span>
+            <span class="text-secondary"> - Sampleeeee {{ message.message }}</span>
           </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
             {{ message.date }}
