@@ -4,36 +4,40 @@
     <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
       <i class="bi bi-arrow-return-left"></i>
     </button>
-    <div class="mt-5">
-      <div class="d-flex justify-content-between">
-        <span style="font-size: 14px"
-          >{{ documentData.name }} - {{ documentData.userId }}</span
-        >
-        <span class="text-secondary" style="font-size: 14px"
-          >Date: {{ documentData.date }}</span
-        >
+    <div class="p-5">
+      <div class="mt-5">
+        <div class="d-flex justify-content-between">
+          <span style="font-size: 14px"
+            >{{ documentData.name }} - {{ documentData.userId }}</span
+          >
+          <span class="text-secondary" style="font-size: 14px"
+            >Date: {{ documentData.date }}</span
+          >
+        </div>
+        <div class="mt-2">
+          <h4 style="font-size: 23px">{{ documentData.subject }}</h4>
+        </div>
+        <div class="mt-2">
+          <p style="font-size: 18px">{{ documentData.message }}</p>
+        </div>
+        <img class="mt-2" :src="documentData.url" alt="Concern Image" />
       </div>
-      <div class="mt-2">
-        <h4 style="font-size: 23px">{{ documentData.subject }}</h4>
+      <div class="mt-2" v-if="showReply">
+        <textarea
+          class="form-control"
+          v-model="replyMessage"
+          rows="5"
+          cols="50"
+          placeholder="Enter your reply"
+        ></textarea>
+        <button class="btn btn-sm btn-success mt-2" @click="sendReply">
+          Send
+        </button>
       </div>
-      <div class="mt-2">
-        <p style="font-size: 18px">{{ documentData.message }}</p>
-      </div>
-      <img class="mt-2" :src="documentData.url" alt="Concern Image" />
+      <button class="btn btn-sm btn-dark mt-2" v-else @click="showReply = true">
+        Reply
+      </button>
     </div>
-    <div class="mt-2" v-if="showReply">
-      <textarea
-        class="form-control"
-        v-model="replyMessage"
-        rows="5"
-        cols="50"
-        placeholder="Enter your reply"
-      ></textarea>
-      <button class="btn btn-sm btn-success mt-2" @click="sendReply">Send</button>
-    </div>
-    <button class="btn btn-sm btn-dark mt-2" v-else @click="showReply = true">
-      Reply
-    </button>
   </div>
 </template>
 
