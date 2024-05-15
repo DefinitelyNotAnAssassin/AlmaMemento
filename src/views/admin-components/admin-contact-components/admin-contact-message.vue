@@ -4,24 +4,24 @@
     <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
       <i class="bi bi-arrow-return-left"></i>
     </button>
-    <div>
-      <div>
-        <span style="font-size: 12px"
+    <div class="mt-5">
+      <div class="d-flex">
+        <span style="font-size: 14px"
           >{{ documentData.name }} - {{ documentData.userId }}</span
         >
-        <span class="text-secondary" style="font-size: 12px"
+        <span class="text-secondary" style="font-size: 14px"
           >Date: {{ documentData.date }}</span
         >
       </div>
       <div>
-        <h4 style="font-size: 20px">{{ documentData.subject }}</h4>
+        <h4 style="font-size: 23px">{{ documentData.subject }}</h4>
       </div>
       <div>
-        <p style="font-size: 14px">{{ documentData.message }}</p>
+        <p style="font-size: 18px">{{ documentData.message }}</p>
       </div>
       <img :src="documentData.url" alt="Concern Image" />
     </div>
-    <div v-if="showReply">
+    <div class="mt-2" v-if="showReply">
       <textarea
         class="form-control"
         v-model="replyMessage"
