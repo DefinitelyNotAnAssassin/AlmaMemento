@@ -37,7 +37,7 @@
             @click="navigateToMessage(message.id)"
             style="
               cursor: pointer;
-              max-width: 300px;
+              max-width: 400px;
               background-color: red;
               white-space: nowrap;
               overflow: hidden;
