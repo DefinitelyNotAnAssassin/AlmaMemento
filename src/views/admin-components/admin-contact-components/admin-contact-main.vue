@@ -19,15 +19,21 @@
     <ul class="list-group">
       <li v-for="message in messages" :key="message.id" class="list-group-item">
         <div class="d-flex justify-content-between align-items-center">
-          <input
-            type="checkbox"
-            v-model="selectedMessages"
-            :value="message.id"
-          />
+          <div class="d-flex">
+            <input
+              type="checkbox"
+              v-model="selectedMessages"
+              :value="message.id"
+            />
+            <div @click="navigateToMessage(message.id)" style="cursor: pointer">
+              {{ message.name }}
+            </div>
+          </div>
           <div @click="navigateToMessage(message.id)" style="cursor: pointer">
-            <div>{{ message.name }}</div>
-            <div>{{ message.subject }}</div>
-            <div>{{ message.date }}</div>
+            {{ message.subject }}
+          </div>
+          <div @click="navigateToMessage(message.id)" style="cursor: pointer">
+            {{ message.date }}
           </div>
         </div>
       </li>
