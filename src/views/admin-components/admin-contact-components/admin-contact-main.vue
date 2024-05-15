@@ -1,5 +1,6 @@
 <template>
   <div class="components-page-main-container p-3">
+    <h3 class="text-center">Contact Support</h3>
     <div class="d-flex justify-content-between align-items-center">
       <input
         class="search-bar form-control"
