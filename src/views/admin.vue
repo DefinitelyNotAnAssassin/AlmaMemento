@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar />
+    <Navbar :currentPage="currentPage" @update:currentPage="currentPage = $event"/>
     <div class="main">
       <Sidebar :currentPage="currentPage" @update:currentPage="currentPage = $event" />
       <div v-if="currentPage === 'Dashboard'">

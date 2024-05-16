@@ -8,31 +8,21 @@
         <span class="icon">
           <i class="fas fa-bell"></i>
         </span>
-        <span
-          v-if="unreadPostsCount > 0"
-          class="notif-badge badge rounded-pill bg-danger"
-          >{{ unreadPostsCount }}</span
-        >
+        <span v-if="unreadPostsCount > 0" class="notif-badge badge rounded-pill bg-danger">{{ unreadPostsCount }}</span>
       </a>
     </div>
     <div v-if="notificationsVisible" class="notification-panel">
-      <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">
-        All
-      </button>
-      <button class="btn btn-sm btn-light" @click="filterBy('Unread')">
-        Unread
-      </button>
+      <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">All</button>
+      <button class="btn btn-sm btn-light" @click="filterBy('Unread')">Unread</button>
       <ul>
         <li
           v-for="post in filteredPosts"
           :key="post.id"
           @click="viewPost(post)"
-          :class="{ unread: post.status === 'unread' }"
+          :class="{ unread: post.status === 'unread', clickable: post.type === 'concern' }"
         >
-          <span style="color: black">{{ post.name }} added a post </span>
-          <span style="color: black">
-            {{ timeDifference(post.time.toDate()) }}</span
-          >
+          <span style="color: black">{{ post.name }} added a {{ post.type }}</span>
+          <span style="color: black">{{ timeDifference(post.time.toDate()) }}</span>
         </li>
       </ul>
     </div>
@@ -40,14 +30,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineEmits } from "vue";
 import { db } from "../../firebase/index.js";
-import {
-  collection,
-  onSnapshot,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, onSnapshot, updateDoc, doc } from "firebase/firestore";
 
 const notificationsVisible = ref(false);
 const unreadPostsCount = ref(0);
@@ -56,22 +41,25 @@ const filteredPosts = ref([]);
 
 const toggleNotifications = async () => {
   notificationsVisible.value = !notificationsVisible.value;
-  unreadPostsCount.value = 0;
-
   if (!notificationsVisible.value) {
-    const newNotifications = newPosts.value.filter(
-      (notification) => notification.type === "newpost"
-    );
+    markAllAsRead();
+  }
+};
 
-    try {
-      for (const notification of newNotifications) {
-        const docRef = doc(db, "notifications", notification.id);
-        await updateDoc(docRef, { status: "read" });
-      }
-      console.log("All notifications updated successfully");
-    } catch (error) {
-      console.error("Error updating notifications: ", error);
+const markAllAsRead = async () => {
+  const newNotifications = newPosts.value.filter(
+    (notification) => notification.type === "newpost" && notification.status === "unread"
+  );
+
+  try {
+    for (const notification of newNotifications) {
+      const docRef = doc(db, "notifications", notification.id);
+      await updateDoc(docRef, { status: "read" });
+      notification.status = "read";
     }
+    console.log("All notifications updated successfully");
+  } catch (error) {
+    console.error("Error updating notifications: ", error);
   }
 };
 
@@ -94,8 +82,28 @@ const timeDifference = (timestamp) => {
   }
 };
 
-const viewPost = (post) => {
-  console.log("Viewing post:", post);
+const emit = defineEmits(["update:currentPage"]);
+
+const viewPost = async (post) => {
+  const currentPage = ref('');
+  if (post.type === "concern") {
+    currentPage.value = "Contact";
+    emit("update:currentPage", "Contact");
+  } else {
+    console.log("New post notification:", post);
+  }
+
+  if (post.status === "unread") {
+    try {
+      const docRef = doc(db, "notifications", post.id);
+      await updateDoc(docRef, { status: "read" });
+      post.status = "read";
+      unreadPostsCount.value -= 1;
+    } catch (error) {
+      console.error("Error updating notification status: ", error);
+    }
+  }
+  notificationsVisible.value = false;
 };
 
 const filterBy = (status) => {
@@ -175,5 +183,9 @@ onMounted(() => {
 
 .unread {
   background-color: lightblue;
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>
