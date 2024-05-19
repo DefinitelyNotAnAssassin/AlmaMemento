@@ -70,10 +70,10 @@ const isLoading = ref(false);
 const router = useRouter();
 
 const signin = async () => {
-  isLoading = true;
+  isLoading.value = true;
   try {
     console.log("Trying to sign in...");
-    console.log(isLoading + "---");
+    console.log(isLoading.value + "---");
 
     const q = query(
       collection(db, "users"),
@@ -102,17 +102,17 @@ const signin = async () => {
 
         console.log("Current URL:", window.location.href);
       } else {
-        isLoading = false;
+        isLoading.value = false;
         errMsg.value = "Your account has been deactivated";
       }
     } else {
-      isLoading = false;
+      isLoading.value = false;
       errMsg.value =
         "No account with that alumni number and password was found";
     }
   } catch (error) {
     console.log("catch");
-    isLoading = false;
+    isLoading.value = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   }
