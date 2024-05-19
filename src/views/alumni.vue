@@ -23,7 +23,7 @@
                 <input
                   style="height: 40px"
                   type="text"
-                  class="form-control"
+                  class="form-control m-0"
                   placeholder="Tell us about your school experiences..."
                 />
               </div>
