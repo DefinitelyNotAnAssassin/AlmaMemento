@@ -5,28 +5,30 @@
       <div class="container-fluid p-0 d-flex">
         <SideBar />
         <div class="main-content">
-          <div
-            class="background-color-brown container card m-3"
-            style="position: relative"
-          >
-            <div>
-              <img
-                src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/441204475_122128868540246120_5470515469793099504_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEHdxMJCaCsLsFSM-wYtFe3XosaZDEWO_VeixpkMRY79TJ_9UeU8ZAtSnOblRBciZ_8Q9QicYbJldRWKiq41WfR&_nc_ohc=IbNiD3P1d_0Q7kNvgEA5qtT&_nc_ht=scontent.fmnl4-6.fna&oh=00_AYAJDf4u4ynNxOHDxctLsm2DsduxRh4zfnORs09d16hCmw&oe=664FB891"
-                style="height: 50px; width: 50px; border-radius: 50%"
-              />
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Tell us about your school experiences..."
-              />
-            </div>
-            <button
-              @click="showPostModal"
-              class="btn m-2"
-              style="position: absolute; bottom: 10px; right: 10px"
+          <div class="d-flex justify-content-center">
+            <div
+              class="background-color-brown card m-3 p-2 pb-5"
+              style="position: relative; width: 400px"
             >
-              <i class="bi bi-card-image"></i> Photo
-            </button>
+              <div class="d-flex">
+                <img
+                  src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/441204475_122128868540246120_5470515469793099504_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEHdxMJCaCsLsFSM-wYtFe3XosaZDEWO_VeixpkMRY79TJ_9UeU8ZAtSnOblRBciZ_8Q9QicYbJldRWKiq41WfR&_nc_ohc=IbNiD3P1d_0Q7kNvgEA5qtT&_nc_ht=scontent.fmnl4-6.fna&oh=00_AYAJDf4u4ynNxOHDxctLsm2DsduxRh4zfnORs09d16hCmw&oe=664FB891"
+                  style="height: 50px; width: 50px; border-radius: 50%"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Tell us about your school experiences..."
+                />
+              </div>
+              <button
+                @click="showPostModal"
+                class="btn m-2"
+                style="position: absolute; bottom: 10px; right: 10px"
+              >
+                <i class="bi bi-card-image"></i> Photo
+              </button>
+            </div>
           </div>
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
