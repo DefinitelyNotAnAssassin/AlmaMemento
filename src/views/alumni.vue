@@ -189,7 +189,7 @@
                 </button>
               </div>
               <!-- Likes -->
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center mt-2">
                 <a
                   href="#"
                   @click="incrementLikes(post)"
@@ -201,7 +201,7 @@
                 <a
                   href="#"
                   @click="toggleComments(post)"
-                  class="text-light mx-1"
+                  class="text-light mx-2"
                   style="text-decoration: none !important"
                 >
                   <i class="bi bi-chat"></i> Commentss
