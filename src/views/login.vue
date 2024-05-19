@@ -111,6 +111,7 @@ const signin = async () => {
         "No account with that alumni number and password was found";
     }
   } catch (error) {
+    console.log("catch");
     isLoading = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
