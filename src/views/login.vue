@@ -84,6 +84,7 @@ const signin = async () => {
     const user = querySnapshot.docs[0];
 
     if (user) {
+      isLoading = true;
       console.log("User found:", user.data());
 
       if (user.data().status === "active") {
