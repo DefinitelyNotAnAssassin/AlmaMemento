@@ -8,9 +8,9 @@
         src="../../assets/images/ctu-logo.png"
         style="height: 200px; width: 200px"
       />
-      <h3 class="mt-2">Reset Password</h3>
+      <h3 class="mt-5">Reset Password</h3>
       <form @submit.prevent="checkId">
-        <div class="mt-3">
+        <div class="mt-5">
           <input
             class="form-control"
             type="text"
