@@ -18,6 +18,7 @@
             v-model="newPass"
             id="newPass"
             required
+            placeholder="New Password"
           />
           <input
             class="form-control"
@@ -25,6 +26,7 @@
             v-model="confPass"
             id="confPass"
             required
+            placeholder="Confirm Password"
           />
         </div>
         <button class="btn btn-danger w-100" type="submit">Continue</button>
