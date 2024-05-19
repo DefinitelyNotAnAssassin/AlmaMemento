@@ -1,14 +1,8 @@
 <template>
-  <aside class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown">
-    <div v-if="isLoading" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div class="box">
-          <progress class="progress is-primary" :value="loadingProgress" max="100">{{ loadingProgress }}%</progress>
-          <p>Logging out...</p>
-        </div>
-      </div>
-    </div>
+  <Loading v-if="isLoading" />
+  <aside
+    class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown"
+  >
     <img class="mt-5" :src="userData.photoURL" alt="profile" />
     <h4 class="mt-2">{{ userData.name }}</h4>
     <p>{{ userData.alumna_email }}</p>
@@ -50,9 +44,9 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import Loading from "../loading.vue";
 
 const router = useRouter();
-const isLoading = ref(false);
 const loadingProgress = ref(0);
 
 const userData = ref({
@@ -65,7 +59,10 @@ const userData = ref({
   photoURL: "",
 });
 
+const isLoading = ref(false);
+
 const logout = async () => {
+  isLoading.value = true;
   try {
     isLoading.value = true;
 
@@ -92,10 +89,12 @@ const logout = async () => {
       console.log("Logout successful. Redirecting to login page...");
       console.log("Current URL:", window.location.href);
     } else {
+      isLoading.value = false;
       console.log("No logged in user found");
       errMsg.value = "No logged in user found";
     }
   } catch (error) {
+    isLoading.value = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   } finally {
