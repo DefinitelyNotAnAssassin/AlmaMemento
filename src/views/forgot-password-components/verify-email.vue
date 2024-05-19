@@ -15,17 +15,22 @@
   </template>
   
   <script setup>
-  import { ref, defineProps } from 'vue';
+  import { ref, defineProps, defineEmits } from 'vue';
   import { collection, query, where, getDocs } from 'firebase/firestore';
   import { db } from '../../firebase/index.js';
-  import axios from 'axios';
+  import emailjs from 'emailjs-com';
+  
+  emailjs.init('zq_xIgPiujn84NnCY');
   
   const code = ref('');
   const errorMessage = ref('');
   const alumna_email = ref('');
   const showResendLink = ref(true);
   const props = defineProps(["id"]);
-  
+  const emit = defineEmits(["update:currentPage"]);
+  let verificationCode = '';
+  const currentPage = ref("Verify");
+
   const generateRandomCode = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -58,9 +63,10 @@
   
   const resendEmail = async () => {
     try {
-      const verificationCode = generateRandomCode(6);
-      await axios.post('http://localhost:3000/send-email', { email: alumna_email.value, code: verificationCode });
+      verificationCode = generateRandomCode(6);
+      await emailjs.send('service_qg6fyml', 'template_unbfrgi', { to_email: alumna_email.value, message: verificationCode });
       console.log('Email sent successfully');
+      console.log(verificationCode);
     } catch (error) {
       errorMessage.value = 'Error sending email. Please try again.';
       console.error('Error sending email:', error);
@@ -68,12 +74,18 @@
   };
   
   const checkEmail = async () => {
-    try {
-      console.log('Checking code...', code.value);
+  try {
+    if (code.value === verificationCode) {
+      console.log('Code is correct');
+      currentPage.value = "New Password";
+      emit("update:currentPage", "New Password");
+    } else {
+      console.log('Incorrect code');
       errorMessage.value = 'Incorrect code. Please try again.';
-    } catch (error) {
-      console.error('Error checking email:', error);
     }
-  };
+  } catch (error) {
+    console.error('Error checking email:', error);
+  }
+};
   </script>
   

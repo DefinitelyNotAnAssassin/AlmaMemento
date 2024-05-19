@@ -1,5 +1,14 @@
 <template>
   <aside class="sidebar">
+    <div v-if="isLoading" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <progress class="progress is-primary" :value="loadingProgress" max="100">{{ loadingProgress }}%</progress>
+          <p>Logging out...</p>
+        </div>
+      </div>
+    </div>
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
       <li class="mt-1" v-for="(item, index) in sidebarItems" :key="index">
@@ -41,6 +50,8 @@ import { db } from "../../firebase/index.js";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 
 const currentPage = ref("Dashboard");
+const isLoading = ref(false);
+const loadingProgress = ref(0);
 
 const sideBarItemsIcons = [
   "bi bi-speedometer2",
@@ -100,23 +111,26 @@ const router = useRouter();
 
 const logout = async () => {
   try {
-    console.log("Logging out...");
+    isLoading.value = true;
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    loadingProgress.value = 25;
 
     const q = collection(db, "users");
     const querySnapshot = await getDocs(q);
     const userId = router.currentRoute.value.query.userId;
-    console.log("UserID:", userId);
+    loadingProgress.value = 50;
 
     const user = querySnapshot.docs.find(
       (doc) => doc.id === userId && doc.data().loggedIn === true
     );
 
     if (user) {
-      console.log("User found:", user.data());
-
       await updateDoc(doc(db, "users", user.id), {
         loggedIn: false,
       });
+
+      loadingProgress.value = 75;
 
       router.push({ name: "login" });
       console.log("Logout successful. Redirecting to login page...");
@@ -128,6 +142,11 @@ const logout = async () => {
   } catch (error) {
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false;
+      loadingProgress.value = 100;
+    }, 500);
   }
 };
 

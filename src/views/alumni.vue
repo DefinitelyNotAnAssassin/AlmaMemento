@@ -143,51 +143,63 @@
       <h3>{{ post.name }}</h3>
       <h5>{{ post.caption }}</h5>
       <div
-        id="imageCarousel"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <!-- Carousel inner -->
-        <div class="carousel-inner">
-          <div
-            v-for="(imageUrl, index) in post.imageUrls"
-            :key="index"
-            class="carousel-item"
-            :class="{ active: index == 0 }"
-          >
-            <img
-              :src="imageUrl"
-              class="d-block w-100"
-              alt="Image Preview"
-            />
-          </div>
-        </div>
-        <!-- Carousel controls -->
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#imageCarousel"
-          data-bs-slide="prev"
-        >
-          <span
-            class="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#imageCarousel"
-          data-bs-slide="next"
-        >
-          <span
-            class="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+  v-if="post.imageUrls.length > 1"
+  id="imageCarousel"
+  class="carousel slide"
+  data-bs-ride="carousel"
+>
+  <!-- Carousel inner -->
+  <div class="carousel-inner">
+    <div
+      v-for="(imageUrl, index) in post.imageUrls"
+      :key="index"
+      class="carousel-item"
+      :class="{ active: index == 0 }"
+    >
+      <img
+        :src="imageUrl"
+        class="d-block w-100"
+        alt="Image Preview"
+      />
+    </div>
+  </div>
+  <!-- Carousel controls -->
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#imageCarousel"
+    data-bs-slide="prev"
+  >
+    <span
+      class="carousel-control-prev-icon"
+      aria-hidden="true"
+    ></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#imageCarousel"
+    data-bs-slide="next"
+  >
+    <span
+      class="carousel-control-next-icon"
+      aria-hidden="true"
+    ></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<div
+  v-else
+  class="image-container"
+>
+  <img
+    v-if="post.imageUrls.length === 1"
+    :src="post.imageUrls[0]"
+    class="d-block w-100 h-100  "
+    alt="Image Preview"
+  />
+</div>
       <!-- Likes -->
       <div class="d-flex align-items-center">
         <button @click="incrementLikes(post)" class="btn btn-link">
@@ -211,7 +223,7 @@
       </div>
       <hr class="pt-1" />
       <p>{{ post.schoolYear }} - {{ post.event }}</p>
-      <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
+      <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
     </div>
   </div>
         </div>
@@ -354,6 +366,19 @@ const approvedPosts = computed(() => {
     });
 });
 
+function formatApprovalDate(timestamp) {
+  if (!timestamp || !timestamp.seconds) {
+    return "Invalid timestamp";
+  }
+  const date = new Date(timestamp.seconds * 1000);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+  return `${month} ${day}, ${year}, ${time}`;
+}
+
 function getLatestApprovalDate(post) {
   if (!post.history || post.history.length === 0) {
     return "No approval date available";
@@ -435,8 +460,6 @@ async function loadComments(post) {
   }
 }
 
-
-// Function to add a comment to a post
 async function addComment(post) {
   if (post.newComment.trim() === '') return;
 
