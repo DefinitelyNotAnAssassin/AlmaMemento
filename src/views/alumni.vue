@@ -190,20 +190,22 @@
               </div>
               <!-- Likes -->
               <div class="d-flex align-items-center">
-                <button
+                <a
+                  href="#"
                   @click="incrementLikes(post)"
-                  class="btn btn-link text-light"
-                  style="text-decoration: none"
+                  class="text-light"
+                  style="text-decoration: none !important"
                 >
                   <i class="bi bi-heart"></i> {{ post.likes }}
-                </button>
-                <button
+                </a>
+                <a
+                  href="#"
                   @click="toggleComments(post)"
-                  class="btn btn-link text-light"
-                  style="text-decoration: none"
+                  class="text-light"
+                  style="text-decoration: none !important"
                 >
                   <i class="bi bi-chat"></i> Comments
-                </button>
+                </a>
               </div>
               <!-- Comments -->
               <div v-if="!post.showComments">
