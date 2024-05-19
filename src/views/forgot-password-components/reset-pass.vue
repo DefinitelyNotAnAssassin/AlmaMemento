@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-secondary">
+  <div class="bg-secondary" style="height: 100vh;">
     <div class="d-flex flex-column align-items-center">
       <img
         src="../../assets/images/ctu-logo.png"
-        style="height: 100px; width: 100px"
+        style="height: 200px; width: 200px"
       />
       <h3 class="mt-2">Reset Password</h3>
       <form @submit.prevent="checkId">
