@@ -204,7 +204,7 @@
                   class="text-light"
                   style="text-decoration: none !important"
                 >
-                  <i class="bi bi-chat"></i> Comments
+                  <i class="bi bi-chat"></i> Commentss
                 </a>
               </div>
               <!-- Comments -->
