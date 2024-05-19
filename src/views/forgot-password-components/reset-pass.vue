@@ -1,6 +1,6 @@
 <template>
   <div class="bg-secondary">
-    <div class="d-flex flex-row align-items-center">
+    <div class="d-flex flex-column align-items-center">
       <img src="../../assets/images/logo2.png" />
       <h3>Reset Password</h3>
       <form @submit.prevent="checkId">
