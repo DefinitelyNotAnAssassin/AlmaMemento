@@ -1,7 +1,10 @@
 <template>
   <div class="bg-secondary">
     <div class="d-flex flex-column align-items-center">
-      <img src="../../assets/images/logo2.png" />
+      <img
+        src="../../assets/images/ctu-logo.png"
+        style="height: 60px; width: 60px"
+      />
       <h3>Reset Password</h3>
       <form @submit.prevent="checkId">
         <div>
