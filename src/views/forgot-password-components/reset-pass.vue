@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-secondary" style="height: 100vh;">
+  <div
+    class="d-flex justify-content-center align-items-center"
+    style="height: 100vh"
+  >
     <div class="d-flex flex-column align-items-center">
       <img
         src="../../assets/images/ctu-logo.png"
