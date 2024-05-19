@@ -1,5 +1,5 @@
 <template>
-  <Loading v-if="!isLoading" />
+  <Loading v-if="isLoading" />
   <div class="main-container">
     <div
       class="login-container d-flex flex-column align-items-center justify-content-between"
@@ -73,6 +73,7 @@ const signin = async () => {
   try {
     isLoading = true;
     console.log("Trying to sign in...");
+    console.log(isLoading);
 
     const q = query(
       collection(db, "users"),
