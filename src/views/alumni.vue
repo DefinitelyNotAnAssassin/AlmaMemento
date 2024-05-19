@@ -21,6 +21,7 @@
                   "
                 />
                 <input
+                  style="height: 40px"
                   type="text"
                   class="form-control"
                   placeholder="Tell us about your school experiences..."
