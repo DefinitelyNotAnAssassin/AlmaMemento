@@ -58,7 +58,7 @@ const userData = ref({
   photoURL: "",
 });
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const logout = async () => {
   isLoading.value = true;
