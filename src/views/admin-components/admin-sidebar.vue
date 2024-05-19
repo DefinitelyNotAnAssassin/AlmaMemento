@@ -11,8 +11,8 @@
     </div>
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
-      <li class="mt-1" v-for="(item, index) in sidebarItems" :key="index">
-        <a class="text-light" @click="handleSidebarItemClick(item)">
+      <li class="mt-1" v-for="(item, index) in sidebarItems" :key="index" :class="{ disabled: isItemDisabled(item) }">
+        <a class="text-light" @click="handleSidebarItemClick(item)" :class="{ 'disabled-link': isItemDisabled(item) }">
           <i :class="sideBarItemsIcons[index]"></i> {{ item }}
           <span
             v-if="item === 'Manage Users' || item === 'Yearbook'"
@@ -53,6 +53,7 @@ const currentPage = ref("Dashboard");
 const isLoading = ref(false);
 const loadingProgress = ref(0);
 
+
 const sideBarItemsIcons = [
   "bi bi-speedometer2",
   "bi bi-person-circle",
@@ -79,7 +80,22 @@ const dropdownItemsVisible = reactive({
 
 const emit = defineEmits(["update:currentPage"]);
 
+const getUserRole = async () => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", userId.value));
+    if (userDoc.exists()) {
+      userRole.value = userDoc.data().userlevel;
+    } else {
+      console.log("No such document!");
+    }
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+  }
+};
+
 const handleSidebarItemClick = (item) => {
+  if (isItemDisabled(item)) return;
+
   if (item === "Dashboard") {
     currentPage.value = "Dashboard";
     emit("update:currentPage", "Dashboard");
@@ -102,12 +118,18 @@ const selectItem = (item) => {
 };
 
 const handleDropdownClick = (dropdownItem) => {
+  if (isItemDisabled(dropdownItem)) return;
+
   console.log("Clicked dropdown item:", dropdownItem);
   currentPage.value = dropdownItem;
   emit("update:currentPage", dropdownItem);
 };
 
 const router = useRouter();
+
+const isItemDisabled = (item) => {
+  return userRole.value === "moderator" && item !== "Profile" && item !== "Manage Content";
+};
 
 const logout = async () => {
   try {
