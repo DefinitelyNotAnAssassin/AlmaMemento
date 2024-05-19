@@ -155,7 +155,8 @@ import {
   onSnapshot,
   getDoc,
   query,
-  where
+  where,
+  addDoc
 } from "firebase/firestore";
 
 const items = ref([]);
@@ -235,11 +236,25 @@ const userIdToName = async (adminId) => {
 };
 
 async function approvePost(item, index) {
-  const postRef = doc(db, "posts", item.id);
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
+  const userId = item.userId;
+
+  const notificationRef = collection(db, "notifications");
+  await addDoc(notificationRef, {
+    for: "alumni",
+    name: adminName,
+    status: "unread",
+    time: approvalTime,
+    type: "newpost",
+    action: "approved",
+    userId: userId
+  });
+
   if (adminName) {
+    const postRef = doc(db, "posts", item.id);
     await updateDoc(postRef, {
+      ...item,
       status: "approved",
       history: [
         ...(item.history || []),
@@ -251,11 +266,25 @@ async function approvePost(item, index) {
 }
 
 async function rejectPost(item, index) {
-  const postRef = doc(db, "posts", item.id);
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
+  const userId = item.userId;
+
+  const notificationRef = collection(db, "notifications");
+  await addDoc(notificationRef, {
+    for: "alumni",
+    name: adminName,
+    status: "unread",
+    time: approvalTime,
+    type: "newpost",
+    action: "rejected",
+    userId: userId
+  });
+
   if (adminName) {
+    const postRef = doc(db, "posts", item.id);
     await updateDoc(postRef, {
+      ...item,
       status: "rejected",
       history: [
         ...(item.history || []),
