@@ -8,9 +8,9 @@
         src="../../assets/images/ctu-logo.png"
         style="height: 200px; width: 200px"
       />
-      <h3 class="mt-3">PLEASE VERIFY IF IT IS YOU</h3>
+      <h3 class="mt-5">PLEASE VERIFY IF IT IS YOU</h3>
       <form @submit.prevent="checkEmail">
-        <p class="mt-1">
+        <p class="mt-5">
           Please check your email for verification code sent to
           <span style="font-weight: bold">{{ alumna_email }}</span>
         </p>
