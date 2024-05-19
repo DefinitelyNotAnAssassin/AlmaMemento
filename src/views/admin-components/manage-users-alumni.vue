@@ -815,7 +815,7 @@ const importUsers = (event) => {
         phone,
         address,
       } = user;
-      const lastName = lName; // assuming lName is the last name field
+      const lastName = lName;
       const last4Digits = alumnaID.slice(-4);
       const alumna_password = `${lastName}${last4Digits}`;
 

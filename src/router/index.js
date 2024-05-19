@@ -7,6 +7,7 @@ import yearbook from '../views/alumni-components/yearbook.vue'
 import memento from '../views/alumni-components/memento.vue'
 import contact from '../views/alumni-components/contact.vue'
 import modDashboard from '../views/mod.vue'
+import forgotPassword from '../views/forgot-password.vue'
 
 const routes = [
   { path: '/', component: Home,  name: 'home' },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/memento', component: memento, name: 'memento' },
   { path: '/contact', component: contact, name: 'contact' },
   { path: '/modDashboard', component: modDashboard, name: 'modDashboard' },
+  { path: '/forgotPassword', component: forgotPassword, name: 'forgotPassword' },
 ]
 
 const router = createRouter({

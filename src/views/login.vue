@@ -10,8 +10,8 @@
           <p v-if="errMsg">{{ errMsg }}</p>
           <button type="submit">Login</button>
           <div>
-            <a href="#" class="forgot-password-link">Forgot Password?</a>
-          </div>
+          <router-link to="/forgotPassword" class="forgot-password-link">Forgot Password?</router-link>
+        </div>
         </form>
         <div class="mb-2">
           <a class="login-footer text-dark">Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a>
