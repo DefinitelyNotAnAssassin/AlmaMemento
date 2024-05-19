@@ -70,8 +70,8 @@ var isLoading = false;
 const router = useRouter();
 
 const signin = async () => {
+  isLoading = true;
   try {
-    isLoading = true;
     console.log("Trying to sign in...");
     console.log(isLoading);
 
@@ -102,13 +102,16 @@ const signin = async () => {
 
         console.log("Current URL:", window.location.href);
       } else {
+        isLoading = false;
         errMsg.value = "Your account has been deactivated";
       }
     } else {
+      isLoading = false;
       errMsg.value =
         "No account with that alumni number and password was found";
     }
   } catch (error) {
+    isLoading = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   }
