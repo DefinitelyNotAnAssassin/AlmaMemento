@@ -35,7 +35,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { getDoc, doc } from 'firebase/firestore'
+import { db } from '../firebase/index.js'
+import { useRouter } from 'vue-router'
 import Navbar from './admin-components/admin-navbar.vue'
 import Sidebar from './admin-components/admin-sidebar.vue'
 import DashboardContent from './admin-components/admin-dashboard.vue'
@@ -49,5 +52,29 @@ import SchoolEvent from './admin-components/school-event.vue'
 import Contact from './admin-components/admin-contact.vue'
 
 const currentPage = ref('Dashboard')
+const userRole = ref(null)
+const router = useRouter();
+const userId = computed(() => router.currentRoute.value.query.userId);
+
+const getUserRole = async () => {
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId.value))
+    if (userDoc.exists()) {
+      userRole.value = userDoc.data().userlevel
+      if (userRole.value === 'moderator') {
+        currentPage.value = 'Manage Content'
+      }
+    } else {
+       currentPage.value = ref('Dashboard')
+    }
+  } catch (error) {
+    console.error('Error fetching user role:', error)
+  }
+}
+
+onMounted(() => {
+  getUserRole()
+})
+
 
 </script>

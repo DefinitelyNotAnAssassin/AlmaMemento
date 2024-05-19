@@ -12,7 +12,7 @@
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
       <li class="mt-1" v-for="(item, index) in sidebarItems" :key="index" :class="{ disabled: isItemDisabled(item) }">
-        <a class="text-light" @click="handleSidebarItemClick(item)" :class="{ 'disabled-link': isItemDisabled(item) }">
+        <a @click="handleSidebarItemClick(item)" :class="{ 'disabled-link': isItemDisabled(item) }" :disabled="isItemDisabled(item)">
           <i :class="sideBarItemsIcons[index]"></i> {{ item }}
           <span
             v-if="item === 'Manage Users' || item === 'Yearbook'"
@@ -44,15 +44,17 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive, defineEmits } from "vue";
+import { ref, computed, reactive, defineEmits, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "../../firebase/index.js";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc, getDoc } from "firebase/firestore";
 
 const currentPage = ref("Dashboard");
 const isLoading = ref(false);
 const loadingProgress = ref(0);
-
+const userRole = ref(null);
+const router = useRouter();
+const userId = computed(() => router.currentRoute.value.query.userId);
 
 const sideBarItemsIcons = [
   "bi bi-speedometer2",
@@ -93,6 +95,10 @@ const getUserRole = async () => {
   }
 };
 
+onMounted(() => {
+  getUserRole();
+});
+
 const handleSidebarItemClick = (item) => {
   if (isItemDisabled(item)) return;
 
@@ -124,8 +130,6 @@ const handleDropdownClick = (dropdownItem) => {
   currentPage.value = dropdownItem;
   emit("update:currentPage", dropdownItem);
 };
-
-const router = useRouter();
 
 const isItemDisabled = (item) => {
   return userRole.value === "moderator" && item !== "Profile" && item !== "Manage Content";
@@ -182,3 +186,11 @@ const dropdownItemsVisibility = computed(() => {
   return visibility;
 });
 </script>
+
+<style>
+.disabled-link {
+  pointer-events: none;
+  color: #504e4e;
+  text-decoration: none;
+}
+</style>

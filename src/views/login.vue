@@ -89,15 +89,14 @@ const signin = async () => {
       if (user.data().status === "active") {
         await updateDoc(doc(db, "users", user.id), { loggedIn: true });
 
-        if (user.data().userlevel === "administrator") {
+        if (user.data().userlevel === "administrator" || user.data().userlevel === "moderator") {
           router.push({ name: "adminDashboard", query: { userId: user.id } });
-        } else {
+        } else if (user.data().userlevel === "alumni") {
           router.push({
             name: "alumniDashboard",
             query: { userId: user.id, alumniId: user.data().alumnaID },
           });
         }
-
         console.log("Current URL:", window.location.href);
       } else {
         isLoading.value = false;

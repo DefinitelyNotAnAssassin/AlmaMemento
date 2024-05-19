@@ -23,9 +23,10 @@
                     style="height: 40px"
                     type="text"
                     class="form-control m-0 mx-1"
+                    v-model="message"
                     placeholder="Tell us about your school experiences..."
                   />
-                  <button class="btn btn-light" style="height: 40px">
+                  <button @click="saveStory" class="btn btn-light" style="height: 40px">
                     <i class="bi bi-plus"></i>
                   </button>
                 </div>
@@ -277,6 +278,7 @@
   const selectedSchoolYear = ref("");
   const selectedEvent = ref("");
   const caption = ref("");
+  const message = ref("");
   const selectedImages = ref([]);
   const progressBars = ref([]);
   const router = useRouter();
@@ -377,6 +379,35 @@
     await addDoc(collection(db, "notifications"), notification);
 
     closeImageModal();
+  }
+
+  async function saveStory() {
+    const userSnapshot = await getDocs(collection(db, "users"));
+    const userData = userSnapshot.docs
+      .find((doc) => doc.id === userId.value)
+      ?.data();
+    const userName = `${userData.lName}, ${userData.fName}`;
+
+    const post = {
+      userId: alumniId.value,
+      name: userName,
+      caption: message.value,
+      status: "pending",
+      history: [],
+    };
+    await addDoc(collection(db, "posts"), post);
+    message.value = '';
+
+    const notification = {
+      userId: alumniId.value,
+      name: userName,
+      time: new Date(),
+      date: new Date().toLocaleDateString(),
+      status: "unread",
+      for: "modandadmin",
+      type: "newpost",
+    };
+    await addDoc(collection(db, "notifications"), notification);
   }
 
   const approvedPosts = computed(() => {
