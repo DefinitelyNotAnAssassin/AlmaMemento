@@ -1,5 +1,5 @@
 <template>
-  <Loading />
+  <Loading v-if="isLoading" />
   <div class="main-container">
     <div
       class="login-container d-flex flex-column align-items-center justify-content-between"
@@ -65,11 +65,13 @@ import Loading from "./loading.vue";
 const alumniID = ref("");
 const password = ref("");
 const errMsg = ref("");
+var isLoading = false;
 
 const router = useRouter();
 
 const signin = async () => {
   try {
+    isLoading = true;
     console.log("Trying to sign in...");
 
     const q = query(
