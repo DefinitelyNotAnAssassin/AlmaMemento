@@ -8,7 +8,7 @@
           <div class="d-flex justify-content-center">
             <div
               class="background-color-brown card m-3 p-2 pb-5"
-              style="position: relative; width: 400px"
+              style="position: relative; width: 500px"
             >
               <div class="d-flex align-items-center">
                 <img
@@ -17,13 +17,12 @@
                     height: 40px !important;
                     width: 40px !important;
                     border-radius: 50%;
-                    margin-right: 10px;
                   "
                 />
                 <input
                   style="height: 40px"
                   type="text"
-                  class="form-control m-0"
+                  class="form-control m-0 mx-1"
                   placeholder="Tell us about your school experiences..."
                 />
                 <button class="btn btn-light" style="height: 40px">
