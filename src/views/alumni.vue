@@ -201,7 +201,7 @@
                 <a
                   href="#"
                   @click="toggleComments(post)"
-                  class="text-light"
+                  class="text-light mx-1"
                   style="text-decoration: none !important"
                 >
                   <i class="bi bi-chat"></i> Commentss
