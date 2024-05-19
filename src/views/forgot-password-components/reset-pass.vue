@@ -7,18 +7,20 @@
       />
       <h3>Reset Password</h3>
       <form @submit.prevent="checkId">
-        <div>
-          <label for="idNumber">ID Number</label>
+        <div class="mt-3">
           <input
             class="form-control"
             type="text"
             v-model="idNumber"
             id="idNumber"
+            placeholder="Enter ID Number"
             required
           />
         </div>
         <p class="text-danger" v-if="errorMessage">{{ errorMessage }}</p>
-        <button class="btn btn-danger" type="submit">Submit</button>
+        <div>
+          <button class="btn btn-danger" type="submit">Continue</button>
+        </div>
       </form>
     </div>
   </div>
