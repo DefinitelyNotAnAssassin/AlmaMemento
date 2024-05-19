@@ -22,7 +22,7 @@
         </div>
         <p class="text-danger" v-if="errorMessage">{{ errorMessage }}</p>
         <div>
-          <button class="btn btn-danger" type="submit">Continue</button>
+          <button class="btn btn-danger w-100" type="submit">Continue</button>
         </div>
       </form>
     </div>
