@@ -1,19 +1,29 @@
 <template>
-  <div class="loader"></div>
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
 </template>
 
 <script></script>
 
 <style scoped>
-.loader {
+.loader-container {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
   top: 0;
   left: 0;
+}
+
+.loader {
   border: 16px solid #f3f3f3;
   border-top: 16px solid #3498db;
   border-radius: 50%;
-  width: 100vw;
-  height: 100vh;
+  width: 50px;
+  height: 50px;
   animation: spin 2s linear infinite;
 }
 
