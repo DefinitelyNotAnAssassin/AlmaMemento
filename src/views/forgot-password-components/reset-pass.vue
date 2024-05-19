@@ -3,9 +3,9 @@
     <div class="d-flex flex-column align-items-center">
       <img
         src="../../assets/images/ctu-logo.png"
-        style="height: 60px; width: 60px"
+        style="height: 100px; width: 100px"
       />
-      <h3>Reset Password</h3>
+      <h3 class="mt-2">Reset Password</h3>
       <form @submit.prevent="checkId">
         <div class="mt-3">
           <input
