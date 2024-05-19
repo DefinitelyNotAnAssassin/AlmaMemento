@@ -16,11 +16,13 @@
   width: 100vw;
   top: 0;
   left: 0;
+  z-index: 10000000;
+  background-color: rgba(0, 0, 0, 0.268);
 }
 
 .loader {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #400;
   border-radius: 50%;
   width: 50px;
   height: 50px;
