@@ -26,7 +26,7 @@
                   placeholder="Tell us about your school experiences..."
                 />
                 <button class="btn btn-light" style="height: 40px">
-                  <i class="bi bi-plus"></i> Post
+                  <i class="bi bi-plus"></i>
                 </button>
               </div>
               <button
