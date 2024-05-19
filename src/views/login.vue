@@ -73,7 +73,7 @@ const signin = async () => {
   isLoading = true;
   try {
     console.log("Trying to sign in...");
-    console.log(isLoading);
+    console.log(isLoading + "---");
 
     const q = query(
       collection(db, "users"),
