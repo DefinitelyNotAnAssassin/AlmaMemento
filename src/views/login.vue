@@ -1,5 +1,5 @@
 <template>
-  <Loading v-if="isLoading" />
+  <Loading v-if="isLoading.value" />
   <div class="main-container">
     <div
       class="login-container d-flex flex-column align-items-center justify-content-between"
