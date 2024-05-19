@@ -131,89 +131,104 @@
           </div>
 
           <div
-    class="d-flex flex-column align-items-center"
-    style="height: calc(100vh - 130px); overflow-y: auto"
-  >
-    <div
-      style="width: 400px"
-      v-for="post in approvedPosts"
-      :key="post.id"
-      class="container card p-3 background-color-brown text-light my-2"
-    >
-      <h3>{{ post.name }}</h3>
-      <h5>{{ post.caption }}</h5>
-      <div
-        id="imageCarousel"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <!-- Carousel inner -->
-        <div class="carousel-inner">
-          <div
-            v-for="(imageUrl, index) in post.imageUrls"
-            :key="index"
-            class="carousel-item"
-            :class="{ active: index == 0 }"
+            class="d-flex flex-column align-items-center"
+            style="height: calc(100vh - 130px); overflow-y: auto"
           >
-            <img
-              :src="imageUrl"
-              class="d-block w-100"
-              alt="Image Preview"
-            />
+            <div
+              style="width: 400px"
+              v-for="post in approvedPosts"
+              :key="post.id"
+              class="container card p-3 background-color-brown text-light my-2"
+            >
+              <h3>{{ post.name }}</h3>
+              <h5>{{ post.caption }}</h5>
+              <div
+                id="imageCarousel"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <!-- Carousel inner -->
+                <div class="carousel-inner">
+                  <div
+                    v-for="(imageUrl, index) in post.imageUrls"
+                    :key="index"
+                    class="carousel-item"
+                    :class="{ active: index == 0 }"
+                  >
+                    <img
+                      :src="imageUrl"
+                      class="d-block w-100"
+                      alt="Image Preview"
+                    />
+                  </div>
+                </div>
+                <!-- Carousel controls -->
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+              <!-- Likes -->
+              <div class="d-flex align-items-center">
+                <button
+                  @click="incrementLikes(post)"
+                  class="btn btn-link text-light"
+                  style="text-decoration: none"
+                >
+                  <i class="bi bi-heart"></i> {{ post.likes }}
+                </button>
+                <button
+                  @click="toggleComments(post)"
+                  class="btn btn-link text-light"
+                  style="text-decoration: none"
+                >
+                  <i class="bi bi-chat"></i> Comments
+                </button>
+              </div>
+              <!-- Comments -->
+              <div v-if="!post.showComments">
+                <div v-if="post.latestComment" class="mt-3">
+                  <strong>{{ post.latestComment.user }}</strong
+                  >: {{ post.latestComment.text }}
+                </div>
+              </div>
+              <div v-if="post.showComments">
+                <div v-for="comment in post.comments" :key="comment.id">
+                  <strong>{{ comment.user }}</strong
+                  >: {{ comment.text }}
+                </div>
+                <input
+                  v-model="post.newComment"
+                  @keyup.enter="addComment(post)"
+                  type="text"
+                  placeholder="Add a comment..."
+                />
+              </div>
+              <hr class="pt-1" />
+              <p>{{ post.schoolYear }} - {{ post.event }}</p>
+              <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
+            </div>
           </div>
-        </div>
-        <!-- Carousel controls -->
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#imageCarousel"
-          data-bs-slide="prev"
-        >
-          <span
-            class="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#imageCarousel"
-          data-bs-slide="next"
-        >
-          <span
-            class="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
-      <!-- Likes -->
-      <div class="d-flex align-items-center">
-        <button @click="incrementLikes(post)" class="btn btn-link">
-          <i class="bi bi-heart"></i> {{ post.likes }}
-        </button>
-        <button @click="toggleComments(post)" class="btn btn-link">
-          <i class="bi bi-chat"></i> Comments
-        </button>
-      </div>
-      <!-- Comments -->
-      <div v-if="!post.showComments">
-        <div v-if="post.latestComment" class="mt-3">
-          <strong>{{ post.latestComment.user }}</strong>: {{ post.latestComment.text }}
-        </div>
-      </div>
-      <div v-if="post.showComments">
-        <div v-for="comment in post.comments" :key="comment.id">
-          <strong>{{ comment.user }}</strong>: {{ comment.text }}
-        </div>
-        <input v-model="post.newComment" @keyup.enter="addComment(post)" type="text" placeholder="Add a comment..." />
-      </div>
-      <hr class="pt-1" />
-      <p>{{ post.schoolYear }} - {{ post.event }}</p>
-      <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
-    </div>
-  </div>
         </div>
       </div>
     </div>
@@ -225,7 +240,15 @@ import { ref, onMounted, computed, watch } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
 import { db, storage } from "../firebase/index.js";
-import { collection, getDocs, addDoc, onSnapshot, doc, updateDoc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import {
   ref as storageRef,
   uploadBytesResumable,
@@ -384,18 +407,18 @@ onMounted(async () => {
   }));
 
   onSnapshot(collection(db, "posts"), (snapshot) => {
-    posts.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data()  }));
+    posts.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     approvedPosts.value = posts.value.filter(
       (post) => post.status === "approved"
     );
   });
 
-  posts.value.forEach(post => {
+  posts.value.forEach((post) => {
     post.comments = [];
     post.likes = 0;
     post.showComments = false;
     post.commentsLoaded = false;
-    post.newComment = '';
+    post.newComment = "";
   });
 });
 
@@ -405,7 +428,7 @@ async function incrementLikes(post) {
   try {
     const postRef = doc(db, "posts", post.id);
     await updateDoc(postRef, {
-      likes: post.likes
+      likes: post.likes,
     });
   } catch (error) {
     console.error("Error updating likes:", error);
@@ -435,10 +458,9 @@ async function loadComments(post) {
   }
 }
 
-
 // Function to add a comment to a post
 async function addComment(post) {
-  if (post.newComment.trim() === '') return;
+  if (post.newComment.trim() === "") return;
 
   const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
@@ -448,17 +470,19 @@ async function addComment(post) {
 
   const newComment = {
     user: userName,
-    text: post.newComment
+    text: post.newComment,
   };
 
   try {
     const postRef = doc(db, "posts", post.id);
-    const updatedComments = post.comments ? [...post.comments, newComment] : [newComment];
+    const updatedComments = post.comments
+      ? [...post.comments, newComment]
+      : [newComment];
     await updateDoc(postRef, {
       comments: updatedComments,
-      latestComment: newComment
+      latestComment: newComment,
     });
-    post.newComment = '';
+    post.newComment = "";
   } catch (error) {
     console.error("Error adding comment:", error);
   }
