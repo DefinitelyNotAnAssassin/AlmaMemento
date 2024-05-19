@@ -4,6 +4,10 @@
     style="height: 100vh"
   >
     <div class="d-flex flex-column align-items-center">
+      <img
+        src="../../assets/images/ctu-logo.png"
+        style="height: 200px; width: 200px"
+      />
       <h3>PLEASE VERIFY IF IT IS YOU</h3>
       <form @submit.prevent="checkEmail">
         <p>
