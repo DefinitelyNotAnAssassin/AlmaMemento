@@ -65,7 +65,7 @@ import Loading from "./loading.vue";
 const alumniID = ref("");
 const password = ref("");
 const errMsg = ref("");
-var isLoading = false;
+const isLoading = ref(false);
 
 const router = useRouter();
 
@@ -84,7 +84,6 @@ const signin = async () => {
     const user = querySnapshot.docs[0];
 
     if (user) {
-      isLoading = true;
       console.log("User found:", user.data());
 
       if (user.data().status === "active") {
