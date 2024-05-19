@@ -1,4 +1,5 @@
 <template>
+  <Loading v-if="isLoading" />
   <aside
     class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown"
   >
@@ -43,6 +44,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import Loading from "../loading.vue";
 
 const router = useRouter();
 
@@ -56,7 +58,10 @@ const userData = ref({
   photoURL: "",
 });
 
+const isLoading = ref(false);
+
 const logout = async () => {
+  isLoading.value = true;
   try {
     console.log("Logging out...");
 
@@ -80,10 +85,12 @@ const logout = async () => {
       console.log("Logout successful. Redirecting to login page...");
       console.log("Current URL:", window.location.href);
     } else {
+      isLoading.value = false;
       console.log("No logged in user found");
       errMsg.value = "No logged in user found";
     }
   } catch (error) {
+    isLoading.value = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   }
