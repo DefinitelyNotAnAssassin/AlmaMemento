@@ -1,6 +1,6 @@
 <template>
+  <h1 class="dashboard-title">Welcome Admin!</h1>
     <div class="cards-container">
-        <h1>Welcome Admin!</h1>
         <div class="card-one">
             <div class="top-content">
                 <img width="100" height="100" src="https://img.icons8.com/dusk/100/students.png" alt="students"/>
@@ -8,7 +8,7 @@
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Total Alumni</h3>
-                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToAlumni"></button>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToAlumni" style="background: none; border: none; margin-right: 10px;"></button>
             </div>
         </div>
         <div class="card-two">
@@ -18,7 +18,7 @@
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Contact Support</h3>
-                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToContact"></button>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToContact" style="background: none; border: none; margin-right: 10px;"></button>
             </div>
         </div>
         <div class="card-three">
@@ -27,9 +27,9 @@
                 <h1 class="text-white">7</h1>
             </div>
             <div class="bottom-content">
-                <h3 class="dashboard-bottom-title">Program & Block</h3>
+                <h3 class="dashboard-bottom-title">Total Moderators</h3>
                 <i class="fas fa-circle-right"></i>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                <i class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToModerators" style="background: none; border: none; margin-right: 10px;"></i>
             </div>
         </div>
         <div class="card-four">
@@ -40,7 +40,7 @@
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Pending for Approval</h3>
                 <i class="fas fa-circle-right"></i>
-                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToManageContent"></button>
+                <button class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToManageContent" style="background: none; border: none; margin-right: 10px;"></button>
             </div>
         </div>
     </div>
@@ -69,6 +69,11 @@ const goToManageContent = () => {
 const goToContact = () => {
   currentPage.value = "Contact";
   emit("update:currentPage", "Contact");
+};
+
+const goToModerators = () => {
+  currentPage.value = "Moderator";
+  emit("update:currentPage", "Moderator");
 };
 
 const fetchAlumniCount = async () => {

@@ -195,12 +195,14 @@ main {
 }
 
 /* cards */
-.cards-container {
-  width: 100%;
-}
-
-.cards-container h1 {
+.dashboard-title{
   margin: 1rem;
+}
+.cards-container {
+  width: 95%;
+  background-color: #d7dce1;
+  margin: 1rem;
+  border-radius: 10px;
 }
 
 .card-one,
@@ -214,19 +216,19 @@ main {
 }
 
 .card-one {
-  background-color: #44546a;
+  background-color: #ffc000;
 }
 
 .card-two {
-  background-color: #44546a;
+  background-color: #01a26c;
 }
 
 .card-three {
-  background-color: #44546a;
+  background-color: #0071c1;
 }
 
 .card-four {
-  background-color: #44546a;
+  background-color: #fe0000;
 }
 
 .top-content {
@@ -239,9 +241,24 @@ main {
   margin: auto;
 }
 
+.card-one .bottom-content{
+  background-color: #be9001;
+}
+
+.card-two .bottom-content{
+  background-color: #008101;
+}
+
+.card-three .bottom-content{
+  background-color: #2f5596;
+}
+
+.card-four .bottom-content{
+  background-color: #c10000;
+}
+
 .bottom-content {
   height: 20%;
-  background-color: #fff2cc;
   display: flex;
   justify-content: space-between;
   align-items: center;
