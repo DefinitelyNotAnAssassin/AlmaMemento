@@ -3,9 +3,8 @@
     <div class="user-profile mt-2">
       <div class="profile-pic-container">
         <img
+          style="border-radius: 50%; height: 100px; width: 100px"
           @click="openImageModal"
-          width="150"
-          height="150"
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
