@@ -29,7 +29,7 @@
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Total Moderators</h3>
                 <i class="fas fa-circle-right"></i>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToModerators" style="background: none; border: none; margin-right: 10px;"></i>
+                <i class="fa fa-arrow-circle-right" aria-hidden="true" @click="goToModerators" style="background: none; border: none; margin-right: 10px; cursor: pointer;"></i>
             </div>
         </div>
         <div class="card-four">
