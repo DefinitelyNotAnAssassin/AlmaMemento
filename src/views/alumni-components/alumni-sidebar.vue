@@ -133,8 +133,8 @@ aside {
 }
 
 aside img {
-  height: 120px;
-  widows: 120px;
+  height: 150px;
+  width: 150px;
   border-radius: 50%;
 }
 

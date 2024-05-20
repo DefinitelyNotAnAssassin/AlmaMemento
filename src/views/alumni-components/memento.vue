@@ -96,7 +96,7 @@
                   </div>
                 </div>
                 <div class="container mt-3">
-                  <button class="btn" @click="savePost">Post</button>
+                  <button class="btn-post" @click="savePost">Post</button>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@
               </div>
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
-              <p>Approved on: {{ getLatestApprovalDate(post) }}</p>
+              <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
             </div>
           </div>
         </div>
@@ -266,17 +266,30 @@ const approvedPosts = computed(() => {
     });
 });
 
-function getLatestApprovalDate(post) {
-  if (!post.history || post.history.length === 0) {
-    return "No approval date available";
+function formatApprovalDate(timestamp) {
+    if (!timestamp || !timestamp.seconds) {
+      return "Invalid timestamp";
+    }
+    const date = new Date(timestamp.seconds * 1000);
+    const month = date.toLocaleString('default', { month: 'short' });
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+    return `${month} ${day}, ${year}, ${time}`;
   }
 
-  const latestTime = post.history.reduce((latest, entry) => {
-    return entry.time > latest ? entry.time : latest;
-  }, post.history[0].time);
+  function getLatestApprovalDate(post) {
+    if (!post.history || post.history.length === 0) {
+      return "No approval date available";
+    }
 
-  return latestTime;
-}
+    const latestTime = post.history.reduce((latest, entry) => {
+      return entry.time > latest ? entry.time : latest;
+    }, post.history[0].time);
+
+    return latestTime;
+  }
 
 watch(approvedPosts, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
@@ -310,12 +323,13 @@ onMounted(async () => {
 .modal {
   display: flex;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -372,5 +386,17 @@ onMounted(async () => {
   height: auto;
   width: 100% !important;
   overflow-y: auto;
+}
+.btn-post{
+  background-color: #400;
+  color: #fff;
+  padding: 10px 15px 10px 15px;
+  border-radius: 15px;
+}
+.btn-post:hover{
+  background-color: #330303;
+  color: #fff;
+  padding: 10px 15px 10px 15px;
+  border-radius: 15px;
 }
 </style>
