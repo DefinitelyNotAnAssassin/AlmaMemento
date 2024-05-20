@@ -1,254 +1,230 @@
-  <template>
-    <div class="main">
-      <div class="container-fluid p-0">
-        <NavBar />
-        <div class="container-fluid p-0 d-flex">
-          <SideBar />
-          <div class="main-content">
-            <div class="d-flex justify-content-center">
-              <div
-                class="background-color-brown card m-3 p-2 pb-5"
-                style="position: relative; width: 500px"
+<template>
+  <div class="main">
+    <div class="container-fluid p-0">
+      <NavBar />
+      <div class="container-fluid p-0 d-flex">
+        <SideBar />
+        <div class="main-content">
+          <div class="d-flex justify-content-center">
+            <div
+              class="background-color-brown card m-3 p-2 pb-5"
+              style="position: relative; width: 500px"
+            >
+              <div class="d-flex align-items-center">
+                <img
+                  src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/441204475_122128868540246120_5470515469793099504_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEHdxMJCaCsLsFSM-wYtFe3XosaZDEWO_VeixpkMRY79TJ_9UeU8ZAtSnOblRBciZ_8Q9QicYbJldRWKiq41WfR&_nc_ohc=IbNiD3P1d_0Q7kNvgEA5qtT&_nc_ht=scontent.fmnl4-6.fna&oh=00_AYAJDf4u4ynNxOHDxctLsm2DsduxRh4zfnORs09d16hCmw&oe=664FB891"
+                  style="
+                    height: 40px !important;
+                    width: 40px !important;
+                    border-radius: 50%;
+                  "
+                />
+                <input
+                  style="height: 40px"
+                  type="text"
+                  class="form-control m-0 mx-1"
+                  v-model="message"
+                  placeholder="Tell us about your school experiences..."
+                />
+                <button @click="saveStory" class="btn btn-light" style="height: 40px">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+              <button
+                @click="showPostModal"
+                class="btn m-2 text-light"
+                style="position: absolute; bottom: 0; right: 0"
               >
-                <div class="d-flex align-items-center">
-                  <img
-                    src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/441204475_122128868540246120_5470515469793099504_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEHdxMJCaCsLsFSM-wYtFe3XosaZDEWO_VeixpkMRY79TJ_9UeU8ZAtSnOblRBciZ_8Q9QicYbJldRWKiq41WfR&_nc_ohc=IbNiD3P1d_0Q7kNvgEA5qtT&_nc_ht=scontent.fmnl4-6.fna&oh=00_AYAJDf4u4ynNxOHDxctLsm2DsduxRh4zfnORs09d16hCmw&oe=664FB891"
-                    style="
-                      height: 40px !important;
-                      width: 40px !important;
-                      border-radius: 50%;
-                    "
-                  />
-                  <input
-                    style="height: 40px"
-                    type="text"
-                    class="form-control m-0 mx-1"
-                    v-model="message"
-                    placeholder="Tell us about your school experiences..."
-                  />
-                  <button @click="saveStory" class="btn btn-light" style="height: 40px">
-                    <i class="bi bi-plus"></i>
-                  </button>
-                </div>
-                <button
-                  @click="showPostModal"
-                  class="btn m-2 text-light"
-                  style="position: absolute; bottom: 0; right: 0"
+                <i class="bi bi-card-image"></i> Photo
+              </button>
+            </div>
+          </div>
+          <div v-if="showModal" class="modal">
+            <div class="modal-content container">
+              <div
+                class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
+              >
+                <span>Select year and event to proceed</span>
+                <span class="close" @click="closeModal">&times;</span>
+              </div>
+              <div class="input-container mt-5 pt-5">
+                <label for="schoolYear">Year:</label>
+                <select
+                  id="schoolYear"
+                  v-model="selectedSchoolYear"
+                  class="form-control"
                 >
-                  <i class="bi bi-card-image"></i> Photo
+                  <option
+                    v-for="year in schoolYears"
+                    :key="year.id"
+                    :value="year.name"
+                  >
+                    {{ year.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="input-container mt-2">
+                <label for="event">Event:</label>
+                <select id="event" v-model="selectedEvent" class="form-control">
+                  <option
+                    v-for="event in events"
+                    :key="event.id"
+                    :value="event.name"
+                  >
+                    {{ event.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-secondary m-1" @click="closeModal">
+                  Cancel
+                </button>
+                <button class="btn btn-primary m-1" @click="continueModal">
+                  Continue
                 </button>
               </div>
             </div>
-            <div v-if="showModal" class="modal">
-              <div class="modal-content container">
-                <div
-                  class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
-                >
-                  <span>Select year and event to proceed</span>
-                  <span class="close" @click="closeModal">&times;</span>
-                </div>
-                <div class="input-container mt-5 pt-5">
-                  <label for="schoolYear">Year:</label>
-                  <select
-                    id="schoolYear"
-                    v-model="selectedSchoolYear"
-                    class="form-control"
-                  >
-                    <option
-                      v-for="year in schoolYears"
-                      :key="year.id"
-                      :value="year.name"
-                    >
-                      {{ year.name }}
-                    </option>
-                  </select>
-                </div>
-                <div class="input-container mt-2">
-                  <label for="event">Event:</label>
-                  <select id="event" v-model="selectedEvent" class="form-control">
-                    <option
-                      v-for="event in events"
-                      :key="event.id"
-                      :value="event.name"
-                    >
-                      {{ event.name }}
-                    </option>
-                  </select>
-                </div>
-                <div class="d-flex justify-content-end mt-3">
-                  <button class="btn btn-secondary m-1" @click="closeModal">
-                    Cancel
-                  </button>
-                  <button class="btn btn-primary m-1" @click="continueModal">
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </div>
+          </div>
 
-            <div v-if="showImageModal" class="modal">
-              <div class="modal-content">
-                <div
-                  class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
-                >
-                  <span>Username / Name Here</span>
-                  <span class="close" @click="closeImageModal">&times;</span>
-                </div>
-                <div class="d-flex flex-column justify-content-between">
-                  <div class="modal-main-content-container">
-                    <textarea
-                      class="form-control mt-2"
-                      v-model="caption"
-                      placeholder="Enter caption"
-                    ></textarea>
-                    <input
-                      class="form-control mt-2"
-                      type="file"
-                      multiple
-                      @change="uploadImages"
-                    />
+          <div v-if="showImageModal" class="modal">
+            <div class="modal-content">
+              <div
+                class="modal-header d-flex justify-content-between align-items-center text-light background-color-brown"
+              >
+                <span>Username / Name Here</span>
+                <span class="close" @click="closeImageModal">&times;</span>
+              </div>
+              <div class="d-flex flex-column justify-content-between">
+                <div class="modal-main-content-container">
+                  <textarea
+                    class="form-control mt-2"
+                    v-model="caption"
+                    placeholder="Enter caption"
+                  ></textarea>
+                  <input
+                    class="form-control mt-2"
+                    type="file"
+                    multiple
+                    @change="uploadImages"
+                  />
+                  <div
+                    v-for="(progress, index) in progressBars"
+                    :key="index"
+                    class="progress mt-2"
+                  >
                     <div
-                      v-for="(progress, index) in progressBars"
-                      :key="index"
-                      class="progress mt-2"
+                      class="progress-bar"
+                      role="progressbar"
+                      :style="{ width: progress + '%' }"
+                      :aria-valuenow="progress"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
                     >
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        :style="{ width: progress + '%' }"
-                        :aria-valuenow="progress"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      >
-                        {{ progress }}%
-                      </div>
+                      {{ progress }}%
                     </div>
                   </div>
-                  <div class="container mt-3">
-                    <button class="btn" @click="savePost">Post</button>
-                  </div>
+                </div>
+                <div class="container mt-3">
+                  <button class="btn" @click="savePost">Post</button>
                 </div>
               </div>
             </div>
+          </div>
 
+          <div
+            class="d-flex flex-column align-items-center"
+            style="height: calc(100vh - 130px); overflow-y: auto"
+          >
             <div
-              class="d-flex flex-column align-items-center"
-              style="height: calc(100vh - 130px); overflow-y: auto"
+              style="width: 400px"
+              v-for="post in approvedPosts"
+              :key="post.id"
+              class="container card p-3 background-color-brown text-light my-2"
             >
-              <div
-                style="width: 400px"
-                v-for="post in approvedPosts"
-                :key="post.id"
-                class="container card p-3 background-color-brown text-light my-2"
-              >
-                <h3>{{ post.name }}</h3>
-                <h5>{{ post.caption }}</h5>
-                <div
-    v-if="post.imageUrls.length > 1"
-    id="imageCarousel"
-    class="carousel slide"
-    data-bs-ride="carousel"
-  >
-    <!-- Carousel inner -->
-    <div class="carousel-inner">
-      <div
-        v-for="(imageUrl, index) in post.imageUrls"
-        :key="index"
-        class="carousel-item"
-        :class="{ active: index == 0 }"
-      >
-        <img
-          :src="imageUrl"
-          class="d-block w-100"
-          alt="Image Preview"
-        />
-      </div>
+              <h3>{{ post.name }}</h3>
+              <h5>{{ post.caption }}</h5>
+<div v-if="post.imageUrls && post.imageUrls.length > 0" id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div
+      v-for="(imageUrl, index) in post.imageUrls"
+      :key="index"
+      class="carousel-item"
+      :class="{ active: index == 0 }"
+    >
+      <img :src="imageUrl" class="d-block w-100" alt="Image Preview" />
     </div>
-    <!-- Carousel controls -->
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#imageCarousel"
-      data-bs-slide="prev"
-    >
-      <span
-        class="carousel-control-prev-icon"
-        aria-hidden="true"
-      ></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#imageCarousel"
-      data-bs-slide="next"
-    >
-      <span
-        class="carousel-control-next-icon"
-        aria-hidden="true"
-      ></span>
-      <span class="visually-hidden">Next</span>
-    </button>
   </div>
-  <div
-    v-else
-    class="image-container"
+  <button
+    v-if="post.imageUrls.length > 1"
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#imageCarousel"
+    data-bs-slide="prev"
   >
-    <img
-      v-if="post.imageUrls.length === 1"
-      :src="post.imageUrls[0]"
-      class="d-block w-100 h-100  "
-      alt="Image Preview"
-    />
-  </div>
-                <!-- Likes -->
-                <div class="d-flex align-items-center mt-2">
-                  <a
-                    href="#"
-                    @click="incrementLikes(post)"
-                    class="text-light"
-                    style="text-decoration: none !important"
-                  >
-                    <i class="bi bi-heart"></i> {{ post.likes }}
-                  </a>
-                  <a
-                    href="#"
-                    @click="toggleComments(post)"
-                    class="text-light mx-2"
-                    style="text-decoration: none !important"
-                  >
-                    <i class="bi bi-chat"></i> Comments
-                  </a>
-                </div>
-                <!-- Comments -->
-                <div v-if="!post.showComments">
-                  <div v-if="post.latestComment" class="mt-3">
-                    <strong>{{ post.latestComment.user }}</strong
-                    >: {{ post.latestComment.text }}
-                  </div>
-                </div>
-                <div v-if="post.showComments">
-                  <div v-for="comment in post.comments" :key="comment.id">
-                    <strong>{{ comment.user }}</strong
-                    >: {{ comment.text }}
-                  </div>
-                  <input
-                    v-model="post.newComment"
-                    @keyup.enter="addComment(post)"
-                    type="text"
-                    placeholder="Add a comment..."
-                  />
-                </div>
-                <hr class="pt-1" />
-                <p>{{ post.schoolYear }} - {{ post.event }}</p>
-                <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    v-if="post.imageUrls.length > 1"
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#imageCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<div v-else>No images available</div>
+
+              <!-- Likes -->
+              <div class="d-flex align-items-center mt-2">
+                <a
+                  href="#"
+                  @click="incrementLikes(post)"
+                  class="text-light"
+                  style="text-decoration: none !important"
+                >
+                  <i class="bi bi-heart"></i> {{ post.likes }}
+                </a>
+                <a
+                  href="#"
+                  @click="toggleComments(post)"
+                  class="text-light mx-2"
+                  style="text-decoration: none !important"
+                >
+                  <i class="bi bi-chat"></i> Comments
+                </a>
               </div>
+              <!-- Comments -->
+              <div v-if="!post.showComments">
+                <div v-if="post.latestComment" class="mt-3">
+                  <strong>{{ post.latestComment.user }}</strong
+                  >: {{ post.latestComment.text }}
+                </div>
+              </div>
+              <div v-if="post.showComments">
+                <div v-for="comment in post.comments" :key="comment.id">
+                  <strong>{{ comment.user }}</strong
+                  >: {{ comment.text }}
+                </div>
+                <input
+                  v-model="post.newComment"
+                  @keyup.enter="addComment(post)"
+                  type="text"
+                  placeholder="Add a comment..."
+                />
+              </div>
+              <hr class="pt-1" />
+              <p>{{ post.schoolYear }} - {{ post.event }}</p>
+              <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
   <script setup>
   import { ref, onMounted, computed, watch } from "vue";
