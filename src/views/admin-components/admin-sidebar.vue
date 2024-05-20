@@ -1,18 +1,34 @@
 <template>
+  <Loading v-if="isLoading" />
   <aside class="sidebar">
-    <div v-if="isLoading" class="modal">
+    <!-- <div v-if="isLoading" class="modal">
       <div class="modal-background"></div>
       <div class="modal-content">
         <div class="box">
-          <progress class="progress is-primary" :value="loadingProgress" max="100">{{ loadingProgress }}%</progress>
+          <progress
+            class="progress is-primary"
+            :value="loadingProgress"
+            max="100"
+          >
+            {{ loadingProgress }}%
+          </progress>
           <p>Logging out...</p>
         </div>
       </div>
-    </div>
+    </div> -->
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
-      <li class="mt-1" v-for="(item, index) in sidebarItems" :key="index" :class="{ disabled: isItemDisabled(item) }">
-        <a @click="handleSidebarItemClick(item)" :class="{ 'disabled-link': isItemDisabled(item) }" :disabled="isItemDisabled(item)">
+      <li
+        class="mt-1"
+        v-for="(item, index) in sidebarItems"
+        :key="index"
+        :class="{ disabled: isItemDisabled(item) }"
+      >
+        <a
+          @click="handleSidebarItemClick(item)"
+          :class="{ 'disabled-link': isItemDisabled(item) }"
+          :disabled="isItemDisabled(item)"
+        >
           <i :class="sideBarItemsIcons[index]"></i> {{ item }}
           <span
             v-if="item === 'Manage Users' || item === 'Yearbook'"
@@ -47,7 +63,14 @@
 import { ref, computed, reactive, defineEmits, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "../../firebase/index.js";
-import { collection, getDocs, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import Loading from "../loading.vue";
 
 const currentPage = ref("Dashboard");
 const isLoading = ref(false);
@@ -55,6 +78,7 @@ const loadingProgress = ref(0);
 const userRole = ref(null);
 const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
+const isLoading = ref(false);
 
 const sideBarItemsIcons = [
   "bi bi-speedometer2",
@@ -83,6 +107,7 @@ const dropdownItemsVisible = reactive({
 const emit = defineEmits(["update:currentPage"]);
 
 const getUserRole = async () => {
+  isLoading.value = true;
   try {
     const userDoc = await getDoc(doc(db, "users", userId.value));
     if (userDoc.exists()) {
@@ -91,6 +116,7 @@ const getUserRole = async () => {
       console.log("No such document!");
     }
   } catch (error) {
+    isLoading.value = false;
     console.error("Error fetching user role:", error);
   }
 };
@@ -132,14 +158,18 @@ const handleDropdownClick = (dropdownItem) => {
 };
 
 const isItemDisabled = (item) => {
-  return userRole.value === "moderator" && item !== "Profile" && item !== "Manage Content";
+  return (
+    userRole.value === "moderator" &&
+    item !== "Profile" &&
+    item !== "Manage Content"
+  );
 };
 
 const logout = async () => {
   try {
     isLoading.value = true;
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     loadingProgress.value = 25;
 
     const q = collection(db, "users");
