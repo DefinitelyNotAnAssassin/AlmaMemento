@@ -16,10 +16,7 @@
         >
           <div
             class="d-flex align-items-center"
-            style="
-              position: absolute;
-              top: -75px;
-            "
+            style="position: absolute; top: -75px"
           >
             <div>
               <img
@@ -37,7 +34,7 @@
             </div>
           </div>
 
-          <div>
+          <div style="margin-top: 90px">
             <h5>Personal Information</h5>
             <table>
               <tr>
