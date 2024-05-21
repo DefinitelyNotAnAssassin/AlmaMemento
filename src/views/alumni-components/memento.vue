@@ -23,17 +23,13 @@
               background-color: red;
             "
           >
-            <div class="profile-container" style="position: relative">
+            <div class="profile-container">
               <img
                 style="height: 150px; width: 150px; border-radius: 50%"
                 src="https://scontent.fmnl4-7.fna.fbcdn.net/v/t39.30808-6/444788838_122111548694306247_2658197019216045247_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE0sCQLtuCTWRmVqCfywHcg0SWGNPkX7-nRJYY0-Rfv6TFGevTnotrWrky46BorddQx3G3TPxizDIaFJ-7C14xZ&_nc_ohc=k-I6VxJucpUQ7kNvgEQUeO1&_nc_oc=AdgLmfwlw7Hl6zYtfQ9nP1miYffN2ejZ5atev0euv6NZk5FX2BmJLH-iuWPbld3WLBY&_nc_ht=scontent.fmnl4-7.fna&oh=00_AYAA_HZ0Oe97adcb4KPUXbtg8IULDPszvpvzWd5HeNmFZg&oe=6652E773"
                 alt="profile"
               />
-              <button
-                type="button"
-                class="btn btn-sm"
-                style="position: absolute; bottom: 10px; right: 10px"
-              >
+              <button type="button" class="btn btn-sm">
                 <i class="bi bi-camera"></i>
               </button>
             </div>
