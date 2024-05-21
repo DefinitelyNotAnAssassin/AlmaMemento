@@ -16,10 +16,7 @@
         >
           <div
             class="d-flex align-items-center"
-            style="
-              position: absolute;
-              top: 0;
-            "
+            style="position: absolute; top: 0; transform: translateY(-70px)"
           >
             <div>
               <img
