@@ -457,5 +457,6 @@ onMounted(async () => {
 .memento-sidebar {
   border-right: 5px solid #330303;
   height: calc(100vh - 300px);
+  width: 400px;
 }
 </style>
