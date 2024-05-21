@@ -33,7 +33,7 @@
           />
           <button
             type="button"
-            class="btn"
+            class="btn mt-1"
             style="position: absolute; right: 0"
             @click="showPw()"
           >
