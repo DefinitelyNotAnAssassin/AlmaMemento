@@ -6,7 +6,7 @@
         <img
           src="../../assets/images/memento-bg.png"
           alt="Memento"
-          style="width: 100vw; height: 200px"
+          style="width: 100vw; height: 300px"
         />
       </div>
       <div class="container-fluid p-0 d-flex">
