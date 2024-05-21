@@ -2,8 +2,14 @@
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
+      <div
+        style="
+          height: 200px;
+          width: 100vw;
+          background-image: url('../../assets/images/memento-bg.png');
+        "
+      ></div>
       <div class="container-fluid p-0 d-flex">
-        <SideBar />
         <div class="main-content">
           <p>
             <button @click="showPostModal" class="btn btn-dark m-2">
@@ -132,7 +138,10 @@
               </div>
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
-              <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
+              <p>
+                Approved on:
+                {{ formatApprovalDate(getLatestApprovalDate(post)) }}
+              </p>
             </div>
           </div>
         </div>
@@ -247,7 +256,7 @@ async function savePost() {
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",
-    for: "administrator"
+    for: "administrator",
   };
   await addDoc(collection(db, "notifications"), notification);
 
@@ -256,7 +265,9 @@ async function savePost() {
 
 const approvedPosts = computed(() => {
   return posts.value
-    .filter((post) => post.status === "approved" && post.userId === alumniId.value)
+    .filter(
+      (post) => post.status === "approved" && post.userId === alumniId.value
+    )
     .sort((a, b) => {
       const aLatestTime = a.history.reduce(
         (latest, entry) => (entry.time > latest ? entry.time : latest),
@@ -267,29 +278,33 @@ const approvedPosts = computed(() => {
 });
 
 function formatApprovalDate(timestamp) {
-    if (!timestamp || !timestamp.seconds) {
-      return "Invalid timestamp";
-    }
-    const date = new Date(timestamp.seconds * 1000);
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+  if (!timestamp || !timestamp.seconds) {
+    return "Invalid timestamp";
+  }
+  const date = new Date(timestamp.seconds * 1000);
+  const month = date.toLocaleString("default", { month: "short" });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const time = date.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
 
-    return `${month} ${day}, ${year}, ${time}`;
+  return `${month} ${day}, ${year}, ${time}`;
+}
+
+function getLatestApprovalDate(post) {
+  if (!post.history || post.history.length === 0) {
+    return "No approval date available";
   }
 
-  function getLatestApprovalDate(post) {
-    if (!post.history || post.history.length === 0) {
-      return "No approval date available";
-    }
+  const latestTime = post.history.reduce((latest, entry) => {
+    return entry.time > latest ? entry.time : latest;
+  }, post.history[0].time);
 
-    const latestTime = post.history.reduce((latest, entry) => {
-      return entry.time > latest ? entry.time : latest;
-    }, post.history[0].time);
-
-    return latestTime;
-  }
+  return latestTime;
+}
 
 watch(approvedPosts, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
@@ -387,13 +402,13 @@ onMounted(async () => {
   width: 100% !important;
   overflow-y: auto;
 }
-.btn-post{
+.btn-post {
   background-color: #400;
   color: #fff;
   padding: 10px 15px 10px 15px;
   border-radius: 15px;
 }
-.btn-post:hover{
+.btn-post:hover {
   background-color: #330303;
   color: #fff;
   padding: 10px 15px 10px 15px;
