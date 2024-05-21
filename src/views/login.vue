@@ -12,22 +12,36 @@
             style="width: 250px; height: 250px"
           />
         </div>
-        <input
-          type="text"
-          id="alumniID"
-          name="alumniID"
-          v-model="alumniID"
-          required
-          placeholder="Alumni ID"
-        />
-        <input
-          type="password"
-          id="password"
-          name="password"
-          v-model="password"
-          required
-          placeholder="Password"
-        />
+        <div>
+          <input
+            type="text"
+            id="alumniID"
+            name="alumniID"
+            v-model="alumniID"
+            required
+            placeholder="Alumni ID"
+          />
+        </div>
+        <div style="position: relative">
+          <input
+            :type="isPwVisible ? 'text' : 'password'"
+            id="password"
+            name="password"
+            v-model="password"
+            required
+            placeholder="Password"
+          />
+          <button
+            style="position: absolute; right: 0"
+            class="btn"
+            @click="showPw()"
+          >
+            <i
+              class="bi"
+              :class="isPwVisible ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+            ></i>
+          </button>
+        </div>
         <p v-if="errMsg">{{ errMsg }}</p>
         <button type="submit">Login</button>
         <div>
@@ -66,6 +80,7 @@ const alumniID = ref("");
 const password = ref("");
 const errMsg = ref("");
 const isLoading = ref(false);
+const isPwVisible = ref(false);
 
 const router = useRouter();
 
@@ -89,7 +104,10 @@ const signin = async () => {
       if (user.data().status === "active") {
         await updateDoc(doc(db, "users", user.id), { loggedIn: true });
 
-        if (user.data().userlevel === "administrator" || user.data().userlevel === "moderator") {
+        if (
+          user.data().userlevel === "administrator" ||
+          user.data().userlevel === "moderator"
+        ) {
           router.push({ name: "adminDashboard", query: { userId: user.id } });
         } else if (user.data().userlevel === "alumni") {
           router.push({
@@ -113,5 +131,9 @@ const signin = async () => {
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   }
+};
+
+const showPw = () => {
+  isPwVisible.value = !isPwVisible.value;
 };
 </script>
