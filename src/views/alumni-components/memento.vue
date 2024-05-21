@@ -15,13 +15,8 @@
           style="position: relative"
         >
           <div
-            class="d-flex"
-            style="
-              position: absolute;
-              top: 0;
-              background-color: red;
-              height: 150px;
-            "
+            class="d-flex align-items-center"
+            style="position: absolute; top: -75px; height: 150px"
           >
             <div class="profile-container" style="position: relative">
               <img
@@ -37,7 +32,7 @@
                 <i class="bi bi-camera"></i>
               </button>
             </div>
-            <div>
+            <div style="margin-left: 20px">
               <h4>Miles Morales</h4>
               <h6>UI / UX</h6>
             </div>
