@@ -43,7 +43,7 @@
           </button>
         </div>
         <p v-if="errMsg">{{ errMsg }}</p>
-        <button type="submit">Login</button>
+        <button type="submit" class="btn-login">Login</button>
         <div>
           <router-link to="/forgotPassword" class="forgot-password-link"
             >Forgot Password?</router-link

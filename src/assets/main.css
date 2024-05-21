@@ -50,7 +50,7 @@ table {
   width: 100%;
 }
 
-.login-container form button {
+.btn-login {
   margin-top: 10px;
   background-color: #400;
   padding: 10px;
@@ -195,7 +195,7 @@ main {
 }
 
 /* cards */
-.dashboard-title{
+.dashboard-title {
   margin: 1rem;
 }
 .cards-container {
@@ -241,19 +241,19 @@ main {
   margin: auto;
 }
 
-.card-one .bottom-content{
+.card-one .bottom-content {
   background-color: #be9001;
 }
 
-.card-two .bottom-content{
+.card-two .bottom-content {
   background-color: #008101;
 }
 
-.card-three .bottom-content{
+.card-three .bottom-content {
   background-color: #2f5596;
 }
 
-.card-four .bottom-content{
+.card-four .bottom-content {
   background-color: #c10000;
 }
 
