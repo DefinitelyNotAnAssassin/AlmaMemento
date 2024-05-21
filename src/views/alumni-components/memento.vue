@@ -16,7 +16,7 @@
         >
           <div
             class="d-flex align-items-center"
-            style="position: absolute; top: -75px; height: 150px"
+            style="position: absolute; top: 0; height: 150px"
           >
             <div class="profile-container" style="position: relative">
               <img
