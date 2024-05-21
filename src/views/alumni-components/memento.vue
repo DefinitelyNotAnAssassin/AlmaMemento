@@ -2,15 +2,9 @@
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
-      <div
-        :style="{
-          height: '200px',
-          width: '100vw',
-          backgroundImage: `url(${require('../../assets/images/memento-bg.png')})`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }"
-      ></div>
+      <div>
+        <img src="../../assets/images/memento-bg.png" alt="Memento" />
+      </div>
       <div class="container-fluid p-0 d-flex">
         <div class="main-content">
           <p>
