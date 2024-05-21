@@ -45,7 +45,7 @@
               <td>2023 - 2024</td>
             </tr>
           </table>
-          <button class="btn btn-sm background-color-brown">
+          <button class="btn btn-sm text-light background-color-brown">
             Change Password
           </button>
         </div>
@@ -452,5 +452,9 @@ onMounted(async () => {
   color: #fff;
   padding: 10px 15px 10px 15px;
   border-radius: 15px;
+}
+
+.memento-sidebar {
+  border-right: 5px solid #330303;
 }
 </style>
