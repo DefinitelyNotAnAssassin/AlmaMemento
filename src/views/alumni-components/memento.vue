@@ -10,44 +10,46 @@
         />
       </div>
       <div class="container-fluid p-0 d-flex">
-        <div class="memento-sidebar">
-          <h5>Personal Information</h5>
-          <table>
-            <tr>
-              <td>ID number:</td>
-              <td>123</td>
-            </tr>
-            <tr>
-              <td>Phone:</td>
-              <td>0912332</td>
-            </tr>
-            <tr>
-              <td>Address:</td>
-              <td>asdakjhd</td>
-            </tr>
-            <tr>
-              <td>Email:</td>
-              <td>emman@gmail.com</td>
-            </tr>
-          </table>
-          <h5>Academic Background:</h5>
-          <table>
-            <tr>
-              <td>Program & Block:</td>
-              <td>BSIT - Block A</td>
-            </tr>
-            <tr>
-              <td>Major:</td>
-              <td>N/A</td>
-            </tr>
-            <tr>
-              <td>Class Year:</td>
-              <td>2023 - 2024</td>
-            </tr>
-          </table>
-          <button class="btn btn-sm text-light background-color-brown">
-            Change Password
-          </button>
+        <div class="memento-sidebar d-flex justify-content-center">
+          <div>
+            <h5>Personal Information</h5>
+            <table>
+              <tr>
+                <td>ID number:</td>
+                <td>123</td>
+              </tr>
+              <tr>
+                <td>Phone:</td>
+                <td>0912332</td>
+              </tr>
+              <tr>
+                <td>Address:</td>
+                <td>asdakjhd</td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>emman@gmail.com</td>
+              </tr>
+            </table>
+            <h5>Academic Background:</h5>
+            <table>
+              <tr>
+                <td>Program & Block:</td>
+                <td>BSIT - Block A</td>
+              </tr>
+              <tr>
+                <td>Major:</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Class Year:</td>
+                <td>2023 - 2024</td>
+              </tr>
+            </table>
+            <button class="btn btn-sm text-light background-color-brown">
+              Change Password
+            </button>
+          </div>
         </div>
         <div class="main-content">
           <p>
