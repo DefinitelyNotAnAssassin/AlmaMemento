@@ -14,6 +14,7 @@
           class="memento-sidebar d-flex justify-content-center"
           style="position: relative"
         >
+
           <div
             class="d-flex align-items-center"
             style="
@@ -38,6 +39,7 @@
               <h6>UI / UX</h6>
             </div>
           </div>
+          
           <div>
             <h5>Personal Information</h5>
             <table>
