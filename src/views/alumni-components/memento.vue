@@ -19,7 +19,6 @@
             style="
               position: absolute;
               top: 0;
-              background-color: red;
             "
           >
             <div>
