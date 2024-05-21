@@ -19,7 +19,6 @@
             style="
               position: absolute;
               top: 0;
-              height: 150px;
               background-color: red;
             "
           >
