@@ -8,7 +8,9 @@
           width: 100vw;
           background-image: url('../../assets/images/memento-bg.png');
         "
-      ></div>
+      >
+        asd
+      </div>
       <div class="container-fluid p-0 d-flex">
         <div class="main-content">
           <p>
