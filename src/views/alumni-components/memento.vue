@@ -18,7 +18,7 @@
             class="d-flex align-items-center"
             style="
               position: absolute;
-              top: -20px;
+              top: -70px;
             "
           >
             <div>
