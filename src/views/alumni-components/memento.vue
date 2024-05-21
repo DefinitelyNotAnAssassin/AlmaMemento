@@ -55,7 +55,7 @@
                 <td>emman@gmail.com</td>
               </tr>
             </table>
-            <h5>Academic Background:</h5>
+            <h5 class="mt-2">Academic Background:</h5>
             <table>
               <tr>
                 <td>Program & Block:</td>
