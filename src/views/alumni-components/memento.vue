@@ -3,7 +3,11 @@
     <div class="container-fluid p-0">
       <NavBar />
       <div>
-        <img src="../../assets/images/memento-bg.png" alt="Memento" />
+        <img
+          src="../../assets/images/memento-bg.png"
+          alt="Memento"
+          style="width: 100vw"
+        />
       </div>
       <div class="container-fluid p-0 d-flex">
         <div class="main-content">
