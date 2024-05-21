@@ -16,7 +16,7 @@
         >
           <div
             class="d-flex align-items-center"
-            style="position: absolute; top: -80px"
+            style="position: absolute; top: -83px"
           >
             <div>
               <img
