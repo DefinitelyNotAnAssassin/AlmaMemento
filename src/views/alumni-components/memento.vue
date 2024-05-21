@@ -20,7 +20,6 @@
               position: absolute;
               top: 0;
               transform: translateY(150px);
-              background-color: red;
             "
           >
             <div>
