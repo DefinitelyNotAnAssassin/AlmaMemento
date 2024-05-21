@@ -18,8 +18,7 @@
             class="d-flex align-items-center"
             style="
               position: absolute;
-              top: 0;
-              transform: translateY(150px);
+              top: -20px;
             "
           >
             <div>
