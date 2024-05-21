@@ -1,21 +1,6 @@
 <template>
   <Loading v-if="isLoading" />
   <aside class="sidebar">
-    <!-- <div v-if="isLoading" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div class="box">
-          <progress
-            class="progress is-primary"
-            :value="loadingProgress"
-            max="100"
-          >
-            {{ loadingProgress }}%
-          </progress>
-          <p>Logging out...</p>
-        </div>
-      </div>
-    </div> -->
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
       <li
@@ -73,7 +58,6 @@ import {
 import Loading from "../loading.vue";
 
 const currentPage = ref("Dashboard");
-const isLoading = ref(false);
 const loadingProgress = ref(0);
 const userRole = ref(null);
 const router = useRouter();
@@ -107,7 +91,6 @@ const dropdownItemsVisible = reactive({
 const emit = defineEmits(["update:currentPage"]);
 
 const getUserRole = async () => {
-  isLoading.value = true;
   try {
     const userDoc = await getDoc(doc(db, "users", userId.value));
     if (userDoc.exists()) {
@@ -116,7 +99,6 @@ const getUserRole = async () => {
       console.log("No such document!");
     }
   } catch (error) {
-    isLoading.value = false;
     console.error("Error fetching user role:", error);
   }
 };

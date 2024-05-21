@@ -1,19 +1,17 @@
 <template>
   <div>
-    <router-view v-if="!isLoading"></router-view>
-    <div v-else>Loading...</div>
+    <router-view v-if="!isLoading" />
+    <Loading v-else />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import Loading from './views/loading.vue';
 
 const isLoading = ref(true);
-const router = useRouter();
 
 onMounted(() => {
   isLoading.value = false;
-  router.push({ name: 'login' });
 });
 </script>

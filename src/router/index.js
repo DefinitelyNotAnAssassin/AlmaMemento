@@ -8,6 +8,7 @@ import memento from '../views/alumni-components/memento.vue'
 import contact from '../views/alumni-components/contact.vue'
 import modDashboard from '../views/mod.vue'
 import forgotPassword from '../views/forgot-password.vue'
+import { useAuth } from '../composables/useAuth';
 
 const routes = [
   { path: '/', component: Home,  name: 'home' },
@@ -24,6 +25,21 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const { isAuthenticated, checkAuth } = useAuth();
+  checkAuth();
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated.value) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 export default router
