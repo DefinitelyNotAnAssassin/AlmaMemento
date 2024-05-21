@@ -32,8 +32,7 @@
             placeholder="Password"
           />
           <button
-            style="position: absolute; right: 0"
-            class="btn"
+            style="position: absolute; right: 0; width: 30px; height: 30px"
             @click="showPw()"
           >
             <i
