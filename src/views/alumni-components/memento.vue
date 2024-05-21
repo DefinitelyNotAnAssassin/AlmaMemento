@@ -14,7 +14,15 @@
           class="memento-sidebar d-flex justify-content-center"
           style="position: relative"
         >
-          <div style="position: absolute; top: 0; background-color: red">
+          <div
+            class="d-flex"
+            style="
+              position: absolute;
+              top: 0;
+              background-color: red;
+              height: 150px;
+            "
+          >
             <div class="profile-container" style="position: relative">
               <img
                 style="height: 150px; width: 150px; border-radius: 50%"
