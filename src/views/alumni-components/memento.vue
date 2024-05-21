@@ -16,7 +16,7 @@
         >
           <div
             class="d-flex align-items-center"
-            style="position: absolute; top: -75px"
+            style="position: absolute; top: -50px"
           >
             <div>
               <img
@@ -31,6 +31,7 @@
             <div style="margin-left: 20px">
               <h4>Miles Morales</h4>
               <h6>UI / UX</h6>
+              <button class="btn btn-sm btn-success">Edit Profile</button>
             </div>
           </div>
 
