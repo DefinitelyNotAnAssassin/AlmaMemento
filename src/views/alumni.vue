@@ -384,7 +384,7 @@ async function saveStory() {
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
     ?.data();
-  const userName = `${userData.lName}, ${userData.fName}`;
+  const userName = `${userData.fName} ${userData.lName}`;
 
   const post = {
     userId: alumniId.value,
