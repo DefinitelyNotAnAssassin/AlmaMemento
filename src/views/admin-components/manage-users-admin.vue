@@ -143,7 +143,7 @@
               </div>
             </div>
             <div class="mx-1">
-              <div>
+              <!---<div>
                 <label for="alumna_password">Password</label>
                 <input
                   class="form-control"
@@ -153,7 +153,7 @@
                   v-model="alumna_password"
                   placeholder="Password"
                 />
-              </div>
+              </div>-->
               <div>
                 <label for="phone">Phone</label>
                 <input
@@ -320,6 +320,10 @@ const address = ref("");
 const yearAppointed = ref(new Date().getFullYear().toString());
 const selectAllChecked = ref(false);
 const searchQuery = ref("");
+
+const lastName = lName.value;
+const last4Digits = alumnaID.value.slice(-4);
+const alumna_password = `${lastName}${last4Digits}`;
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
