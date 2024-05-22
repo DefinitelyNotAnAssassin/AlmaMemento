@@ -12,24 +12,39 @@
             style="width: 250px; height: 250px"
           />
         </div>
-        <input
-          type="text"
-          id="alumniID"
-          name="alumniID"
-          v-model="alumniID"
-          required
-          placeholder="Alumni ID"
-        />
-        <input
-          type="password"
-          id="password"
-          name="password"
-          v-model="password"
-          required
-          placeholder="Password"
-        />
+        <div>
+          <input
+            type="text"
+            id="alumniID"
+            name="alumniID"
+            v-model="alumniID"
+            required
+            placeholder="Alumni ID"
+          />
+        </div>
+        <div style="position: relative">
+          <input
+            :type="isPwVisible ? 'text' : 'password'"
+            id="password"
+            name="password"
+            v-model="password"
+            required
+            placeholder="Password"
+          />
+          <button
+            type="button"
+            class="btn mt-1"
+            style="position: absolute; right: 0"
+            @click="showPw()"
+          >
+            <i
+              class="bi"
+              :class="isPwVisible ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+            ></i>
+          </button>
+        </div>
         <p v-if="errMsg">{{ errMsg }}</p>
-        <button type="submit">Login</button>
+        <button type="submit" class="btn-login">Login</button>
         <div>
           <router-link to="/forgotPassword" class="forgot-password-link"
             >Forgot Password?</router-link
