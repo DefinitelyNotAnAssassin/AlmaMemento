@@ -220,7 +220,7 @@
 import { ref, onMounted, computed, watch, defineProps } from "vue";
 import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
-import MementoSideBar from "./alumni-sidebar.vue";
+import MementoSideBar from "./memento-sidebar.vue";
 import { db, storage } from "../../firebase/index.js";
 import { collection, getDocs, addDoc, onSnapshot } from "firebase/firestore";
 import {
