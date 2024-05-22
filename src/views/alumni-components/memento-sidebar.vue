@@ -42,7 +42,7 @@
           </tr>
           <tr>
             <td>Email:</td>
-            <td>{{ userData.email }}</td>
+            <td>{{ userData.alumna_email }}</td>
           </tr>
         </table>
         <h5 class="mt-2">Academic Background:</h5>
@@ -108,6 +108,16 @@ const fetchUserData = async () => {
       name: name.trim(),
       photoURL: user.profilePicture,
     };
+
+    // userData.value = {
+    //   name: name.trim(),
+    //   alumna_email: "",
+    //   idNumber: "",
+    //   course: "",
+    //   classYear: "",
+    //   phone: "",
+    //   photoURL: "",
+    // };
 
     console.log("user" + userData.photoURL);
   } else {
