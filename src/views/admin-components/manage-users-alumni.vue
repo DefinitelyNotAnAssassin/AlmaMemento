@@ -141,7 +141,7 @@
         </div>
       </div>
       <div v-if="isModalVisible" class="modal">
-        <div class="modal-content" style="width: 1000px">
+        <div class="modal-content">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
             <div class="mx-1">
