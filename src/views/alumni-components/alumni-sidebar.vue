@@ -3,7 +3,11 @@
   <aside
     class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown"
   >
-    <img class="mt-5" :src="userData.photoURL" alt="profile" />
+    <img
+      class="mt-5"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+      alt="profile"
+    />
     <h4 class="mt-2">{{ userData.name }}</h4>
     <p>{{ userData.alumna_email }}</p>
     <div class="mt-5 profile-table-container">
@@ -15,7 +19,7 @@
         </tr>
         <tr>
           <td>Course:</td>
-          <td class="td-padding-left">{{ userData.course }}</td>
+          <td class="td-padding-left">{{ userData.pab }}</td>
         </tr>
         <tr>
           <td>Class Year:</td>
@@ -53,7 +57,7 @@ const userData = ref({
   name: "",
   email: "",
   idNumber: "",
-  course: "",
+  pab: "",
   classYear: "",
   phone: "",
   photoURL: "",
@@ -66,7 +70,7 @@ const logout = async () => {
   try {
     isLoading.value = true;
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     loadingProgress.value = 25;
 
     const q = collection(db, "users");
