@@ -12,7 +12,7 @@
             >
               <div class="d-flex align-items-center">
                 <img
-                  src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/441204475_122128868540246120_5470515469793099504_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEHdxMJCaCsLsFSM-wYtFe3XosaZDEWO_VeixpkMRY79TJ_9UeU8ZAtSnOblRBciZ_8Q9QicYbJldRWKiq41WfR&_nc_ohc=IbNiD3P1d_0Q7kNvgEA5qtT&_nc_ht=scontent.fmnl4-6.fna&oh=00_AYAJDf4u4ynNxOHDxctLsm2DsduxRh4zfnORs09d16hCmw&oe=664FB891"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
                   style="
                     height: 40px !important;
                     width: 40px !important;
