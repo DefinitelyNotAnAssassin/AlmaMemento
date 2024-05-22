@@ -29,11 +29,11 @@
         <h5>Personal Information</h5>
         <table>
           <tr>
-            <td>ID number:</td>
+            <td>ID number: </td>
             <td>{{ userData.alumnaID }}</td>
           </tr>
           <tr>
-            <td>Phone:</td>
+            <td>Phone: </td>
             <td>{{ userData.phone }}</td>
           </tr>
           <tr>
@@ -41,22 +41,22 @@
             <td>asdakjhd</td>
           </tr>
           <tr>
-            <td>Email:</td>
+            <td>Email: </td>
             <td>{{ userData.alumna_email }}</td>
           </tr>
         </table>
-        <h5 class="mt-2">Academic Background:</h5>
+        <h5 class="mt-2">Academic Background: </h5>
         <table>
           <tr>
             <td>Program & Block:</td>
-            <td>{{ userData.course }}</td>
+            <td>{{ userData.pab }}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>Major:</td>
             <td>N/A</td>
-          </tr>
+          </tr> -->
           <tr>
-            <td>Class Year:</td>
+            <td>Class Year: </td>
             <td>{{ userData.classYear }}</td>
           </tr>
         </table>
@@ -90,6 +90,8 @@ const userData = ref({
   course: "",
   classYear: "",
   phone: "",
+  address: "",
+  pab: "",
   photoURL: "",
 });
 
