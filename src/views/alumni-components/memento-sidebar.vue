@@ -44,7 +44,7 @@
         <table>
           <tr>
             <td>ID number:</td>
-            <td>{{ userData.idNumber }}</td>
+            <td>{{ userData.alumnaID }}</td>
           </tr>
           <tr>
             <td>Phone:</td>
@@ -184,7 +184,7 @@ const router = useRouter();
 const userData = ref({
   name: "",
   alumna_email: "",
-  idNumber: "",
+  alumnaID: "",
   course: "",
   classYear: "",
   phone: "",
