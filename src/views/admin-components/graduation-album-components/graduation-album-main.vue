@@ -221,13 +221,6 @@ const deleteFolder = async (folderId) => {
         await deleteDoc(doc(db, "gradportrait", docSnapshot.id));
       });
 
-      const classYearsSnapshot = await getDocs(
-        query(collection(db, "classYears"), where("name", "==", folder.name))
-      );
-      classYearsSnapshot.forEach(async (docSnapshot) => {
-        await deleteDoc(doc(db, "classYears", docSnapshot.id));
-      });
-
       fetchFolders();
     } catch (error) {
       console.error("Error deleting folder and associated data: ", error);
@@ -244,15 +237,6 @@ const saveEditFolder = async () => {
   ).name;
 
   await updateDoc(folderRef, { name: editFolderName.value });
-
-  const querySnapshot = await getDocs(collection(db, "classYears"));
-  querySnapshot.forEach(async (docSnapshot) => {
-    if (docSnapshot.data().name === oldFolderName) {
-      await updateDoc(doc(db, "classYears", docSnapshot.id), {
-        name: editFolderName.value,
-      });
-    }
-  });
 
   editIndex.value = null;
   fetchFolders();
