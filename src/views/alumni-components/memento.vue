@@ -10,7 +10,8 @@
         />
       </div>
       <div class="container-fluid p-0 d-flex">
-        <div
+        <MementoSideBar />
+        <!-- <div
           class="memento-sidebar d-flex justify-content-center"
           style="position: relative"
         >
@@ -74,7 +75,7 @@
               Change Password
             </button>
           </div>
-        </div>
+        </div> -->
         <div class="main-content">
           <p>
             <button @click="showPostModal" class="btn btn-dark m-2">
@@ -219,6 +220,7 @@
 import { ref, onMounted, computed, watch, defineProps } from "vue";
 import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
+import MementoSideBar from "./alumni-sidebar.vue";
 import { db, storage } from "../../firebase/index.js";
 import { collection, getDocs, addDoc, onSnapshot } from "firebase/firestore";
 import {
@@ -494,7 +496,6 @@ onMounted(async () => {
   max-height: 200px;
   margin-top: 10px;
 }
-
 .posts-container {
   height: auto;
   width: 100% !important;
@@ -511,11 +512,5 @@ onMounted(async () => {
   color: #fff;
   padding: 10px 15px 10px 15px;
   border-radius: 15px;
-}
-
-.memento-sidebar {
-  border-right: 5px solid #330303;
-  height: calc(100vh - 300px);
-  width: 400px;
 }
 </style>
