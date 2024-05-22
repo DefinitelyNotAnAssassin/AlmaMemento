@@ -132,11 +132,20 @@ const addFolder = async () => {
     return;
   }
 
-  await addDoc(collection(db, "folders"), { name: newFolderName.value });
-  newFolderName.value = "";
-  showModal.value = false;
-  fetchFolders();
+  try {
+
+    await addDoc(collection(db, "folders"), { name: newFolderName.value });
+    await addDoc(collection(db, "classYears"), { name: newFolderName.value });
+
+    newFolderName.value = "";
+    showModal.value = false;
+
+    fetchFolders();
+  } catch (error) {
+    console.error("Error adding folder: ", error);
+  }
 };
+
 
 const emit = defineEmits(["update:currentPage"]);
 
@@ -159,9 +168,20 @@ const showFolderOptions = (folderId) => {
   toggleFolderOptions(folderId);
 };
 
-const deleteFolder = async (index) => {
-  await deleteDoc(doc(db, "folders", folders.value[index].id));
-  fetchFolders();
+const deleteFolder = async (folderId) => {
+  const folder = folders.value.find((folder) => folder.id === folderId);
+  if (folder) {
+    await deleteDoc(doc(db, "folders", folderId));
+
+    const querySnapshot = await getDocs(collection(db, "classYears"));
+    querySnapshot.forEach(async (docSnapshot) => {
+      if (docSnapshot.data().name === folder.name) {
+        await deleteDoc(doc(db, "classYears", docSnapshot.id));
+      }
+    });
+
+    fetchFolders();
+  }
 };
 
 const editFolder = (folderId) => {
@@ -173,13 +193,24 @@ const editFolder = (folderId) => {
 };
 
 const saveEditFolder = async () => {
-  if (editIndex.value === null) return;
-  if (!editFolderName.value.trim()) return;
+  if (editIndex.value === null || !editFolderName.value.trim()) return;
+  
   const folderRef = doc(db, "folders", editIndex.value);
+  const oldFolderName = folders.value.find(folder => folder.id === editIndex.value).name;
+
   await updateDoc(folderRef, { name: editFolderName.value });
+
+  const querySnapshot = await getDocs(collection(db, "classYears"));
+  querySnapshot.forEach(async (docSnapshot) => {
+    if (docSnapshot.data().name === oldFolderName) {
+      await updateDoc(doc(db, "classYears", docSnapshot.id), { name: editFolderName.value });
+    }
+  });
+
   editIndex.value = null;
   fetchFolders();
 };
+
 
 const cancelEditFolder = () => {
   editIndex.value = null;
@@ -208,7 +239,7 @@ const filteredFolders = computed(() => {
     .filter((folder) =>
       folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => b.name.localeCompare(a.name));
 });
 </script>
 

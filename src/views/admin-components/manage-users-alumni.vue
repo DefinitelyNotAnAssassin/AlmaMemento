@@ -451,20 +451,9 @@ const fetchData = async () => {
 
 const fetchProgramAndBlockAndClassYears = async () => {
   const pabsSnapshot = await query(collection(db, "pabs"));
-  const pabSet = new Set();
   onSnapshot(pabsSnapshot, (snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      const data = doc.data();
-      let name;
-      if (data.major === "N/A" || !data.major) {
-        name = `${data.program} - Block ${data.blck}`;
-      } else {
-        name = `${data.program} Major in ${data.major} - Block ${data.blck}`;
-      }
-      pabSet.add(name);
-    });
-    pabs.value = Array.from(pabSet)
-      .map((name) => ({ name }))
+    pabs.value = snapshot.docs
+      .map((doc) => ({ id: doc.id, name: doc.data().name }))
       .sort((a, b) => a.name.localeCompare(b.name));
   });
 
@@ -475,6 +464,47 @@ const fetchProgramAndBlockAndClassYears = async () => {
       .sort((a, b) => a.name.localeCompare(b.name));
   });
 };
+
+const syncData = async () => {
+  const userPabs = new Set(items.value.map(user => user.pab));
+  const userClassYears = new Set(items.value.map(user => user.classYear));
+
+  // Check for existing pabs
+  const existingPabsSnapshot = await getDocs(collection(db, "pabs"));
+  const existingPabs = existingPabsSnapshot.docs.map(doc => doc.data().name);
+
+  // Check for existing class years
+  const existingClassYearsSnapshot = await getDocs(collection(db, "classYears"));
+  const existingClassYears = existingClassYearsSnapshot.docs.map(doc => doc.data().name);
+
+  for (const pab of Array.from(userPabs)) {
+    if (!existingPabs.includes(pab)) {
+      await addDoc(collection(db, "pabs"), { name: pab });
+    }
+  }
+
+  for (const year of Array.from(userClassYears)) {
+    if (!existingClassYears.includes(year)) {
+      await addDoc(collection(db, "classYears"), { name: year });
+    }
+  }
+
+  for (const pab of existingPabs) {
+    if (!userPabs.has(pab)) {
+      const docRef = doc(db, "pabs", existingPabsSnapshot.docs.find(doc => doc.data().name === pab).id);
+      await deleteDoc(docRef);
+    }
+  }
+
+  for (const year of existingClassYears) {
+    if (!userClassYears.has(year)) {
+      const docRef = doc(db, "classYears", existingClassYearsSnapshot.docs.find(doc => doc.data().name === year).id);
+      await deleteDoc(docRef);
+    }
+  }
+};
+
+watch(items, syncData, { deep: true });
 
 onMounted(fetchData);
 
@@ -591,11 +621,7 @@ const submitModal = async () => {
 
       if (!programBlockExists) {
         const pabData = {
-          program: pabName.value,
-          major: major.value,
-          blck: blck.value,
-          year: year.value,
-          pab: name,
+          name: name,
         };
         const subForData = {
           name: name,
