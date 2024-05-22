@@ -6,7 +6,7 @@
     >
       <div
         class="d-flex align-items-center"
-        style="position: absolute; top: -100px; padding-left: 30px"
+        style="position: absolute; top: -120px; padding-left: 30px"
       >
         <div>
           <img
