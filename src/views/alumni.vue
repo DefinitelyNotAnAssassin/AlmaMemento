@@ -6,18 +6,11 @@
         <SideBar />
         <div class="main-content">
           <div class="d-flex justify-content-center">
-            <div
-              class="background-color-brown card m-3 p-2 pb-5"
-              style="position: relative; width: 500px"
-            >
+            <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
               <div class="d-flex align-items-center">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
-                  style="
-                    height: 40px !important;
-                    width: 40px !important;
-                    border-radius: 50%;
-                  "
+                  style="height: 40px !important; width: 40px !important; border-radius: 50%;"
                 />
                 <input
                   style="height: 40px"
@@ -26,19 +19,9 @@
                   v-model="message"
                   placeholder="Tell us about your school experiences..."
                 />
-                <button
-                  @click="saveStory"
-                  class="btn btn-light"
-                  style="height: 40px"
-                >
-                  Post
-                </button>
+                <button @click="saveStory" class="btn btn-light" style="height: 40px">Post</button>
               </div>
-              <button
-                @click="showPostModal"
-                class="btn m-2 text-light"
-                style="position: absolute; bottom: 0; right: 0"
-              >
+              <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
                 <i class="bi bi-card-image"></i> Photo
               </button>
             </div>
@@ -135,10 +118,7 @@
             </div>
           </div>
 
-          <div
-            class="d-flex flex-column align-items-center"
-            style="height: calc(100vh - 130px); overflow-y: auto"
-          >
+          <div class="d-flex flex-column align-items-center" style="height: calc(100vh - 130px); overflow-y: auto">
             <div
               style="width: 400px"
               v-for="post in approvedPosts"
@@ -196,15 +176,15 @@
               </div>
               <div v-else>No images available</div>
 
-              <!-- Likes -->
+               <!-- Likes -->
               <div class="d-flex align-items-center mt-2">
                 <a
                   href="#"
-                  @click="incrementLikes(post)"
+                  @click="toggleLike(post)"
                   class="text-light"
                   style="text-decoration: none !important"
                 >
-                  <i class="bi bi-heart"></i> {{ post.likes }}
+                  <i class="bi" :class="{'bi-heart-fill': post.likedBy.includes(userId.value), 'bi-heart': !post.likedBy.includes(userId.value)}"></i> {{ post.likes }}
                 </a>
                 <a
                   href="#"
@@ -218,28 +198,18 @@
               <!-- Comments -->
               <div v-if="!post.showComments">
                 <div v-if="post.latestComment" class="mt-3">
-                  <strong>{{ post.latestComment.user }}</strong
-                  >: {{ post.latestComment.text }}
+                  <strong>{{ post.latestComment.user }}</strong>: {{ post.latestComment.text }}
                 </div>
               </div>
               <div v-if="post.showComments">
                 <div v-for="comment in post.comments" :key="comment.id">
-                  <strong>{{ comment.user }}</strong
-                  >: {{ comment.text }}
+                  <strong>{{ comment.user }}</strong>: {{ comment.text }}
                 </div>
-                <input
-                  v-model="post.newComment"
-                  @keyup.enter="addComment(post)"
-                  type="text"
-                  placeholder="Add a comment..."
-                />
+                <input v-model="post.newComment" @keyup.enter="addComment(post)" type="text" placeholder="Add a comment..." />
               </div>
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
-              <p>
-                Approved on:
-                {{ formatApprovalDate(getLatestApprovalDate(post)) }}
-              </p>
+              <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
             </div>
           </div>
         </div>
@@ -247,6 +217,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
@@ -362,6 +333,8 @@ async function savePost() {
     imageUrls: selectedImages.value,
     status: "pending",
     history: [],
+    likedBy: [], // Initialize with an empty array
+    likes: 0, // Initialize likes count
   };
   await addDoc(collection(db, "posts"), post);
 
@@ -392,6 +365,8 @@ async function saveStory() {
     caption: message.value,
     status: "pending",
     history: [],
+    likedBy: [], // Initialize with an empty array
+    likes: 0, // Initialize likes count
   };
   await addDoc(collection(db, "posts"), post);
   message.value = "";
@@ -482,18 +457,28 @@ onMounted(async () => {
   });
 });
 
-async function incrementLikes(post) {
-  post.likes++;
+const toggleLike = async (post) => {
+  const postRef = doc(db, "posts", post.id);
+  const postSnapshot = await getDoc(postRef);
+  const postData = postSnapshot.data();
+  const likedBy = postData.likedBy || [];
 
-  try {
-    const postRef = doc(db, "posts", post.id);
+  if (likedBy.includes(userId.value)) {
+    // If the user has already liked the post, unlike it
+    const updatedLikes = likedBy.filter((id) => id !== userId.value);
     await updateDoc(postRef, {
-      likes: post.likes,
+      likedBy: updatedLikes,
+      likes: updatedLikes.length,
     });
-  } catch (error) {
-    console.error("Error updating likes:", error);
+  } else {
+    // If the user has not liked the post, like it
+    const updatedLikes = [...likedBy, userId.value];
+    await updateDoc(postRef, {
+      likedBy: updatedLikes,
+      likes: updatedLikes.length,
+    });
   }
-}
+};
 
 function toggleComments(post) {
   post.showComments = !post.showComments;
