@@ -197,11 +197,13 @@
     showDeleteConfirmation.value = false;
   };
   
-  const filteredFolders = computed(() => {
-    return folders.value.filter((folder) =>
+const filteredFolders = computed(() => {
+  return folders.value
+    .filter((folder) =>
       folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  });
+    )
+    .sort((a, b) => b.name.localeCompare(a.name));
+});
   </script>
   
   <style>
