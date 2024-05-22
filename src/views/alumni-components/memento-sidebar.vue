@@ -10,7 +10,10 @@
       >
         <div>
           <img
-            :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
+            :src="
+              userData.photoURL ||
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+            "
             alt="profile"
             style="height: 150px; width: 150px; border-radius: 50%"
           />
@@ -27,7 +30,10 @@
         <div style="margin-left: 20px">
           <h4 class="text-light">{{ userData.name }}</h4>
           <h6 class="text-light">UI / UX</h6>
-          <button class="btn btn-sm btn-success" @click="showEditProfileModal = true">
+          <button
+            class="btn btn-sm btn-success"
+            @click="showEditProfileModal = true"
+          >
             Edit Profile
           </button>
         </div>
@@ -64,59 +70,92 @@
             <td>{{ userData.classYear }}</td>
           </tr>
         </table>
-        <button class="btn btn-sm text-light background-color-brown" @click="showChangePasswordModal = true">
+        <button
+          class="btn btn-sm text-light background-color-brown"
+          @click="showChangePasswordModal = true"
+        >
           Change Password
         </button>
       </div>
     </div>
 
     <!-- Edit Profile Modal -->
-    <div v-if="showEditProfileModal" class="modal-overlay" @click.self="showEditProfileModal = false">
+    <div
+      v-if="showEditProfileModal"
+      class="modal-overlay"
+      @click.self="showEditProfileModal = false"
+    >
       <div class="modal">
         <h3>Edit Profile</h3>
         <div>
           <label>First Name</label>
-          <input type="text" v-model="editData.fName" />
+          <input class="form-control" type="text" v-model="editData.fName" />
         </div>
         <div>
           <label>Middle Initial</label>
-          <input type="text" v-model="editData.mInitial" />
+          <input class="form-control" type="text" v-model="editData.mInitial" />
         </div>
         <div>
           <label>Last Name</label>
-          <input type="text" v-model="editData.lName" />
+          <input class="form-control" type="text" v-model="editData.lName" />
         </div>
         <div>
           <label>Phone</label>
-          <input type="text" v-model="editData.phone" />
+          <input class="form-control" type="text" v-model="editData.phone" />
         </div>
         <div>
           <label>Address</label>
-          <input type="text" v-model="editData.address" />
+          <input class="form-control" type="text" v-model="editData.address" />
         </div>
         <div>
           <label>Email</label>
-          <input type="email" v-model="editData.email" />
+          <input class="form-control" type="email" v-model="editData.email" />
         </div>
-        <button @click="saveProfile">Save</button>
-        <button @click="showEditProfileModal = false">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="saveProfile">
+          Save
+        </button>
+        <button
+          class="btn btn-sm btn-dark"
+          @click="showEditProfileModal = false"
+        >
+          Cancel
+        </button>
       </div>
     </div>
 
     <!-- Change Password Modal -->
-    <div v-if="showChangePasswordModal" class="modal-overlay" @click.self="showChangePasswordModal = false">
+    <div
+      v-if="showChangePasswordModal"
+      class="modal-overlay"
+      @click.self="showChangePasswordModal = false"
+    >
       <div class="modal">
         <h3>Change Password</h3>
         <div>
           <label>Current Password</label>
-          <input type="password" v-model="passwordData.currentPassword" />
+          <input
+            class="form-control"
+            type="password"
+            v-model="passwordData.currentPassword"
+          />
         </div>
         <div>
           <label>New Password</label>
-          <input type="password" v-model="passwordData.newPassword" />
+          <input
+            class="form-control"
+            type="password"
+            v-model="passwordData.newPassword"
+          />
         </div>
-        <button @click="changePassword">Save</button>
-        <button @click="showChangePasswordModal = false">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="changePassword">
+          Save
+        </button>
+        <button
+          class="btn btn-sm btn-dark"
+          @click="showChangePasswordModal = false"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </aside>
@@ -133,7 +172,12 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 
 const router = useRouter();
 
@@ -160,7 +204,7 @@ const editData = ref({
 
 const passwordData = ref({
   currentPassword: "",
-  newPassword: ""
+  newPassword: "",
 });
 
 const showEditProfileModal = ref(false);
@@ -281,7 +325,7 @@ fetchUserData();
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 .modal {
   background: white;
