@@ -11,7 +11,7 @@
         <div>
           <img
             style="height: 150px; width: 150px; border-radius: 50%"
-            :src="userData.photoURL"
+            src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
             alt="profile"
           />
           <button type="button" class="btn btn-sm">
@@ -19,7 +19,7 @@
           </button>
         </div>
         <div style="margin-left: 20px">
-          <h4 class="text-light">Miles Morales</h4>
+          <h4 class="text-light">{{ userData.name }}</h4>
           <h6 class="text-light">UI / UX</h6>
           <button class="btn btn-sm btn-success">Edit Profile</button>
         </div>
@@ -29,11 +29,11 @@
         <h5>Personal Information</h5>
         <table>
           <tr>
-            <td>ID number: </td>
+            <td>ID number:</td>
             <td>{{ userData.alumnaID }}</td>
           </tr>
           <tr>
-            <td>Phone: </td>
+            <td>Phone:</td>
             <td>{{ userData.phone }}</td>
           </tr>
           <tr>
@@ -41,11 +41,11 @@
             <td>asdakjhd</td>
           </tr>
           <tr>
-            <td>Email: </td>
+            <td>Email:</td>
             <td>{{ userData.alumna_email }}</td>
           </tr>
         </table>
-        <h5 class="mt-2">Academic Background: </h5>
+        <h5 class="mt-2">Academic Background:</h5>
         <table>
           <tr>
             <td>Program & Block:</td>
@@ -56,7 +56,7 @@
             <td>N/A</td>
           </tr> -->
           <tr>
-            <td>Class Year: </td>
+            <td>Class Year:</td>
             <td>{{ userData.classYear }}</td>
           </tr>
         </table>
