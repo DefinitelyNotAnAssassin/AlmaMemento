@@ -273,7 +273,6 @@ const fetchUserData = async () => {
     console.log("User not found");
   }
 };
-
 fetchUserData();
 
 // Edited End
