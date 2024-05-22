@@ -6,14 +6,16 @@
     <div class="d-flex justify-content-end">
       <input
         class="form-control"
-        style="width: 250px;"
+        style="width: 250px"
         type="text"
         v-model="searchQuery"
         placeholder="Search Folder"
       />
     </div>
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-dark mx-1" @click="backToMain"><i class="bi bi-arrow-return-left"></i></button>
+      <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
+        <i class="bi bi-arrow-return-left"></i>
+      </button>
       <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
         Add Folder
       </button>
@@ -44,23 +46,51 @@
     </div>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <input class="form-control" type="text" v-model="newFolderName" placeholder="Folder Name" />
-        <button class="btn btn-sm btn-primary" @click="addFolder">Create Folder</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="showModal = false">Cancel</button>
+        <input
+          class="form-control"
+          type="text"
+          v-model="newFolderName"
+          placeholder="Folder Name"
+        />
+        <button class="btn btn-sm btn-primary" @click="addFolder">
+          Create Folder
+        </button>
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="showModal = false"
+        >
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="editIndex !== null" class="modal">
       <div class="modal-content">
-        <input class="form-control" type="text" v-model="editFolderName" placeholder="Folder Name" />
-        <button class="btn btn-sm btn-primary" @click="saveEditFolder">Save</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="cancelEditFolder">Cancel</button>
+        <input
+          class="form-control"
+          type="text"
+          v-model="editFolderName"
+          placeholder="Folder Name"
+        />
+        <button class="btn btn-sm btn-primary" @click="saveEditFolder">
+          Save
+        </button>
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelEditFolder">
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="showDeleteConfirmation" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to delete this folder?</p>
-        <button class="btn btn-sm btn-primary" @click="confirmDeleteFolder">Delete</button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">Cancel</button>
+        <button class="btn btn-sm btn-primary" @click="confirmDeleteFolder">
+          Delete
+        </button>
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="cancelDeleteFolder"
+        >
+          Cancel
+        </button>
       </div>
     </div>
     <div v-if="showWarningModal" class="modal">
@@ -133,13 +163,16 @@ const addFolder = async () => {
 
   const selectedYear = currentAlbumPage.value === "PAB" ? props.folderName : "";
 
-  await addDoc(collection(db, "subfolders"), {
-    name: newFolderName.value,
-    year: selectedYear,
-    type: "pab",
-  });
+  const pabsQuerySnapshot = await getDocs(
+    query(collection(db, "pabs"), where("name", "==", newFolderName.value))
+  );
+  if (pabsQuerySnapshot.docs.length === 0) {
+    await addDoc(collection(db, "pabs"), {
+      name: newFolderName.value,
+    });
+  }
 
-  await addDoc(collection(db, "pab"), {
+  await addDoc(collection(db, "subfolders"), {
     name: newFolderName.value,
     year: selectedYear,
     type: "pab",

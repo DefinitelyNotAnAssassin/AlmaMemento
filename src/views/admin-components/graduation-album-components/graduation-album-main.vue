@@ -25,12 +25,17 @@
         @click="changeAlbumPage(folder.name)"
       >
         <div class="folder-box bg-secondary">
-          <div class="folder-options" @click.stop="showFolderOptions(folder.id)">
+          <div
+            class="folder-options"
+            @click.stop="showFolderOptions(folder.id)"
+          >
             <i class="bi bi-three-dots-vertical"></i>
           </div>
           <div class="folder-options-content" v-if="folder.showOptions">
             <span @click.stop="editFolder(folder.id)">Edit</span>
-            <span @click.stop="showDeleteFolderConfirmation(folder.id)">Delete</span>
+            <span @click.stop="showDeleteFolderConfirmation(folder.id)"
+              >Delete</span
+            >
           </div>
           <div class="folder-name-bottom bg-primary text-light">
             <span>{{ folder.name }}</span>
@@ -50,7 +55,10 @@
         <button class="btn btn-sm btn-primary" @click="addFolder">
           Create Folder
         </button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="showModal = false">
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="showModal = false"
+        >
           Cancel
         </button>
       </div>
@@ -77,7 +85,10 @@
         <button class="btn btn-sm btn-danger" @click="confirmDeleteFolder">
           Delete
         </button>
-        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="cancelDeleteFolder"
+        >
           Cancel
         </button>
       </div>
@@ -92,7 +103,16 @@
 
 <script setup>
 import { ref, onMounted, defineEmits, computed } from "vue";
-import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../firebase/index.js";
 
 const currentAlbumPage = ref("Main");
@@ -133,9 +153,16 @@ const addFolder = async () => {
   }
 
   try {
-
     await addDoc(collection(db, "folders"), { name: newFolderName.value });
-    await addDoc(collection(db, "classYears"), { name: newFolderName.value });
+
+    const classYearsQuerySnapshot = await getDocs(collection(db, "classYears"));
+    const classYearsNames = classYearsQuerySnapshot.docs.map(
+      (doc) => doc.data().name
+    );
+
+    if (!classYearsNames.includes(newFolderName.value)) {
+      await addDoc(collection(db, "classYears"), { name: newFolderName.value });
+    }
 
     newFolderName.value = "";
     showModal.value = false;
@@ -145,7 +172,6 @@ const addFolder = async () => {
     console.error("Error adding folder: ", error);
   }
 };
-
 
 const emit = defineEmits(["update:currentPage"]);
 
@@ -171,46 +197,66 @@ const showFolderOptions = (folderId) => {
 const deleteFolder = async (folderId) => {
   const folder = folders.value.find((folder) => folder.id === folderId);
   if (folder) {
-    await deleteDoc(doc(db, "folders", folderId));
+    try {
+      await deleteDoc(doc(db, "folders", folderId));
 
-    const querySnapshot = await getDocs(collection(db, "classYears"));
-    querySnapshot.forEach(async (docSnapshot) => {
-      if (docSnapshot.data().name === folder.name) {
+      const dbSnapshot = await getDocs(
+        query(collection(db, "subfolders"), where("year", "==", folder.name))
+      );
+      dbSnapshot.forEach(async (docSnapshot) => {
+        await deleteDoc(doc(db, "subfolders", docSnapshot.id));
+      });
+
+      const gallerySnapshot = await getDocs(
+        query(collection(db, "gallery"), where("year", "==", folder.name))
+      );
+      gallerySnapshot.forEach(async (docSnapshot) => {
+        await deleteDoc(doc(db, "gallery", docSnapshot.id));
+      });
+
+      const gradPortraitSnapshot = await getDocs(
+        query(collection(db, "gradportrait"), where("year", "==", folder.name))
+      );
+      gradPortraitSnapshot.forEach(async (docSnapshot) => {
+        await deleteDoc(doc(db, "gradportrait", docSnapshot.id));
+      });
+
+      const classYearsSnapshot = await getDocs(
+        query(collection(db, "classYears"), where("name", "==", folder.name))
+      );
+      classYearsSnapshot.forEach(async (docSnapshot) => {
         await deleteDoc(doc(db, "classYears", docSnapshot.id));
-      }
-    });
+      });
 
-    fetchFolders();
-  }
-};
-
-const editFolder = (folderId) => {
-  const folder = folders.value.find((folder) => folder.id === folderId);
-  if (folder) {
-    editIndex.value = folderId;
-    editFolderName.value = folder.name;
+      fetchFolders();
+    } catch (error) {
+      console.error("Error deleting folder and associated data: ", error);
+    }
   }
 };
 
 const saveEditFolder = async () => {
   if (editIndex.value === null || !editFolderName.value.trim()) return;
-  
+
   const folderRef = doc(db, "folders", editIndex.value);
-  const oldFolderName = folders.value.find(folder => folder.id === editIndex.value).name;
+  const oldFolderName = folders.value.find(
+    (folder) => folder.id === editIndex.value
+  ).name;
 
   await updateDoc(folderRef, { name: editFolderName.value });
 
   const querySnapshot = await getDocs(collection(db, "classYears"));
   querySnapshot.forEach(async (docSnapshot) => {
     if (docSnapshot.data().name === oldFolderName) {
-      await updateDoc(doc(db, "classYears", docSnapshot.id), { name: editFolderName.value });
+      await updateDoc(doc(db, "classYears", docSnapshot.id), {
+        name: editFolderName.value,
+      });
     }
   });
 
   editIndex.value = null;
   fetchFolders();
 };
-
 
 const cancelEditFolder = () => {
   editIndex.value = null;
@@ -242,7 +288,6 @@ const filteredFolders = computed(() => {
     .sort((a, b) => b.name.localeCompare(a.name));
 });
 </script>
-
 
 <style>
 .modal {

@@ -141,7 +141,7 @@
         </div>
       </div>
       <div v-if="isModalVisible" class="modal">
-        <div class="modal-content" style="width: 500px">
+        <div class="modal-content" style="width: 1000px">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
             <div class="mx-1">
@@ -156,8 +156,8 @@
                   placeholder="ID Number"
                 />
               </div>
-              <div>
-                <label for="fName">First Name</label>
+              <div class="input-group">
+                <span class="input-group-text" for="fName">First Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -166,9 +166,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-              </div>
-              <div>
-                <label for="mInitial">Middle Initial</label>
+                <span class="input-group-text" for="mInitial"
+                  >Middle Initial</span
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -177,9 +177,7 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-              </div>
-              <div>
-                <label for="lName">Last Name</label>
+                <span class="input-group-text" for="lName">Last Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -189,8 +187,8 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div>
-                <label for="pabName">Program</label>
+              <div class="input-group">
+                <span class="input-group-text">Program</span>
                 <input
                   class="form-control"
                   type="text"
@@ -198,9 +196,7 @@
                   name="pabName"
                   v-model="pabName"
                 />
-              </div>
-              <div>
-                <label for="majoy">Major</label>
+                <span class="input-group-text">Major</span>
                 <input
                   class="form-control"
                   type="text"
@@ -208,11 +204,7 @@
                   name="major"
                   v-model="major"
                 />
-              </div>
-            </div>
-            <div class="mx-1">
-              <div>
-                <label for="blck">Block</label>
+                <span class="input-group-text">Block</span>
                 <input
                   class="form-control"
                   type="text"
@@ -220,9 +212,7 @@
                   name="blck"
                   v-model="blck"
                 />
-              </div>
-              <div>
-                <label for="year">Class Year</label>
+                <span class="input-group-text">Class Year</span>
                 <input
                   class="form-control"
                   type="text"
@@ -280,8 +270,8 @@
                   disabled
                 />
               </div>
-              <div>
-                <label for="fName">First Name</label>
+              <div class="input-group">
+                <span class="input-group-text" for="fName">First Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -290,9 +280,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-              </div>
-              <div>
-                <label for="mInitial">Middle Initial</label>
+                <span class="input-group-text" for="mInitial"
+                  >Middle Initial</span
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -301,9 +291,7 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-              </div>
-              <div>
-                <label for="lName">Last Name</label>
+                <span class="input-group-text" for="lName">Last Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -313,8 +301,8 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div>
-                <label for="pabName">Program</label>
+              <div class="input-group">
+                <span class="input-group-text">Program</span>
                 <input
                   class="form-control"
                   type="text"
@@ -322,11 +310,7 @@
                   name="pabName"
                   v-model="pabName"
                 />
-              </div>
-            </div>
-            <div class="mx-1">
-              <div>
-                <label for="year">Class Year</label>
+                <span class="input-group-text">Class Year</span>
                 <input
                   class="form-control"
                   type="text"
@@ -488,20 +472,14 @@ const fetchProgramAndBlockAndClassYears = async () => {
 };
 
 const syncData = async () => {
-  const userPabs = new Set(items.value.map((user) => user.pab));
-  const userClassYears = new Set(items.value.map((user) => user.classYear));
+  const userPabs = new Set(items.value.map(user => user.pab));
+  const userClassYears = new Set(items.value.map(user => user.classYear));
 
-  // Check for existing pabs
   const existingPabsSnapshot = await getDocs(collection(db, "pabs"));
-  const existingPabs = existingPabsSnapshot.docs.map((doc) => doc.data().name);
+  const existingPabs = existingPabsSnapshot.docs.map(doc => doc.data().name);
 
-  // Check for existing class years
-  const existingClassYearsSnapshot = await getDocs(
-    collection(db, "classYears")
-  );
-  const existingClassYears = existingClassYearsSnapshot.docs.map(
-    (doc) => doc.data().name
-  );
+  const existingClassYearsSnapshot = await getDocs(collection(db, "classYears"));
+  const existingClassYears = existingClassYearsSnapshot.docs.map(doc => doc.data().name);
 
   for (const pab of Array.from(userPabs)) {
     if (!existingPabs.includes(pab)) {
@@ -517,24 +495,31 @@ const syncData = async () => {
 
   for (const pab of existingPabs) {
     if (!userPabs.has(pab)) {
-      const docRef = doc(
-        db,
-        "pabs",
-        existingPabsSnapshot.docs.find((doc) => doc.data().name === pab).id
-      );
-      await deleteDoc(docRef);
+      const subfoldersQuery = query(collection(db, "subfolders"), where("name", "==", pab));
+      const subfoldersSnapshot = await getDocs(subfoldersQuery);
+      const hasSubfolders = !subfoldersSnapshot.empty;
+
+      if (!hasSubfolders) {
+        const docRef = doc(db, "pabs", existingPabsSnapshot.docs.find(doc => doc.data().name === pab).id);
+        await deleteDoc(docRef);
+      } else {
+        console.log(`PAB ${pab} is referenced in subfolders and cannot be deleted.`);
+      }
     }
   }
 
   for (const year of existingClassYears) {
     if (!userClassYears.has(year)) {
-      const docRef = doc(
-        db,
-        "classYears",
-        existingClassYearsSnapshot.docs.find((doc) => doc.data().name === year)
-          .id
-      );
-      await deleteDoc(docRef);
+      const foldersQuery = query(collection(db, "folders"), where("name", "==", year));
+      const foldersSnapshot = await getDocs(foldersQuery);
+      const hasFolders = !foldersSnapshot.empty;
+
+      if (!hasFolders) {
+        const docRef = doc(db, "classYears", existingClassYearsSnapshot.docs.find(doc => doc.data().name === year).id);
+        await deleteDoc(docRef);
+      } else {
+        console.log(`Class year ${year} is referenced in folders and cannot be deleted.`);
+      }
     }
   }
 };
@@ -655,9 +640,6 @@ const submitModal = async () => {
       }
 
       if (!programBlockExists) {
-        const pabData = {
-          name: name,
-        };
         const subForData = {
           name: name,
           year: year.value,
@@ -669,7 +651,6 @@ const submitModal = async () => {
           year: year.value,
           type: "subfolder",
         };
-        await addDoc(collection(db, "pabs"), pabData);
         await addDoc(collection(db, "subfolders"), subForData);
         await addDoc(collection(db, "subfolders"), subFolder);
       }
