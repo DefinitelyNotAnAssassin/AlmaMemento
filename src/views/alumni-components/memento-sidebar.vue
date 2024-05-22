@@ -10,18 +10,26 @@
       >
         <div>
           <img
-            style="height: 150px; width: 150px; border-radius: 50%"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+            :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
             alt="profile"
+            style="height: 150px; width: 150px; border-radius: 50%"
           />
-          <button type="button" class="btn btn-sm">
+          <button type="button" class="btn btn-sm" @click="triggerFileInput">
             <i class="bi bi-camera"></i>
           </button>
+          <input
+            type="file"
+            ref="fileInput"
+            @change="uploadImage"
+            style="display: none"
+          />
         </div>
         <div style="margin-left: 20px">
           <h4 class="text-light">{{ userData.name }}</h4>
           <h6 class="text-light">UI / UX</h6>
-          <button class="btn btn-sm btn-success" @click="showModal = true">Edit Profile</button>
+          <button class="btn btn-sm btn-success" @click="showModal = true">
+            Edit Profile
+          </button>
         </div>
       </div>
 
@@ -99,8 +107,15 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { db } from "../../firebase/index.js";
-import { collection, getDocs, updateDoc, doc, getDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase/index.js";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const router = useRouter();
 
@@ -126,6 +141,7 @@ const editData = ref({
 });
 
 const showModal = ref(false);
+const fileInput = ref(null);
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
@@ -174,6 +190,29 @@ const saveProfile = async () => {
     fetchUserData();
   } catch (error) {
     console.error("Error updating document: ", error);
+  }
+};
+
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+const uploadImage = async (event) => {
+  const userId = router.currentRoute.value.query.userId;
+  const file = event.target.files[0];
+  if (file) {
+    const storage = getStorage();
+    const storageReference = storageRef(storage, `profilePictures/${userId}`);
+    try {
+      const snapshot = await uploadBytes(storageReference, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      await updateDoc(doc(db, "users", userId), {
+        profilePicture: downloadURL,
+      });
+      userData.value.photoURL = downloadURL;
+    } catch (error) {
+      console.error("Error uploading image: ", error);
+    }
   }
 };
 
