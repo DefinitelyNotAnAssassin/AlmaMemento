@@ -141,7 +141,7 @@
         </div>
       </div>
       <div v-if="isModalVisible" class="modal">
-        <div class="modal-content" style="width: 1000px">
+        <div class="modal-content" style="width: 500px">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
             <div class="mx-1">
@@ -156,8 +156,8 @@
                   placeholder="ID Number"
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text" for="fName">First Name</span>
+              <div>
+                <label for="fName">First Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -166,9 +166,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-                <span class="input-group-text" for="mInitial"
-                  >Middle Initial</span
-                >
+              </div>
+              <div>
+                <label for="mInitial">Middle Initial</label>
                 <input
                   class="form-control"
                   type="text"
@@ -177,7 +177,9 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-                <span class="input-group-text" for="lName">Last Name</span>
+              </div>
+              <div>
+                <label for="lName">Last Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -187,8 +189,8 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text">Program</span>
+              <div>
+                <label>Program</label>
                 <input
                   class="form-control"
                   type="text"
@@ -196,7 +198,9 @@
                   name="pabName"
                   v-model="pabName"
                 />
-                <span class="input-group-text">Major</span>
+              </div>
+              <div>
+                <label>Major</label>
                 <input
                   class="form-control"
                   type="text"
@@ -204,7 +208,11 @@
                   name="major"
                   v-model="major"
                 />
-                <span class="input-group-text">Block</span>
+              </div>
+            </div>
+            <div class="mx-1">
+              <div>
+                <label>Block</label>
                 <input
                   class="form-control"
                   type="text"
@@ -212,7 +220,9 @@
                   name="blck"
                   v-model="blck"
                 />
-                <span class="input-group-text">Class Year</span>
+              </div>
+              <div>
+                <label>Class Year</label>
                 <input
                   class="form-control"
                   type="text"
@@ -270,8 +280,8 @@
                   disabled
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text" for="fName">First Name</span>
+              <div>
+                <label for="fName">First Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -280,9 +290,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-                <span class="input-group-text" for="mInitial"
-                  >Middle Initial</span
-                >
+              </div>
+              <div>
+                <label for="mInitial">Middle Initial</label>
                 <input
                   class="form-control"
                   type="text"
@@ -291,7 +301,9 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-                <span class="input-group-text" for="lName">Last Name</span>
+              </div>
+              <div>
+                <label for="lName">Last Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -301,8 +313,8 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text">Program</span>
+              <div>
+                <label>Program</label>
                 <input
                   class="form-control"
                   type="text"
@@ -310,7 +322,11 @@
                   name="pabName"
                   v-model="pabName"
                 />
-                <span class="input-group-text">Class Year</span>
+              </div>
+            </div>
+            <div class="mx-1">
+              <div>
+                <label>Class Year</label>
                 <input
                   class="form-control"
                   type="text"
@@ -472,14 +488,18 @@ const fetchProgramAndBlockAndClassYears = async () => {
 };
 
 const syncData = async () => {
-  const userPabs = new Set(items.value.map(user => user.pab));
-  const userClassYears = new Set(items.value.map(user => user.classYear));
+  const userPabs = new Set(items.value.map((user) => user.pab));
+  const userClassYears = new Set(items.value.map((user) => user.classYear));
 
   const existingPabsSnapshot = await getDocs(collection(db, "pabs"));
-  const existingPabs = existingPabsSnapshot.docs.map(doc => doc.data().name);
+  const existingPabs = existingPabsSnapshot.docs.map((doc) => doc.data().name);
 
-  const existingClassYearsSnapshot = await getDocs(collection(db, "classYears"));
-  const existingClassYears = existingClassYearsSnapshot.docs.map(doc => doc.data().name);
+  const existingClassYearsSnapshot = await getDocs(
+    collection(db, "classYears")
+  );
+  const existingClassYears = existingClassYearsSnapshot.docs.map(
+    (doc) => doc.data().name
+  );
 
   for (const pab of Array.from(userPabs)) {
     if (!existingPabs.includes(pab)) {
@@ -495,30 +515,50 @@ const syncData = async () => {
 
   for (const pab of existingPabs) {
     if (!userPabs.has(pab)) {
-      const subfoldersQuery = query(collection(db, "subfolders"), where("name", "==", pab));
+      const subfoldersQuery = query(
+        collection(db, "subfolders"),
+        where("name", "==", pab)
+      );
       const subfoldersSnapshot = await getDocs(subfoldersQuery);
       const hasSubfolders = !subfoldersSnapshot.empty;
 
       if (!hasSubfolders) {
-        const docRef = doc(db, "pabs", existingPabsSnapshot.docs.find(doc => doc.data().name === pab).id);
+        const docRef = doc(
+          db,
+          "pabs",
+          existingPabsSnapshot.docs.find((doc) => doc.data().name === pab).id
+        );
         await deleteDoc(docRef);
       } else {
-        console.log(`PAB ${pab} is referenced in subfolders and cannot be deleted.`);
+        console.log(
+          `PAB ${pab} is referenced in subfolders and cannot be deleted.`
+        );
       }
     }
   }
 
   for (const year of existingClassYears) {
     if (!userClassYears.has(year)) {
-      const foldersQuery = query(collection(db, "folders"), where("name", "==", year));
+      const foldersQuery = query(
+        collection(db, "folders"),
+        where("name", "==", year)
+      );
       const foldersSnapshot = await getDocs(foldersQuery);
       const hasFolders = !foldersSnapshot.empty;
 
       if (!hasFolders) {
-        const docRef = doc(db, "classYears", existingClassYearsSnapshot.docs.find(doc => doc.data().name === year).id);
+        const docRef = doc(
+          db,
+          "classYears",
+          existingClassYearsSnapshot.docs.find(
+            (doc) => doc.data().name === year
+          ).id
+        );
         await deleteDoc(docRef);
       } else {
-        console.log(`Class year ${year} is referenced in folders and cannot be deleted.`);
+        console.log(
+          `Class year ${year} is referenced in folders and cannot be deleted.`
+        );
       }
     }
   }
