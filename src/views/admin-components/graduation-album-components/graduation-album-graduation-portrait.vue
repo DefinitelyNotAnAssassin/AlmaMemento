@@ -544,7 +544,7 @@ const fetchStudentsAndAdviser = async () => {
         adviser.value = { ...data, id: doc.id };
         adviserImageUrl.value = data.imageUrl;
         adviserName.value = data.name;
-      } else {
+      } else if (data.role === "student") {
         students.value.push({ ...data, id: doc.id });
       }
     });
@@ -552,6 +552,7 @@ const fetchStudentsAndAdviser = async () => {
 
   return unsubscribe;
 };
+
 
 let unsubscribe1;
 
