@@ -339,5 +339,7 @@ fetchUserData();
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
