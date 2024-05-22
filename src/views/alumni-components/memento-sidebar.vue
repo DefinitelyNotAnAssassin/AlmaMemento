@@ -11,7 +11,7 @@
         <div>
           <img
             style="height: 150px; width: 150px; border-radius: 50%"
-            src="https://scontent.fmnl4-7.fna.fbcdn.net/v/t39.30808-6/444788838_122111548694306247_2658197019216045247_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE0sCQLtuCTWRmVqCfywHcg0SWGNPkX7-nRJYY0-Rfv6TFGevTnotrWrky46BorddQx3G3TPxizDIaFJ-7C14xZ&_nc_ohc=k-I6VxJucpUQ7kNvgEQUeO1&_nc_oc=AdgLmfwlw7Hl6zYtfQ9nP1miYffN2ejZ5atev0euv6NZk5FX2BmJLH-iuWPbld3WLBY&_nc_ht=scontent.fmnl4-7.fna&oh=00_AYAA_HZ0Oe97adcb4KPUXbtg8IULDPszvpvzWd5HeNmFZg&oe=6652E773"
+            :src="userData.photoURL"
             alt="profile"
           />
           <button type="button" class="btn btn-sm">
@@ -30,11 +30,11 @@
         <table>
           <tr>
             <td>ID number:</td>
-            <td>123</td>
+            <td>{{ userData.alumnaID }}</td>
           </tr>
           <tr>
             <td>Phone:</td>
-            <td>0912332</td>
+            <td>{{ userData.phone }}</td>
           </tr>
           <tr>
             <td>Address:</td>
@@ -42,14 +42,14 @@
           </tr>
           <tr>
             <td>Email:</td>
-            <td>emman@gmail.com</td>
+            <td>{{ userData.email }}</td>
           </tr>
         </table>
         <h5 class="mt-2">Academic Background:</h5>
         <table>
           <tr>
             <td>Program & Block:</td>
-            <td>BSIT - Block A</td>
+            <td>{{ userData.course }}</td>
           </tr>
           <tr>
             <td>Major:</td>
@@ -57,7 +57,7 @@
           </tr>
           <tr>
             <td>Class Year:</td>
-            <td>2023 - 2024</td>
+            <td>{{ userData.classYear }}</td>
           </tr>
         </table>
         <button class="btn btn-sm text-light background-color-brown">
