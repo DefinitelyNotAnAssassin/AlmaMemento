@@ -244,6 +244,40 @@ const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
 
+// Edited start
+const userData = ref({
+  name: "",
+  email: "",
+  idNumber: "",
+  course: "",
+  classYear: "",
+  phone: "",
+  photoURL: "",
+});
+
+const fetchUserData = async () => {
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data();
+    const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+
+    userData.value = {
+      ...user,
+      name: name.trim(),
+      photoURL: user.profilePicture,
+    };
+    console.log(userData);
+  } else {
+    console.log("User not found");
+  }
+};
+
+fetchUserData();
+
+// Edited End
+
 function showPostModal() {
   showModal.value = true;
 }
