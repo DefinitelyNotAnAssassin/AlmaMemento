@@ -51,7 +51,7 @@
     <div class="students-container d-flex flex-wrap">
       <div
         class="student-container m-2"
-        v-for="student in sortedStudents"
+        v-for="student in students"
         :key="student.id"
       >
         <div class="image-container wh-150px p-0" style="position: relative">
