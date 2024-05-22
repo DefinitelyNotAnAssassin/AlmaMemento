@@ -246,10 +246,10 @@ const changePassword = async () => {
   const userDocSnap = await getDoc(userDocRef);
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
-    if (user.password === passwordData.value.currentPassword) {
+    if (user.alumna_password === passwordData.value.currentPassword) {
       try {
         await updateDoc(userDocRef, {
-          password: passwordData.value.newPassword,
+          alumna_password: passwordData.value.newPassword,
         });
         showChangePasswordModal.value = false;
       } catch (error) {
