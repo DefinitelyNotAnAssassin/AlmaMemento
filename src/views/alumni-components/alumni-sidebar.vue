@@ -91,12 +91,10 @@ const logout = async () => {
     } else {
       isLoading.value = false;
       console.log("No logged in user found");
-      errMsg.value = "No logged in user found";
     }
   } catch (error) {
     isLoading.value = false;
     console.error("Error:", error.message);
-    errMsg.value = "An error occurred";
   } finally {
     setTimeout(() => {
       isLoading.value = false;
