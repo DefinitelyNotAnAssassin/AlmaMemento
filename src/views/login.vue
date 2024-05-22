@@ -81,7 +81,7 @@ const alumniID = ref("");
 const password = ref("");
 const errMsg = ref("");
 const isLoading = ref(false);
-// const isPwVisible = ref(false);
+const isPwVisible = ref(false);
 
 const router = useRouter();
 
@@ -133,7 +133,7 @@ const signin = async () => {
   }
 };
 
-// const showPw = () => {
-//   isPwVisible.value = !isPwVisible.value;
-// };
+const showPw = () => {
+  isPwVisible.value = !isPwVisible.value;
+};
 </script>
