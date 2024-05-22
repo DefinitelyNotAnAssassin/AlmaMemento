@@ -81,6 +81,7 @@ const alumniID = ref("");
 const password = ref("");
 const errMsg = ref("");
 const isLoading = ref(false);
+const isPwVisible = ref(false);
 
 const router = useRouter();
 
@@ -102,8 +103,14 @@ const signin = async () => {
         localStorage.setItem("userId", user.id);
         localStorage.setItem("userlevel", user.data().userlevel);
 
-        if (user.data().userlevel === "administrator" || user.data().userlevel === "moderator") {
-          router.replace({ name: "adminDashboard", query: { userId: user.id } });
+        if (
+          user.data().userlevel === "administrator" ||
+          user.data().userlevel === "moderator"
+        ) {
+          router.replace({
+            name: "adminDashboard",
+            query: { userId: user.id },
+          });
         } else if (user.data().userlevel === "alumni") {
           router.replace({
             name: "alumniDashboard",
@@ -116,12 +123,17 @@ const signin = async () => {
       }
     } else {
       isLoading.value = false;
-      errMsg.value = "No account with that alumni number and password was found";
+      errMsg.value =
+        "No account with that alumni number and password was found";
     }
   } catch (error) {
     isLoading.value = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";
   }
+};
+
+const showPw = () => {
+  isPwVisible.value = !isPwVisible.value;
 };
 </script>
