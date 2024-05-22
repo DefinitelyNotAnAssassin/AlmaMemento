@@ -675,7 +675,6 @@ const submitModal = async () => {
 
       if (!yearExists) {
         const yearData = { name: year.value };
-        await addDoc(collection(db, "classYears"), yearData);
         await addDoc(collection(db, "folders"), yearData);
       }
 
