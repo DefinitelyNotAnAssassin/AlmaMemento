@@ -44,60 +44,60 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in filteredItems" :key="item.id">
-          <td>
-            <input type="checkbox" v-model="selectedItems" :value="item.id" />
-          </td>
-          <td>{{ item.userId }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.schoolYear }}</td>
-          <td>{{ item.event }}</td>
-          <td>{{ item.caption }}</td>
-          <td>
-            <a class="btn-view-image" @click="showImagePreview(item.imageUrls)"
-              >View Image</a
-            >
-          </td>
-          <td>
-            <template class="d-flex flex-wrap" v-if="item.status === 'pending'">
-              <button
-                class="btn btn-sm btn-success"
-                @click="approvePost(item, index)"
-              >
-                Approve
-              </button>
-              <button
-                class="btn btn-sm btn-danger mx-1"
-                @click="rejectPost(item, index)"
-              >
-                Reject
-              </button>
-            </template>
-            <span
-              class="btn btn-sm btn-success"
-              style="cursor: not-allowed"
-              v-else-if="item.status === 'approved'"
-              >Approved</span
-            >
-            <span
-              class="btn btn-sm btn-danger"
-              style="cursor: not-allowed"
-              v-else-if="item.status === 'rejected'"
-              >Rejected</span
-            >
-          </td>
-          <td>
-            <template v-if="item.history && item.history.length > 0">
-              <ul>
-                <li v-for="historyItem in item.history" :key="historyItem.id">
-                  {{ historyItem.admin }} - {{ historyItem.status }} 
-                </li>
-              </ul>
-            </template>
-            <span v-else>No History</span>
-          </td>
-        </tr>
-      </tbody>
+  <tr v-for="(item, index) in filteredItems" :key="item.id">
+    <td>
+      <input type="checkbox" v-model="selectedItems" :value="item.id" />
+    </td>
+    <td>{{ item.userId }}</td>
+    <td>{{ item.name }}</td>
+    <td>{{ item.schoolYear }}</td>
+    <td>{{ item.event }}</td>
+    <td>{{ item.caption }}</td>
+    <td>
+      <a class="btn-view-image" @click="showImagePreview(item.imageUrls)">
+        View Image
+      </a>
+    </td>
+    <td>
+      <template class="d-flex flex-wrap" v-if="item.status === 'pending'">
+        <button
+          class="btn btn-sm btn-success"
+          @click="approvePost(item, index)"
+        >
+          Approve
+        </button>
+        <button
+          class="btn btn-sm btn-danger mx-1"
+          @click="rejectPost(item, index)"
+        >
+          Reject
+        </button>
+      </template>
+      <span
+        class="btn btn-sm btn-success"
+        style="cursor: not-allowed"
+        v-else-if="item.status === 'approved'"
+        >Approved</span
+      >
+      <span
+        class="btn btn-sm btn-danger"
+        style="cursor: not-allowed"
+        v-else-if="item.status === 'rejected'"
+        >Rejected</span
+      >
+    </td>
+    <td>
+      <template v-if="item.history && item.history.length > 0">
+        <ul>
+          <li v-for="historyItem in item.history" :key="historyItem.id">
+            {{ historyItem.admin }} - {{ historyItem.status }} 
+          </li>
+        </ul>
+      </template>
+      <span v-else>No History</span>
+    </td>
+  </tr>
+</tbody>
     </table>
     <div v-show="filterStatus === 'history'" class="history-list">
       <h4>History</h4>
@@ -181,9 +181,7 @@ const fetchUsersAndClassYearsAndEvents = async () => {
     name: doc.data().name,
   }));
 
-  const querySnapshot = await getDocs(
-    query(collection(db, "posts"), where("status", "==", "pending"))
-  );
+  const querySnapshot = await getDocs(collection(db, "posts"));
   items.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -201,7 +199,6 @@ const fetchUsersAndClassYearsAndEvents = async () => {
     name: doc.data().name,
   }));
 };
-
 
 const listenForPostChanges = () => {
   const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
@@ -243,17 +240,6 @@ async function approvePost(item, index) {
   const approvalTime = new Date();
   const userId = item.userId;
 
-  const notificationRef = collection(db, "notifications");
-  await addDoc(notificationRef, {
-    for: "alumni",
-    name: adminName,
-    status: "unread",
-    time: approvalTime,
-    type: "newpost",
-    action: "approved",
-    userId: userId
-  });
-
   if (adminName) {
     const postRef = doc(db, "posts", item.id);
     await updateDoc(postRef, {
@@ -266,14 +252,6 @@ async function approvePost(item, index) {
     });
     items.value[index].status = "approved";
   }
-}
-
-
-async function rejectPost(item, index) {
-  const adminId = router.currentRoute.value.query.userId;
-  const adminName = await userIdToName(adminId);
-  const approvalTime = new Date();
-  const userId = item.userId;
 
   const notificationRef = collection(db, "notifications");
   await addDoc(notificationRef, {
@@ -282,9 +260,17 @@ async function rejectPost(item, index) {
     status: "unread",
     time: approvalTime,
     type: "newpost",
-    action: "rejected",
+    action: "approved",
     userId: userId
   });
+}
+
+
+async function rejectPost(item, index) {
+  const adminId = router.currentRoute.value.query.userId;
+  const adminName = await userIdToName(adminId);
+  const approvalTime = new Date();
+  const userId = item.userId;
 
   if (adminName) {
     const postRef = doc(db, "posts", item.id);
@@ -298,6 +284,17 @@ async function rejectPost(item, index) {
     });
     items.value[index].status = "rejected";
   }
+
+  const notificationRef = collection(db, "notifications");
+  await addDoc(notificationRef, {
+    for: "alumni",
+    name: adminName,
+    status: "unread",
+    time: approvalTime,
+    type: "newpost",
+    action: "rejected",
+    userId: userId
+  });
 }
 
 function showImagePreview(imageUrls) {
@@ -357,21 +354,24 @@ const filteredHistory = computed(() => {
 const filteredItems = computed(() => {
   let filtered = items.value;
 
-  if (filterStatus.value !== "all") {
-    filtered = filtered.filter((item) => item.status === filterStatus.value);
-  }
+  if (filterStatus.value !== "history") {
+    if (filterStatus.value !== "all") {
+      filtered = filtered.filter((item) => item.status === filterStatus.value);
+    }
 
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    filtered = filtered.filter(
-      (item) =>
-        item.userId.toLowerCase().includes(query) ||
-        item.name.toLowerCase().includes(query)
-    );
+    if (searchQuery.value) {
+      const query = searchQuery.value.toLowerCase();
+      filtered = filtered.filter(
+        (item) =>
+          item.userId.toLowerCase().includes(query) ||
+          item.name.toLowerCase().includes(query)
+      );
+    }
   }
 
   return filtered;
 });
+
 
 const confirmDelete = () => {
   isModalVisible.value = true;

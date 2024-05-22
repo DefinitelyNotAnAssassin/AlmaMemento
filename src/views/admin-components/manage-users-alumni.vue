@@ -595,6 +595,7 @@ const submitModal = async () => {
           major: major.value,
           blck: blck.value,
           year: year.value,
+          pab: name,
         };
         const subForData = {
           name: name,

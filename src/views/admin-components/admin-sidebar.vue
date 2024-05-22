@@ -175,11 +175,9 @@ const logout = async () => {
       console.log("Current URL:", window.location.href);
     } else {
       console.log("No logged in user found");
-      errMsg.value = "No logged in user found";
     }
   } catch (error) {
     console.error("Error:", error.message);
-    errMsg.value = "An error occurred";
   } finally {
     setTimeout(() => {
       isLoading.value = false;

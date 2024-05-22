@@ -20,19 +20,17 @@
     <div class="folders d-flex flex-wrap">
       <div
         class="folder m-2"
-        v-for="(folder, index) in filteredFolders"
-        :key="index"
+        v-for="folder in filteredFolders"
+        :key="folder.id"
         @click="changeAlbumPage(folder.name)"
       >
         <div class="folder-box bg-secondary">
-          <div class="folder-options" @click.stop="showFolderOptions(index)">
+          <div class="folder-options" @click.stop="showFolderOptions(folder.id)">
             <i class="bi bi-three-dots-vertical"></i>
           </div>
           <div class="folder-options-content" v-if="folder.showOptions">
-            <span @click.stop="editFolder(index)">Edit</span>
-            <span @click.stop="showDeleteFolderConfirmation(index)"
-              >Delete</span
-            >
+            <span @click.stop="editFolder(folder.id)">Edit</span>
+            <span @click.stop="showDeleteFolderConfirmation(folder.id)">Delete</span>
           </div>
           <div class="folder-name-bottom bg-primary text-light">
             <span>{{ folder.name }}</span>
@@ -52,10 +50,7 @@
         <button class="btn btn-sm btn-primary" @click="addFolder">
           Create Folder
         </button>
-        <button
-          class="btn btn-sm btn-secondary mt-1"
-          @click="showModal = false"
-        >
+        <button class="btn btn-sm btn-secondary mt-1" @click="showModal = false">
           Cancel
         </button>
       </div>
@@ -82,10 +77,7 @@
         <button class="btn btn-sm btn-danger" @click="confirmDeleteFolder">
           Delete
         </button>
-        <button
-          class="btn btn-sm btn-secondary mt-1"
-          @click="cancelDeleteFolder"
-        >
+        <button class="btn btn-sm btn-secondary mt-1" @click="cancelDeleteFolder">
           Cancel
         </button>
       </div>
@@ -120,6 +112,7 @@ const fetchFolders = async () => {
   folders.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     name: doc.data().name,
+    showOptions: false,
   }));
 };
 
@@ -153,14 +146,17 @@ const changeAlbumPage = (folderName) => {
   emit("folder-name", folderName);
 };
 
-const showFolderOptions = (index) => {
-  folders.value.forEach((folder, i) => {
-    if (i !== index) {
-      folder.showOptions = false;
-    } else {
-      folder.showOptions = !folder.showOptions;
+const toggleFolderOptions = (folderId) => {
+  folders.value = folders.value.map((folder) => {
+    if (folder.id === folderId) {
+      return { ...folder, showOptions: !folder.showOptions };
     }
+    return { ...folder, showOptions: false };
   });
+};
+
+const showFolderOptions = (folderId) => {
+  toggleFolderOptions(folderId);
 };
 
 const deleteFolder = async (index) => {
@@ -168,16 +164,18 @@ const deleteFolder = async (index) => {
   fetchFolders();
 };
 
-const editFolder = (index) => {
-  editIndex.value = index;
-  editFolderName.value = folders.value[index].name;
+const editFolder = (folderId) => {
+  const folder = folders.value.find((folder) => folder.id === folderId);
+  if (folder) {
+    editIndex.value = folderId;
+    editFolderName.value = folder.name;
+  }
 };
 
 const saveEditFolder = async () => {
   if (editIndex.value === null) return;
   if (!editFolderName.value.trim()) return;
-  const folderId = folders.value[editIndex.value].id;
-  const folderRef = doc(db, "folders", folderId);
+  const folderRef = doc(db, "folders", editIndex.value);
   await updateDoc(folderRef, { name: editFolderName.value });
   editIndex.value = null;
   fetchFolders();
@@ -195,8 +193,8 @@ const confirmDeleteFolder = async () => {
   }
 };
 
-const showDeleteFolderConfirmation = (index) => {
-  folderToDeleteIndex = index;
+const showDeleteFolderConfirmation = (folderId) => {
+  folderToDeleteIndex = folderId;
   showDeleteConfirmation.value = true;
 };
 
@@ -206,12 +204,14 @@ const cancelDeleteFolder = () => {
 };
 
 const filteredFolders = computed(() => {
-  return folders.value.filter((folder) =>
-    folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-  .sort((a, b) => a.name.localeCompare(b.name));
+  return folders.value
+    .filter((folder) =>
+      folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>
+
 
 <style>
 .modal {
