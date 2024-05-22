@@ -263,6 +263,15 @@ async function approvePost(item, index) {
     action: "approved",
     userId: userId
   });
+
+    if (item.imageUrls && item.imageUrls.length > 0) {
+    const eventGalleryRef = collection(db, "eventsgallery");
+    await addDoc(eventGalleryRef, {
+      imageUrl: item.imageUrls,
+      schoolYear: item.schoolYear,
+      event: item.event
+    });
+  }
 }
 
 
