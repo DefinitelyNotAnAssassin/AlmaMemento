@@ -333,5 +333,8 @@ fetchUserData();
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
