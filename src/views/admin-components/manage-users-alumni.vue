@@ -278,8 +278,8 @@
                   disabled
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text" for="fName">First Name</span>
+              <div>
+                <label for="fName">First Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -288,9 +288,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-                <span class="input-group-text" for="mInitial"
-                  >Middle Initial</span
-                >
+              </div>
+              <div>
+                <label for="mInitial">Middle Initial</label>
                 <input
                   class="form-control"
                   type="text"
@@ -299,7 +299,9 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-                <span class="input-group-text" for="lName">Last Name</span>
+              </div>
+              <div>
+                <label for="lName">Last Name</label>
                 <input
                   class="form-control"
                   type="text"
@@ -309,8 +311,8 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div class="input-group">
-                <span class="input-group-text">Program</span>
+              <div>
+                <label for="pabName">Program</label>
                 <input
                   class="form-control"
                   type="text"
@@ -318,7 +320,9 @@
                   name="pabName"
                   v-model="pabName"
                 />
-                <span class="input-group-text">Class Year</span>
+              </div>
+              <div>
+                <label for="year">Class Year</label>
                 <input
                   class="form-control"
                   type="text"
