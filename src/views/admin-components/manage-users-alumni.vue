@@ -166,7 +166,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-                <span class="input-group-text" for="mInitial">Middle Initial</span>
+                <span class="input-group-text" for="mInitial"
+                  >Middle Initial</span
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -278,7 +280,9 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-                <span class="input-group-text" for="mInitial">Middle Initial</span>
+                <span class="input-group-text" for="mInitial"
+                  >Middle Initial</span
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -352,7 +356,9 @@
           </div>
           <div v-else-if="isDeleteConfirmationVisible">
             <p>Are you sure you want to delete the selected item(s)?</p>
-            <button @click="deleteSelected">Confirm</button>
+            <button class="btn btn-sm btn-dark mt-2" @click="deleteSelected">
+              Confirm
+            </button>
           </div>
           <div v-if="!isDeleteConfirmationVisible">
             <button class="btn btn-sm btn-dark mt-2" @click="submitModal">
