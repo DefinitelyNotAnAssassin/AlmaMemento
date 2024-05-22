@@ -247,35 +247,35 @@ const showAllImages = ref(false);
 const posts = ref([]);
 
 // Edited start
-const userData = ref({
-  name: "",
-  email: "",
-  idNumber: "",
-  course: "",
-  classYear: "",
-  phone: "",
-  photoURL: "",
-});
+// const userData = ref({
+//   name: "",
+//   email: "",
+//   idNumber: "",
+//   course: "",
+//   classYear: "",
+//   phone: "",
+//   photoURL: "",
+// });
 
-const fetchUserData = async () => {
-  const userId = router.currentRoute.value.query.userId;
-  const userDocRef = doc(db, "users", userId);
-  const userDocSnap = await getDoc(userDocRef);
-  if (userDocSnap.exists()) {
-    const user = userDocSnap.data();
-    const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+// const fetchUserData = async () => {
+//   const userId = router.currentRoute.value.query.userId;
+//   const userDocRef = doc(db, "users", userId);
+//   const userDocSnap = await getDoc(userDocRef);
+//   if (userDocSnap.exists()) {
+//     const user = userDocSnap.data();
+//     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
 
-    userData.value = {
-      ...user,
-      name: name.trim(),
-      photoURL: user.profilePicture,
-    };
-    console.log("memento name: " + userData.name);
-  } else {
-    console.log("User not found");
-  }
-};
-fetchUserData();
+//     userData.value = {
+//       ...user,
+//       name: name.trim(),
+//       photoURL: user.profilePicture,
+//     };
+//     console.log("memento name: " + userData.name);
+//   } else {
+//     console.log("User not found");
+//   }
+// };
+// fetchUserData();
 
 // Edited End
 
