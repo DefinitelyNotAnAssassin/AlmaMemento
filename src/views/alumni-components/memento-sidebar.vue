@@ -316,6 +316,7 @@ fetchUserData();
   height: calc(100vh - 300px);
   width: 400px;
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -327,12 +328,14 @@ fetchUserData();
   justify-content: center;
   align-items: center;
 }
+
 .modal {
   background: white;
   padding: 20px;
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
+  height: auto;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
