@@ -109,7 +109,7 @@ const fetchUserData = async () => {
       photoURL: user.profilePicture,
     };
 
-    console.log("user" + user.profilePicture);
+    console.log("user" + userData.photoURL);
   } else {
     console.log("User not found");
   }
