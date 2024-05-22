@@ -21,7 +21,7 @@
         <div style="margin-left: 20px">
           <h4 class="text-light">{{ userData.name }}</h4>
           <h6 class="text-light">UI / UX</h6>
-          <button class="btn btn-sm btn-success">Edit Profile</button>
+          <button class="btn btn-sm btn-success" @click="showModal = true">Edit Profile</button>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
         <table>
           <tr>
             <td>ID number:</td>
-            <td>{{ userData.alumnaID }}</td>
+            <td>{{ userData.idNumber }}</td>
           </tr>
           <tr>
             <td>Phone:</td>
@@ -38,7 +38,7 @@
           </tr>
           <tr>
             <td>Address:</td>
-            <td>asdakjhd</td>
+            <td>{{ userData.address }}</td>
           </tr>
           <tr>
             <td>Email:</td>
@@ -51,10 +51,6 @@
             <td>Program & Block:</td>
             <td>{{ userData.pab }}</td>
           </tr>
-          <!-- <tr>
-            <td>Major:</td>
-            <td>N/A</td>
-          </tr> -->
           <tr>
             <td>Class Year:</td>
             <td>{{ userData.classYear }}</td>
@@ -65,6 +61,38 @@
         </button>
       </div>
     </div>
+    <!-- Edit Profile Modal -->
+    <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
+      <div class="modal">
+        <h3>Edit Profile</h3>
+        <div>
+          <label>First Name</label>
+          <input type="text" v-model="editData.fName" />
+        </div>
+        <div>
+          <label>Middle Initial</label>
+          <input type="text" v-model="editData.mInitial" />
+        </div>
+        <div>
+          <label>Last Name</label>
+          <input type="text" v-model="editData.lName" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input type="text" v-model="editData.phone" />
+        </div>
+        <div>
+          <label>Address</label>
+          <input type="text" v-model="editData.address" />
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" v-model="editData.email" />
+        </div>
+        <button @click="saveProfile">Save</button>
+        <button @click="showModal = false">Cancel</button>
+      </div>
+    </div>
   </aside>
 </template>
 
@@ -72,14 +100,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "../../firebase/index.js";
-import {
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import Loading from "../loading.vue";
+import { collection, getDocs, updateDoc, doc, getDoc } from "firebase/firestore";
 
 const router = useRouter();
 
@@ -95,7 +116,16 @@ const userData = ref({
   photoURL: "",
 });
 
-const isLoading = ref(false);
+const editData = ref({
+  fName: "",
+  mInitial: "",
+  lName: "",
+  phone: "",
+  address: "",
+  email: "",
+});
+
+const showModal = ref(false);
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
@@ -111,19 +141,39 @@ const fetchUserData = async () => {
       photoURL: user.profilePicture,
     };
 
-    // userData.value = {
-    //   name: name.trim(),
-    //   alumna_email: "",
-    //   idNumber: "",
-    //   course: "",
-    //   classYear: "",
-    //   phone: "",
-    //   photoURL: "",
-    // };
+    // Populate editData with the fetched user data
+    editData.value = {
+      fName: user.fName,
+      mInitial: user.mInitial,
+      lName: user.lName,
+      phone: user.phone,
+      address: user.address,
+      email: user.alumna_email,
+    };
 
     console.log("user" + userData.photoURL);
   } else {
     console.log("User not found");
+  }
+};
+
+const saveProfile = async () => {
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  try {
+    await updateDoc(userDocRef, {
+      fName: editData.value.fName,
+      mInitial: editData.value.mInitial,
+      lName: editData.value.lName,
+      phone: editData.value.phone,
+      address: editData.value.address,
+      alumna_email: editData.value.email,
+    });
+    showModal.value = false;
+    // Refresh the user data
+    fetchUserData();
+  } catch (error) {
+    console.error("Error updating document: ", error);
   }
 };
 
@@ -135,5 +185,23 @@ fetchUserData();
   border-right: 5px solid #330303;
   height: calc(100vh - 300px);
   width: 400px;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
 }
 </style>
