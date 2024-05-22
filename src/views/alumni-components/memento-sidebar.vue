@@ -115,7 +115,7 @@
           Save
         </button>
         <button
-          class="btn btn-sm btn-dark"
+          class="btn btn-sm btn-dark mx-1"
           @click="showEditProfileModal = false"
         >
           Cancel
@@ -151,7 +151,7 @@
           Save
         </button>
         <button
-          class="btn btn-sm btn-dark"
+          class="btn btn-sm btn-dark mx-1"
           @click="showChangePasswordModal = false"
         >
           Cancel
