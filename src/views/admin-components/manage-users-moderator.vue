@@ -321,10 +321,6 @@ const yearAppointed = ref(new Date().getFullYear().toString());
 const selectAllChecked = ref(false);
 const searchQuery = ref("");
 
-const lastName = lName.value;
-const last4Digits = alumnaID.value.slice(-4);
-const alumna_password = `${lastName}${last4Digits}`;
-
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
   return sortedItems.value.filter((item) => {
