@@ -143,7 +143,7 @@
               </div>
             </div>
             <div class="mx-1">
-              <!---<div>
+              <<div>
                 <label for="alumna_password">Password</label>
                 <input
                   class="form-control"
@@ -153,7 +153,7 @@
                   v-model="alumna_password"
                   placeholder="Password"
                 />
-              </div>-->
+              </div>
               <div>
                 <label for="phone">Phone</label>
                 <input
