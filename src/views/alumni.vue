@@ -31,7 +31,7 @@
                   class="btn btn-light"
                   style="height: 40px"
                 >
-                  <i class="bi bi-plus"></i>
+                  Post
                 </button>
               </div>
               <button
