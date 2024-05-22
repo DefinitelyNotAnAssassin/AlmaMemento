@@ -441,12 +441,22 @@ onMounted(async () => {
     name: doc.data().name,
   }));
 
-  onSnapshot(collection(db, "posts"), (snapshot) => {
-    posts.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    approvedPosts.value = posts.value.filter(
-      (post) => post.status === "approved"
-    );
+onSnapshot(collection(db, "posts"), (snapshot) => {
+  posts.value = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      likedBy: data.likedBy || [], // Ensure likedBy is always an array
+      likes: data.likes || 0, // Ensure likes is always a number
+      comments: data.comments || [], // Ensure comments is always an array
+      showComments: false,
+      commentsLoaded: false,
+      newComment: "",
+    };
   });
+  approvedPosts.value = posts.value.filter((post) => post.status === "approved");
+});
 
   posts.value.forEach((post) => {
     post.comments = [];
