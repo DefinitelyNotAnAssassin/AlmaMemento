@@ -209,6 +209,8 @@
                   v-model="major"
                 />
               </div>
+            </div>
+            <div class="mx-1">
               <div>
                 <label for="blck">Block</label>
                 <input
@@ -321,6 +323,8 @@
                   v-model="pabName"
                 />
               </div>
+            </div>
+            <div class="mx-1">
               <div>
                 <label for="year">Class Year</label>
                 <input
