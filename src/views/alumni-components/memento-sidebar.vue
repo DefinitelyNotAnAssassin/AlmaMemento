@@ -27,7 +27,7 @@
         <div style="margin-left: 20px">
           <h4 class="text-light">{{ userData.name }}</h4>
           <h6 class="text-light">UI / UX</h6>
-          <button class="btn btn-sm btn-success" @click="showModal = true">
+          <button class="btn btn-sm btn-success" @click="showEditProfileModal = true">
             Edit Profile
           </button>
         </div>
@@ -64,13 +64,14 @@
             <td>{{ userData.classYear }}</td>
           </tr>
         </table>
-        <button class="btn btn-sm text-light background-color-brown">
+        <button class="btn btn-sm text-light background-color-brown" @click="showChangePasswordModal = true">
           Change Password
         </button>
       </div>
     </div>
+
     <!-- Edit Profile Modal -->
-    <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
+    <div v-if="showEditProfileModal" class="modal-overlay" @click.self="showEditProfileModal = false">
       <div class="modal">
         <h3>Edit Profile</h3>
         <div>
@@ -98,7 +99,24 @@
           <input type="email" v-model="editData.email" />
         </div>
         <button @click="saveProfile">Save</button>
-        <button @click="showModal = false">Cancel</button>
+        <button @click="showEditProfileModal = false">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div v-if="showChangePasswordModal" class="modal-overlay" @click.self="showChangePasswordModal = false">
+      <div class="modal">
+        <h3>Change Password</h3>
+        <div>
+          <label>Current Password</label>
+          <input type="password" v-model="passwordData.currentPassword" />
+        </div>
+        <div>
+          <label>New Password</label>
+          <input type="password" v-model="passwordData.newPassword" />
+        </div>
+        <button @click="changePassword">Save</button>
+        <button @click="showChangePasswordModal = false">Cancel</button>
       </div>
     </div>
   </aside>
@@ -140,7 +158,13 @@ const editData = ref({
   email: "",
 });
 
-const showModal = ref(false);
+const passwordData = ref({
+  currentPassword: "",
+  newPassword: ""
+});
+
+const showEditProfileModal = ref(false);
+const showChangePasswordModal = ref(false);
 const fileInput = ref(null);
 
 const fetchUserData = async () => {
@@ -185,7 +209,7 @@ const saveProfile = async () => {
       address: editData.value.address,
       alumna_email: editData.value.email,
     });
-    showModal.value = false;
+    showEditProfileModal.value = false;
     // Refresh the user data
     fetchUserData();
   } catch (error) {
@@ -216,6 +240,29 @@ const uploadImage = async (event) => {
   }
 };
 
+const changePassword = async () => {
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data();
+    if (user.password === passwordData.value.currentPassword) {
+      try {
+        await updateDoc(userDocRef, {
+          password: passwordData.value.newPassword,
+        });
+        showChangePasswordModal.value = false;
+      } catch (error) {
+        console.error("Error updating password: ", error);
+      }
+    } else {
+      alert("Current password is incorrect");
+    }
+  } else {
+    console.log("User not found");
+  }
+};
+
 fetchUserData();
 </script>
 
@@ -234,7 +281,7 @@ fetchUserData();
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 .modal {
   background: white;
