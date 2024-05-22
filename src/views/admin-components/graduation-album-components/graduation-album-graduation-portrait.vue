@@ -51,7 +51,7 @@
     <div class="students-container d-flex flex-wrap">
       <div
         class="student-container m-2"
-        v-for="student in students"
+        v-for="student in sortedStudents"
         :key="student.id"
       >
         <div class="image-container wh-150px p-0" style="position: relative">
@@ -515,6 +515,12 @@ const uploadData = async () => {
 
   closeModal();
 };
+
+const sortedStudents = computed(() => {
+  return students.value.slice().sort((a, b) => {
+    return a.name.localeCompare(b.name);
+  });
+});
 
 const checkAdviserExists = async () => {
   const q = query(
