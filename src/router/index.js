@@ -8,10 +8,9 @@ import memento from '../views/alumni-components/memento.vue'
 import contact from '../views/alumni-components/contact.vue'
 import modDashboard from '../views/mod.vue'
 import forgotPassword from '../views/forgot-password.vue'
-import { useAuth } from '../composables/useAuth';
 
 const routes = [
-  { path: '/', component: Home,  name: 'home' },
+  { path: '/', component: Home,  name: 'home', meta: { requiresAuth: true } },
   { path: '/adminDashboard', component: adminDashboard, name: 'adminDashboard' },
   { path: '/login', component: Login,  name: 'login' },
   { path: '/alumniDashboard', component: alumniDashboard, name: 'alumniDashboard' },
@@ -28,15 +27,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { isAuthenticated, checkAuth } = useAuth();
-  checkAuth();
-
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated.value) {
-      next({ name: 'login' });
-    } else {
-      next();
-    }
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    next({ name: 'login' });
   } else {
     next();
   }

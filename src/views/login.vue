@@ -72,9 +72,6 @@ const router = useRouter();
 const signin = async () => {
   isLoading.value = true;
   try {
-    console.log("Trying to sign in...");
-    console.log(isLoading.value + "---");
-
     const q = query(
       collection(db, "users"),
       where("alumnaID", "==", alumniID.value),
@@ -84,31 +81,29 @@ const signin = async () => {
     const user = querySnapshot.docs[0];
 
     if (user) {
-      console.log("User found:", user.data());
-
       if (user.data().status === "active") {
         await updateDoc(doc(db, "users", user.id), { loggedIn: true });
 
+        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userlevel", user.data().userlevel);
+
         if (user.data().userlevel === "administrator" || user.data().userlevel === "moderator") {
-          router.push({ name: "adminDashboard", query: { userId: user.id } });
+          router.replace({ name: "adminDashboard", query: { userId: user.id } });
         } else if (user.data().userlevel === "alumni") {
-          router.push({
+          router.replace({
             name: "alumniDashboard",
             query: { userId: user.id, alumniId: user.data().alumnaID },
           });
         }
-        console.log("Current URL:", window.location.href);
       } else {
         isLoading.value = false;
         errMsg.value = "Your account has been deactivated";
       }
     } else {
       isLoading.value = false;
-      errMsg.value =
-        "No account with that alumni number and password was found";
+      errMsg.value = "No account with that alumni number and password was found";
     }
   } catch (error) {
-    console.log("catch");
     isLoading.value = false;
     console.error("Error:", error.message);
     errMsg.value = "An error occurred";

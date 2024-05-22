@@ -8,21 +8,24 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth } from './composables/useAuth';
-import Loading from './views/loading.vue';
 
 const isLoading = ref(true);
 const router = useRouter();
 
-const { isAuthenticated, checkAuth } = useAuth();
-
-checkAuth();
-
 onMounted(() => {
-  if (!isAuthenticated.value) {
+  const userId = localStorage.getItem('userId');
+  const userlevel = localStorage.getItem('userlevel');
+
+  if (userId && userlevel) {
+    if (userlevel === "administrator" || userlevel === "moderator") {
+      router.push({ name: 'adminDashboard', query: { userId } });
+    } else if (userlevel === "alumni") {
+      router.push({ name: 'alumniDashboard', query: { userId } });
+    }
+  } else {
     router.push({ name: 'login' });
   }
+
   isLoading.value = false;
 });
 </script>
-

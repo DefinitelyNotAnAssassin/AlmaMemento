@@ -224,18 +224,21 @@ const listenForPostChanges = () => {
 
 const searchQuery = ref("");
 
-const userIdToName = async (adminId) => {
+async function userIdToName(adminId) {
   const docRef = doc(db, "users", adminId);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    return docSnap.data().name;
+    const userData = docSnap.data();
+    const { fName, lName, mInitial } = userData;
+    const fullName = `${fName}, ${lName} ${mInitial}.`;
+    return fullName;
   } else {
     console.log("No such document!");
     return null;
   }
-};
+}
 
-async function approvePost(item, index) {
+async function approvePost(item, index) { 
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
   const userId = item.userId;
@@ -265,7 +268,9 @@ async function approvePost(item, index) {
   }
 }
 
+
 async function rejectPost(item, index) {
+  const adminId = router.currentRoute.value.query.userId;
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
   const userId = item.userId;

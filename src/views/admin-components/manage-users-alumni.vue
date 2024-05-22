@@ -72,12 +72,6 @@
                   </ul>
                 </div>
                 <span class="mx-1">Program & Block</span>
-                <button
-                  class="btn btn-sm btn-light"
-                  @click="addProgramAndBlock"
-                >
-                  <i class="bi bi-plus-lg"></i>
-                </button>
               </div>
             </th>
             <th>
@@ -105,9 +99,6 @@
                   </ul>
                 </div>
                 <span class="mx-1">Class Year</span>
-                <button class="btn btn-sm btn-light" @click="addClassYear">
-                  <i class="bi bi-plus-lg"></i>
-                </button>
               </div>
             </th>
             <th>Email</th>
@@ -132,7 +123,7 @@
               <button class="btn btn-sm btn-dark mx-1" @click="editItem(item)">
                 <i class="bi bi-pen"></i>
               </button>
-              <button class="btn btn-sm btn-danger" @click="deleteItem(index)">
+              <button class="btn btn-sm btn-danger" @click="deleteItem(item)">
                 <i class="bi bi-trash3-fill"></i>
               </button>
             </td>
@@ -150,7 +141,7 @@
         </div>
       </div>
       <div v-if="isModalVisible" class="modal">
-        <div class="modal-content" style="width: 500px">
+        <div class="modal-content" style="width: 1000px">
           <span class="close" @click="closeModal">&times;</span>
           <div v-if="isAdding" class="d-flex">
             <div class="mx-1">
@@ -165,8 +156,8 @@
                   placeholder="ID Number"
                 />
               </div>
-              <div>
-                <label for="fName">First Name</label>
+              <div class="input-group">
+                <span class="input-group-text" for="fName">First Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -175,9 +166,7 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-              </div>
-              <div>
-                <label for="mInitial">Middle Initial</label>
+                <span class="input-group-text" for="mInitial">Middle Initial</span>
                 <input
                   class="form-control"
                   type="text"
@@ -186,9 +175,7 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-              </div>
-              <div>
-                <label for="lName">Last Name</label>
+                <span class="input-group-text" for="lName">Last Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -198,27 +185,39 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div>
-                <label>Program & Block</label>
-                <select class="form-control" v-model="selectedProgramAndBlock">
-                  <option v-for="pab in pabs" :key="pab.id" :value="pab.name">
-                    {{ pab.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="mx-1">
-              <div>
-                <label>Class Year</label>
-                <select class="form-control" v-model="selectedClassYear">
-                  <option
-                    v-for="classYear in classYears"
-                    :key="classYear.id"
-                    :value="classYear.name"
-                  >
-                    {{ classYear.name }}
-                  </option>
-                </select>
+              <div class="input-group">
+                <span class="input-group-text">Program</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="pabName"
+                  name="pabName"
+                  v-model="pabName"
+                />
+                <span class="input-group-text">Major</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="major"
+                  name="major"
+                  v-model="major"
+                />
+                <span class="input-group-text">Block</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="blck"
+                  name="blck"
+                  v-model="blck"
+                />
+                <span class="input-group-text">Class Year</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="year"
+                  name="year"
+                  v-model="year"
+                />
               </div>
               <div>
                 <label for="alumna_email">Email</label>
@@ -266,10 +265,11 @@
                   name="alumnaID"
                   v-model="alumnaID"
                   placeholder="ID Number"
+                  disabled
                 />
               </div>
-              <div>
-                <label for="fName">First Name</label>
+              <div class="input-group">
+                <span class="input-group-text" for="fName">First Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -278,9 +278,7 @@
                   v-model="fName"
                   placeholder="First Name"
                 />
-              </div>
-              <div>
-                <label for="mInitial">Middle Initial</label>
+                <span class="input-group-text" for="mInitial">Middle Initial</span>
                 <input
                   class="form-control"
                   type="text"
@@ -289,9 +287,7 @@
                   v-model="mInitial"
                   placeholder="Middle Initial"
                 />
-              </div>
-              <div>
-                <label for="lName">Last Name</label>
+                <span class="input-group-text" for="lName">Last Name</span>
                 <input
                   class="form-control"
                   type="text"
@@ -301,27 +297,23 @@
                   placeholder="Last Name"
                 />
               </div>
-              <div>
-                <label>Program & Block</label>
-                <select class="form-control" v-model="selectedProgramAndBlock">
-                  <option v-for="pab in pabs" :key="pab.id" :value="pab.name">
-                    {{ pab.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="mx-1">
-              <div>
-                <label>Class Year</label>
-                <select class="form-control" v-model="selectedClassYear">
-                  <option
-                    v-for="classYear in classYears"
-                    :key="classYear.id"
-                    :value="classYear.name"
-                  >
-                    {{ classYear.name }}
-                  </option>
-                </select>
+              <div class="input-group">
+                <span class="input-group-text">Program</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="pabName"
+                  name="pabName"
+                  v-model="pabName"
+                />
+                <span class="input-group-text">Class Year</span>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="year"
+                  name="year"
+                  v-model="year"
+                />
               </div>
               <div>
                 <label for="alumna_email">Email</label>
@@ -356,64 +348,6 @@
                   placeholder="Address"
                 />
               </div>
-            </div>
-          </div>
-          <div v-else-if="isAddingProgramAndBlock">
-            <div>
-              <label for="pabName">Program</label>
-              <input
-                class="form-control"
-                type="text"
-                id="pabName"
-                name="pabName"
-                v-model="pabName"
-                placeholder="Program"
-              />
-            </div>
-            <div>
-              <label for="major">Major</label>
-              <input
-                class="form-control"
-                type="text"
-                id="major"
-                name="major"
-                v-model="major"
-                placeholder="Major"
-              />
-            </div>
-            <div>
-              <label for="blck">Block</label>
-              <input
-                class="form-control"
-                type="text"
-                id="blck"
-                name="blck"
-                v-model="blck"
-                placeholder="Block"
-              />
-            </div>
-            <label for="year">Class Year</label>
-            <select class="form-control" v-model="selectedClassYear">
-              <option
-                v-for="classYear in classYears"
-                :key="classYear.id"
-                :value="classYear.name"
-              >
-                {{ classYear.name }}
-              </option>
-            </select>
-          </div>
-          <div v-else-if="isAddingClassYear">
-            <div>
-              <label for="year">Class Year</label>
-              <input
-                class="form-control"
-                type="text"
-                id="year"
-                name="year"
-                v-model="year"
-                placeholder="Class Year"
-              />
             </div>
           </div>
           <div v-else-if="isDeleteConfirmationVisible">
@@ -452,11 +386,7 @@ const selectedItems = ref([]);
 const isModalVisible = ref(false);
 const isAdding = ref(false);
 const isEditing = ref(false);
-const isAddingProgramAndBlock = ref(false);
-const isAddingClassYear = ref(false);
 const isDeleteConfirmationVisible = ref(false);
-const selectedProgramAndBlock = ref(null);
-const selectedClassYear = ref(null);
 const pabs = ref([]);
 const classYears = ref([]);
 const alumnaID = ref("");
@@ -474,6 +404,7 @@ const selectedClassYears = ref([]);
 const pabName = ref("");
 const major = ref("");
 const blck = ref("");
+const year = ref("");
 const isWarningVisible = ref(false);
 const warningMessage = ref("");
 const isSuccessVisible = ref(false);
@@ -555,26 +486,13 @@ const addUser = () => {
   fName.value = "";
   mInitial.value = "";
   lName.value = "";
-  selectedProgramAndBlock.value = null;
-  selectedClassYear.value = null;
-  alumna_email.value = "";
-  phone.value = "";
-  address.value = "";
-};
-
-const addProgramAndBlock = () => {
-  isModalVisible.value = true;
-  isAddingProgramAndBlock.value = true;
-
   pabName.value = "";
   major.value = "";
   blck.value = "";
-  selectedClassYear.value = null;
-};
-
-const addClassYear = () => {
-  isModalVisible.value = true;
-  isAddingClassYear.value = true;
+  year.value = "";
+  alumna_email.value = "";
+  phone.value = "";
+  address.value = "";
 };
 
 const confirmDelete = () => {
@@ -586,8 +504,6 @@ const closeModal = () => {
   isModalVisible.value = false;
   isAdding.value = false;
   isEditing.value = false;
-  isAddingProgramAndBlock.value = false;
-  isAddingClassYear.value = false;
   isDeleteConfirmationVisible.value = false;
 };
 
@@ -625,22 +541,37 @@ const showWarningPopup = (message) => {
 const submitModal = async () => {
   if (isAdding.value === true) {
     const alumnaIDExists = await checkAlumnaIDExists(alumnaID.value);
+    const programBlockExists = await checkProgramBlockExist(
+      pabName.value,
+      major.value,
+      blck.value,
+      year.value
+    );
+    const yearExists = await checkClassYearExists(year.value);
+
     if (alumnaIDExists) {
       showWarningPopup("Alumna ID already exists!");
       return;
+    }
+
+    let name;
+    if (major.value === "N/A" || !major.value) {
+      name = `${pabName.value} - Block ${blck.value}`;
+    } else {
+      name = `${pabName.value} Major in ${major.value} - Block ${blck.value}`;
     }
 
     const lastName = lName.value;
     const last4Digits = alumnaID.value.slice(-4);
     const alumna_password = `${lastName}${last4Digits}`;
 
-    const data = {
+    const userData = {
       alumnaID: alumnaID.value,
       fName: fName.value,
       mInitial: mInitial.value,
       lName: lName.value,
-      pab: selectedProgramAndBlock.value,
-      classYear: selectedClassYear.value,
+      pab: name,
+      classYear: year.value,
       alumna_email: alumna_email.value,
       phone: phone.value,
       address: address.value,
@@ -648,7 +579,42 @@ const submitModal = async () => {
       userlevel: "alumni",
       status: "active",
     };
-    await addDoc(collection(db, "users"), data);
+
+    try {
+      await addDoc(collection(db, "users"), userData);
+
+      if (!yearExists) {
+        const yearData = { name: year.value };
+        await addDoc(collection(db, "classYears"), yearData);
+        await addDoc(collection(db, "folders"), yearData);
+      }
+
+      if (!programBlockExists) {
+        const pabData = {
+          program: pabName.value,
+          major: major.value,
+          blck: blck.value,
+          year: year.value,
+        };
+        const subForData = {
+          name: name,
+          year: year.value,
+          type: "pab",
+        };
+        const subFolder = {
+          name: "Graduation Portrait",
+          parentFolder: name,
+          year: year.value,
+          type: "subfolder",
+        };
+        await addDoc(collection(db, "pabs"), pabData);
+        await addDoc(collection(db, "subfolders"), subForData);
+        await addDoc(collection(db, "subfolders"), subFolder);
+      }
+      showSuccessPopup("Data has been successfully saved!");
+    } catch (error) {
+      showWarningPopup("Error saving data: " + error.message);
+    }
   } else if (isEditing.value === true) {
     const selectedItem = items.value.find(
       (item) => item.alumnaID === alumnaID.value
@@ -659,12 +625,11 @@ const submitModal = async () => {
       const last4Digits = alumnaID.value.slice(-4);
       const alumna_password = `${lastName}${last4Digits}`;
       await updateDoc(docRef, {
-        alumnaID: alumnaID.value,
         fName: fName.value,
         mInitial: mInitial.value,
         lName: lName.value,
-        pab: selectedProgramAndBlock.value,
-        classYear: selectedClassYear.value,
+        pab: pabName.value,
+        classYear: year.value,
         alumna_email: alumna_email.value,
         phone: phone.value,
         address: address.value,
@@ -673,54 +638,6 @@ const submitModal = async () => {
     } else {
       showWarningPopup("Selected item not found");
     }
-  } else if (isAddingProgramAndBlock.value === true) {
-    const programBlockExists = await checkProgramBlockExist(
-      pabName.value,
-      major.value,
-      blck.value,
-      selectedClassYear.value
-    );
-    if (programBlockExists) {
-      showWarningPopup("Program, Major, Block for that year exists");
-      return;
-    }
-    let name;
-    if (major.value === "N/A" || !major.value) {
-      name = `${pabName.value} - Block ${blck.value}`;
-    } else {
-      name = `${pabName.value} Major in ${major.value} - Block ${blck.value}`;
-    }
-    const data = {
-      program: pabName.value,
-      major: major.value,
-      blck: blck.value,
-      year: selectedClassYear.value,
-    };
-    const subForData = {
-      name: name,
-      year: selectedClassYear.value,
-      type: "pab",
-    };
-    const subFolder = {
-      name: "Graduation Portrait",
-      parentFolder: name,
-      year: selectedClassYear.value,
-      type: "subfolder",
-    };
-    await addDoc(collection(db, "pabs"), data);
-    await addDoc(collection(db, "subfolders"), subForData);
-    await addDoc(collection(db, "subfolders"), subFolder);
-  } else if (isAddingClassYear.value == true) {
-    const yearExists = await checkClassYearExists(year.value);
-    if (yearExists) {
-      showWarningPopup("Class year already exists");
-      return;
-    }
-    const data = {
-      name: year.value,
-    };
-    await addDoc(collection(db, "classYears"), data);
-    await addDoc(collection(db, "folders"), data);
   }
   showSuccessPopup("Data has been added successfully!");
   closeModal();
@@ -747,20 +664,18 @@ const editItem = (selectedItem) => {
   fName.value = selectedItem.fName;
   mInitial.value = selectedItem.mInitial;
   lName.value = selectedItem.lName;
-  selectedProgramAndBlock.value = selectedItem.pab;
-  selectedClassYear.value = selectedItem.classYear;
+  pabName.value = selectedItem.pab;
+  year.value = selectedItem.classYear;
   alumna_email.value = selectedItem.alumna_email;
   phone.value = selectedItem.phone;
   address.value = selectedItem.address;
 };
 
-const deleteItem = async (index) => {
-  const selectedItem = items.value[index];
-  if (!selectedItem) return;
-
-  const docRef = doc(db, "users", selectedItem.id);
+const deleteItem = async (item) => {
+  const docRef = doc(db, "users", item.id);
   await deleteDoc(docRef);
 
+  const index = items.value.findIndex((i) => i.id === item.id);
   items.value.splice(index, 1);
 };
 
@@ -816,7 +731,7 @@ const importUsers = (event) => {
         address,
       } = user;
       const lastName = lName;
-      const last4Digits = alumnaID.slice(-4);
+      const last4Digits = alumnaID.toString().slice(-4);
       const alumna_password = `${lastName}${last4Digits}`;
 
       await addDoc(collection(db, "users"), {
