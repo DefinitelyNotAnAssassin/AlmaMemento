@@ -6,12 +6,12 @@
     >
       <div
         class="d-flex align-items-center"
-        style="position: absolute; top: -85px"
+        style="position: absolute; top: -100px; padding-left: 30px"
       >
         <div>
           <img
             style="height: 150px; width: 150px; border-radius: 50%"
-            src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
             alt="profile"
           />
           <button type="button" class="btn btn-sm">
