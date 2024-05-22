@@ -85,7 +85,7 @@ const router = useRouter();
 
 const userData = ref({
   name: "",
-  email: "",
+  alumna_email: "",
   idNumber: "",
   course: "",
   classYear: "",
