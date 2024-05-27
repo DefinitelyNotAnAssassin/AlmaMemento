@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item" href="#"> </a>
+      <a class="navbar-item" href="#">
+      
+      </a>
     </div>
     <div class="navbar-end">
       <a class="notif-main navbar-item text-light" @click="toggleNotifications">
@@ -188,4 +190,7 @@ onMounted(() => {
 .clickable {
   cursor: pointer;
 }
+
+
+
 </style>

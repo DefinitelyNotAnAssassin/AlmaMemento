@@ -143,7 +143,7 @@
               </div>
             </div>
             <div class="mx-1">
-              <<div>
+              <div>
                 <label for="alumna_password">Password</label>
                 <input
                   class="form-control"

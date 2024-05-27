@@ -264,6 +264,18 @@
                   placeholder="Address"
                 />
               </div>
+              <div>
+                <label for="bio">Bio</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="bio"
+                  name="bio"
+                  v-model="bio"
+                  placeholder="Bio"
+                  maxlength="50"
+                />
+              </div>
             </div>
           </div>
           <div class="d-flex" v-else-if="isEditing">
@@ -368,6 +380,18 @@
                   placeholder="Address"
                 />
               </div>
+              <div>
+                <label for="bio">Bio</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="bio"
+                  name="bio"
+                  v-model="bio"
+                  placeholder="Bio"
+                  maxlength="50"
+                />
+              </div>
             </div>
           </div>
           <div v-else-if="isDeleteConfirmationVisible">
@@ -418,6 +442,7 @@ const lName = ref("");
 const alumna_email = ref("");
 const phone = ref("");
 const address = ref("");
+const bio = ref("");
 const users = ref([]);
 const searchQuery = ref("");
 const selectAllChecked = ref(false);
@@ -583,6 +608,7 @@ const addUser = () => {
   alumna_email.value = "";
   phone.value = "";
   address.value = "";
+  bio.value = "";
 };
 
 const confirmDelete = () => {
@@ -668,6 +694,7 @@ const submitModal = async () => {
       alumna_password: alumna_password,
       userlevel: "alumni",
       status: "active",
+      bio: bio.value
     };
 
     try {
@@ -716,6 +743,7 @@ const submitModal = async () => {
         phone: phone.value,
         address: address.value,
         alumna_password: alumna_password,
+        bio: bio.value
       });
     } else {
       showWarningPopup("Selected item not found");
@@ -751,6 +779,7 @@ const editItem = (selectedItem) => {
   alumna_email.value = selectedItem.alumna_email;
   phone.value = selectedItem.phone;
   address.value = selectedItem.address;
+  bio.value = selectedItem.bio
 };
 
 const deleteItem = async (item) => {
@@ -811,6 +840,7 @@ const importUsers = (event) => {
         alumna_email,
         phone,
         address,
+        bio
       } = user;
       const lastName = lName;
       const last4Digits = alumnaID.toString().slice(-4);
@@ -829,6 +859,7 @@ const importUsers = (event) => {
         alumna_password,
         userlevel: "alumni",
         status: "active",
+        bio
       });
     }
 

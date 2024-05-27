@@ -101,6 +101,7 @@
             class="form-control"
             type="file"
             @change="uploadImage"
+            accept="image/*"
             ref="imageInput"
           />
           <div>
@@ -188,6 +189,7 @@
               id="adviserImage"
               ref="adviserImageInput"
               @change="uploadAdviserImage"
+              accept="image/*"
             />
           </div>
           <div class="text-center">
@@ -242,6 +244,7 @@
               id="studentImage"
               ref="studentImageInput"
               @change="uploadStudentImage"
+              accept="image/*"
             />
           </div>
           <div class="text-center">

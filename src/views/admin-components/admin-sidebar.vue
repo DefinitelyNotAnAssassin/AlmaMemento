@@ -1,6 +1,7 @@
 <template>
   <Loading v-if="isLoading" />
-  <aside class="sidebar">
+  <aside :class="['sidebar', {'show-nav': isNavVisible}]">
+    <a href="#" class="btn-nav" @click="handleSidebar">&#9776;</a>
     <img src="../../assets/images/w-logo.png" alt="Logo" />
     <ul class="mt-3">
       <li
@@ -63,6 +64,7 @@ const userRole = ref(null);
 const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const isLoading = ref(false);
+const isNavVisible = ref(false);
 
 const sideBarItemsIcons = [
   "bi bi-speedometer2",
@@ -106,6 +108,12 @@ const getUserRole = async () => {
 onMounted(() => {
   getUserRole();
 });
+
+const handleSidebar = (e)=>{
+  e.preventDefault();
+ isNavVisible.value = !isNavVisible.value;
+ console.log(isNavVisible.value)
+}
 
 const handleSidebarItemClick = (item) => {
   if (isItemDisabled(item)) return;
@@ -203,4 +211,53 @@ const dropdownItemsVisibility = computed(() => {
   color: #504e4e;
   text-decoration: none;
 }
+.btn-nav{ 
+  background: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  right: 0.9rem;
+  top: -0.5rem;
+  cursor: pointer;
+  display: none;
+}
+.sidebar li {
+  color: #fff;
+}
+
+
+@media only screen and (max-width: 615px) {
+ .sidebar{
+  width: 3rem;
+  min-width: 3rem;
+  overflow-x: hidden;
+  position: relative;
+  transition: all 0.3s ease-out;
+ }
+
+ .sidebar.show-nav{
+  width: 12rem;
+  min-width: 12rem;
+  transition: all 0.3s ease-out;
+ }
+
+.btn-nav{
+  display: block;
+}
+
+ .sidebar img{
+  display: none;
+ }
+
+ .sidebar li {
+  overflow-x: hidden;
+
+ }
+
+
+
+}
+
 </style>
+

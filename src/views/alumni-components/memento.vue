@@ -1,4 +1,5 @@
 <template>
+    <Loading v-if="isLoading" />
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
@@ -12,11 +13,17 @@
       <div class="container-fluid p-0 d-flex">
         <MementoSideBar />
         <div class="main-content">
-          <p>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 1rem;">
             <button @click="showPostModal" class="btn btn-dark m-2">
               Add Post
             </button>
-          </p>
+
+            <select v-model="selectedStatus" class="btn btn-dark m-2">
+              <option>Approved</option>
+              <option>Rejected</option>
+              <option>Pending</option>
+            </select>
+          </div>
           <div v-if="showModal" class="modal">
             <div class="modal-content container">
               <div
@@ -81,7 +88,8 @@
                   ></textarea>
                   <input
                     class="form-control mt-2"
-                    type="file"
+                    type="file" 
+                    accept="image/*"
                     multiple
                     @change="uploadImages"
                   />
@@ -152,6 +160,8 @@
 </template>
 
 <script setup>
+import Loading from "../loading.vue";
+import { useQuasar } from 'quasar'
 import { ref, onMounted, computed, watch, defineProps } from "vue";
 import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
@@ -173,44 +183,62 @@ const selectedSchoolYear = ref("");
 const selectedEvent = ref("");
 const caption = ref("");
 const selectedImages = ref([]);
+const selectedStatus = ref('Approved')
 const progressBars = ref([]);
 const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
-const isImageSelected = computed(() => selectedImages.value.length > 0);
+const isImageSelected = computed(() => selectedImages.value.length > 0) ;
 const showAllImages = ref(false);
 const posts = ref([]);
+const isLoading = ref(false);
+const $q = useQuasar()
 
 // Edited start
-// const userData = ref({
-//   name: "",
-//   email: "",
-//   idNumber: "",
-//   course: "",
-//   classYear: "",
-//   phone: "",
-//   photoURL: "",
-// });
+const userData = ref({
+  name: "",
+  email: "",
+  idNumber: "",
+  course: "",
+  classYear: "",
+  phone: "",
+  photoURL: "",
+});
 
-// const fetchUserData = async () => {
-//   const userId = router.currentRoute.value.query.userId;
-//   const userDocRef = doc(db, "users", userId);
-//   const userDocSnap = await getDoc(userDocRef);
-//   if (userDocSnap.exists()) {
-//     const user = userDocSnap.data();
-//     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+const CustomDialog = (title,message)=> {
+      $q.dialog({
+        title,
+        message
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
 
-//     userData.value = {
-//       ...user,
-//       name: name.trim(),
-//       photoURL: user.profilePicture,
-//     };
-//     console.log("memento name: " + userData.name);
-//   } else {
-//     console.log("User not found");
-//   }
-// };
-// fetchUserData();
+
+const fetchUserData = async () => {
+
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data();
+    const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+
+    userData.value = {
+      ...user,
+      name: name.trim(),
+      photoURL: user.profilePicture,
+    };
+    console.log("memento name: " + userData.name);
+  } else {
+    console.log("User not found");
+  }
+};
+fetchUserData();
 
 // Edited End
 
@@ -267,7 +295,10 @@ function uploadImages(event) {
 }
 
 async function savePost() {
-  const userSnapshot = await getDocs(collection(db, "users"));
+  isLoading.value = true
+  const success = ref(false)
+  try {
+    const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
     ?.data();
@@ -296,17 +327,27 @@ async function savePost() {
   await addDoc(collection(db, "notifications"), notification);
 
   closeImageModal();
+
+  success.value = true
+  } catch (error) {
+    CustomDialog("Error", error.message)
+    success.value = false
+  }finally{
+    isLoading.value = false
+    if(success.value) CustomDialog("Successful", "Post has been added.")
+  }
+ 
 }
 
 const approvedPosts = computed(() => {
   return posts.value
     .filter(
-      (post) => post.status === "approved" && post.userId === alumniId.value
+      (post) => post.status === selectedStatus.value.toLowerCase() && post.userId === alumniId.value
     )
     .sort((a, b) => {
       const aLatestTime = a.history.reduce(
-        (latest, entry) => (entry.time > latest ? entry.time : latest),
-        a.history[0].time
+        (latest, entry) => (entry?.time > latest ? entry?.time : latest),
+        a.history[0]?.time
       );
       return new Date(aLatestTime);
     });

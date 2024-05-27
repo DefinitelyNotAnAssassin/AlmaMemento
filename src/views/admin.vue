@@ -3,7 +3,7 @@
     <Navbar :currentPage="currentPage" @update:currentPage="currentPage = $event"/>
     <div class="main">
       <Sidebar :currentPage="currentPage" @update:currentPage="currentPage = $event" />
-      <div v-if="currentPage === 'Dashboard'">
+      <div v-if="currentPage === 'Dashboard'" >
         <DashboardContent :currentPage="currentPage" @update:currentPage="currentPage = $event" />
       </div>
       <div v-else-if="currentPage === 'Profile'">
@@ -78,3 +78,5 @@ onMounted(() => {
 
 
 </script>
+
+

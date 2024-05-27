@@ -1,4 +1,5 @@
 <template>
+  <Loading v-if="isLoading" />
   <aside>
     <div
       class="memento-sidebar d-flex justify-content-center"
@@ -6,7 +7,7 @@
     >
       <div
         class="d-flex align-items-center"
-        style="position: absolute; top: -120px; padding-left: 30px"
+        style="position: absolute; top: -150px; padding-left: 200px"
       >
         <div>
           <img
@@ -14,6 +15,7 @@
               userData.photoURL ||
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
             "
+            @click="openImageModal(userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s')"
             alt="profile"
             style="height: 150px; width: 150px; border-radius: 50%"
           />
@@ -23,15 +25,17 @@
           <input
             type="file"
             ref="fileInput"
-            @change="uploadImage"
+            @change="showSaveDialog"
+            accept="image/*"
             style="display: none"
           />
         </div>
-        <div style="margin-left: 20px">
-          <h4 class="text-light">{{ userData.name }}</h4>
-          <h6 class="text-light">UI / UX</h6>
+        <div style="margin-left: 10px">
+          <h4 class="text-light" style="white-space: nowrap;">{{ userData.name }}</h4>
+          <h6 class="text-light">{{ userData.bio || "Add bio" }}</h6>
           <button
             class="btn btn-sm btn-success"
+           
             @click="showEditProfileModal = true"
           >
             Edit Profile
@@ -72,6 +76,7 @@
         </table>
         <button
           class="btn btn-sm text-light background-color-brown"
+      style="background-color: #400;"
           @click="showChangePasswordModal = true"
         >
           Change Password
@@ -88,18 +93,6 @@
       <div class="modal">
         <h3>Edit Profile</h3>
         <div>
-          <label>First Name</label>
-          <input class="form-control" type="text" v-model="editData.fName" />
-        </div>
-        <div>
-          <label>Middle Initial</label>
-          <input class="form-control" type="text" v-model="editData.mInitial" />
-        </div>
-        <div>
-          <label>Last Name</label>
-          <input class="form-control" type="text" v-model="editData.lName" />
-        </div>
-        <div>
           <label>Phone</label>
           <input class="form-control" type="text" v-model="editData.phone" />
         </div>
@@ -111,7 +104,11 @@
           <label>Email</label>
           <input class="form-control" type="email" v-model="editData.email" />
         </div>
-        <button class="btn btn-sm btn-primary" @click="saveProfile">
+        <div style="margin-bottom: 1rem;">
+          <label>Bio</label>
+          <input class="form-control" type="text" v-model="editData.bio" maxlength="50"/>
+        </div>
+        <button class="btn btn-sm btn-primary" @click="ConfirmationSaveProfile">
           Save
         </button>
         <button
@@ -147,7 +144,7 @@
             v-model="passwordData.newPassword"
           />
         </div>
-        <button class="btn btn-sm btn-primary" @click="changePassword">
+        <button class="btn btn-sm btn-primary" @click="ConfirmationChangePassword">
           Save
         </button>
         <button
@@ -157,11 +154,25 @@
           Cancel
         </button>
       </div>
+      
     </div>
+  
   </aside>
+   <div v-if="isOpen" class="profile-modal">
+      <div class="modal-content">
+        <span @click="closeImageModal" class="close">&times;</span>
+        <img
+          :src="imageUrl"
+          alt="Preview Image"
+          style="max-width: 100%; max-height: 80vh"
+        />
+      </div>
+    </div>
 </template>
 
 <script setup>
+import Loading from "../loading.vue";
+import { useQuasar } from 'quasar'
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db, storage } from "../../firebase/index.js";
@@ -178,6 +189,20 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
+const $q = useQuasar(); 
+const isOpen = ref(false);
+const imageUrl = ref("");
+const isLoading = ref(false);
+
+const openImageModal = (url) => {
+  imageUrl.value = url;
+  isOpen.value = true;
+};
+
+const closeImageModal = () => {
+  isOpen.value = false;
+};
+
 
 const router = useRouter();
 
@@ -189,17 +214,16 @@ const userData = ref({
   classYear: "",
   phone: "",
   address: "",
+  bio: "",
   pab: "",
   photoURL: "",
 });
 
 const editData = ref({
-  fName: "",
-  mInitial: "",
-  lName: "",
   phone: "",
   address: "",
   email: "",
+  bio: ""
 });
 
 const passwordData = ref({
@@ -227,12 +251,11 @@ const fetchUserData = async () => {
 
     // Populate editData with the fetched user data
     editData.value = {
-      fName: user.fName,
-      mInitial: user.mInitial,
-      lName: user.lName,
+    
       phone: user.phone,
       address: user.address,
       email: user.alumna_email,
+      bio: user.bio
     };
 
     console.log("user" + userData.photoURL);
@@ -241,23 +264,41 @@ const fetchUserData = async () => {
   }
 };
 
+const ConfirmationSaveProfile = () => {
+  $q.dialog({
+    title: 'Confirmation',
+    message: 'Are you sure you want to save changes?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    saveProfile()
+  }).onCancel(() => {
+    // Action on Cancel
+  }).onDismiss(() => {
+    // Action on Dismiss
+  });
+};
+
+
 const saveProfile = async () => {
+  isLoading.value = true
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   try {
     await updateDoc(userDocRef, {
-      fName: editData.value.fName,
-      mInitial: editData.value.mInitial,
-      lName: editData.value.lName,
       phone: editData.value.phone,
       address: editData.value.address,
       alumna_email: editData.value.email,
+      bio: editData.value.bio
     });
     showEditProfileModal.value = false;
     // Refresh the user data
     fetchUserData();
   } catch (error) {
     console.error("Error updating document: ", error);
+  }finally {
+    isLoading.value = false
+    SuccessfulMessage("Profile has been updated.")
   }
 };
 
@@ -265,7 +306,36 @@ const triggerFileInput = () => {
   fileInput.value.click();
 };
 
+const showSaveDialog = (event) => {
+  $q.dialog({
+    title: 'Confirmation',
+    message: 'Are you sure you want to change your profile picture?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    uploadImage(event)
+  }).onCancel(() => {
+    // Action on Cancel
+  }).onDismiss(() => {
+    // Action on Dismiss
+  });
+};
+
+const SuccessfulMessage = (message)=> {
+      $q.dialog({
+        title: 'Successful',
+        message
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
 const uploadImage = async (event) => {
+  isLoading.value = true
   const userId = router.currentRoute.value.query.userId;
   const file = event.target.files[0];
   if (file) {
@@ -280,11 +350,30 @@ const uploadImage = async (event) => {
       userData.value.photoURL = downloadURL;
     } catch (error) {
       console.error("Error uploading image: ", error);
+    }finally{
+      isLoading.value = false
+      SuccessfulMessage('Profile picture has been updated.')
     }
   }
 };
 
+const ConfirmationChangePassword = ()=> {
+  $q.dialog({
+    title: 'Confirmation',
+    message: 'Are you sure you want to change your password?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    changePassword()
+  }).onCancel(() => {
+    // Action on Cancel
+  }).onDismiss(() => {
+    // Action on Dismiss
+  });
+}
+
 const changePassword = async () => {
+  isLoading.value = true
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
@@ -298,6 +387,9 @@ const changePassword = async () => {
         showChangePasswordModal.value = false;
       } catch (error) {
         console.error("Error updating password: ", error);
+      }finally{
+        isLoading.value = false
+        SuccessfulMessage('Password has been updated.')
       }
     } else {
       alert("Current password is incorrect");
@@ -327,6 +419,7 @@ fetchUserData();
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
 }
 
 .modal {
@@ -338,7 +431,28 @@ fetchUserData();
   height: auto;
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  top: 10%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+
 }
+
+.profile-modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.profile-modal .modal-content{
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+  max-width: 800px;
+}
+
 </style>

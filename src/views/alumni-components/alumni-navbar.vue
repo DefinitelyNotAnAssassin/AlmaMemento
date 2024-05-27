@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar" style="position: sticky; top: 0; z-index: 10;">
     <div class="navbar-brand">
       <a class="navbar-item" href="#"> </a>
     </div>

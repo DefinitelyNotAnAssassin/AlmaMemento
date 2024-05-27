@@ -5,7 +5,7 @@
 }
 
 body {
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 table {
@@ -138,7 +138,7 @@ table {
 /* Sidebar */
 .sidebar {
   width: 250px;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #400;
   padding: 1rem;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -156,10 +156,12 @@ table {
 .sidebar a {
   text-decoration: none !important;
   cursor: pointer;
+  color: #eee;
 }
 
 .sidebar ul li {
   margin-bottom: 0.5rem;
+  white-space: nowrap;
 }
 
 .sidebar-button {
@@ -199,10 +201,11 @@ main {
   margin: 1rem;
 }
 .cards-container {
-  width: 95%;
+  /* width: 95%;  */
   background-color: #d7dce1;
   margin: 1rem;
   border-radius: 10px;
+  padding: 1rem;
 }
 
 .card-one,
@@ -211,8 +214,9 @@ main {
 .card-four {
   height: 200px;
   width: 45%;
-  display: inline-block;
+
   margin: 1rem;
+  display: inline-block;
 }
 
 .card-one {
@@ -221,6 +225,18 @@ main {
 
 .card-two {
   background-color: #01a26c;
+}
+
+.q-dialog__inner > div{
+  overflow-x: hidden !important;
+}
+
+.q-dialog  .q-card__actions{
+  padding-right: 1rem !important;
+}
+
+.sidebar a {
+  cursor: pointer !important;
 }
 
 .card-three {
@@ -241,6 +257,13 @@ main {
   margin: auto;
 }
 
+h1 {
+  font-size: 4rem !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+}
 .card-one .bottom-content {
   background-color: #be9001;
 }

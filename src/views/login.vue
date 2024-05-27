@@ -124,7 +124,7 @@ const signin = async () => {
     } else {
       isLoading.value = false;
       errMsg.value =
-        "No account with that alumni number and password was found";
+        "No account with that alumni number and password was found";  
     }
   } catch (error) {
     isLoading.value = false;

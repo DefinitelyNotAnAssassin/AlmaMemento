@@ -1,4 +1,5 @@
 <template>
+   <Loading v-if="isLoading" />
   <div class="components-page-main-container p-3 profile-container container">
     <div class="user-profile mt-2">
       <div class="profile-pic-container">
@@ -131,6 +132,7 @@
             class="form-control"
             type="file"
             id="profile-picture"
+            accept="image/*"
             name="profile-picture"
             @change="handleFileUpload"
           />
@@ -148,9 +150,11 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { ref, onMounted } from "vue";
 import { db } from "../../firebase/index.js";
 import { useRoute } from "vue-router";
+import Loading from "../loading.vue";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import {
   getStorage,
@@ -161,6 +165,7 @@ import {
 } from "firebase/storage";
 
 const storage = getStorage();
+const $q = useQuasar(); 
 
 const route = useRoute();
 const userId = route.query.userId;
@@ -178,10 +183,10 @@ const userDataLoaded = ref(false);
 const isEditable = ref(false);
 const isModalOpen = ref(false);
 const isImageModalOpen = ref(false);
+const isLoading = ref(false);
 let fileToUpload = null;
 
 import userImage from "@/assets/images/user.png";
-
 onMounted(async () => {
   try {
     const docRef = doc(db, "users", userId);
@@ -197,18 +202,55 @@ onMounted(async () => {
   }
 });
 
-const editProfile = () => {
-  isEditable.value = !isEditable.value;
+const showSaveDialog = () => {
+  $q.dialog({
+    title: 'Confirmation',
+    message: 'Are you sure you want to save changes?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    saveChanges();
+  }).onCancel(() => {
+    // Action on Cancel
+  }).onDismiss(() => {
+    // Action on Dismiss
+  });
 };
 
+const editProfile = () => {
+  isEditable.value = !isEditable.value;
+  if(!isEditable.value){
+    // showModal()
+    showSaveDialog ()
+  }
+};
+
+const alert = ()=> {
+      $q.dialog({
+        title: 'Successful',
+        message: 'Profile has been updated.'
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
 const saveChanges = async () => {
+  isLoading.value = true;
   try {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, userData.value);
     closeModal();
     isEditable.value = false;
+    alert()
+   
   } catch (error) {
     console.error("Error updating document:", error);
+  }finally{
+    isLoading.value = false;
   }
 };
 

@@ -91,6 +91,7 @@
                   <input
                     class="form-control mt-2"
                     type="file"
+                    accept="image/*, video/*"
                     multiple
                     @change="uploadImages"
                   />
@@ -144,6 +145,7 @@
                       :src="imageUrl"
                       class="d-block w-100"
                       alt="Image Preview"
+                      @click="openImageModal(imageUrl)"
                     />
                   </div>
                 </div>
@@ -216,6 +218,16 @@
       </div>
     </div>
   </div>
+  <div v-if="isOpen" class="modal">
+      <div class="modal-content">
+        <span @click="closePostImageModal" class="close">&times;</span>
+        <img
+          :src="imageUrl"
+          alt="Preview Image"
+          style="max-width: 100%; max-height: 80vh"
+        />
+      </div>
+    </div>
 </template>
 
 
@@ -256,6 +268,18 @@ const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
+const isOpen = ref(false);
+const imageUrl = ref("");
+
+const openImageModal = (url) => {
+  imageUrl.value = url;
+  isOpen.value = true;
+};
+
+const closePostImageModal = () => {
+  isOpen.value = false;
+};
+
 
 function showPostModal() {
   showModal.value = true;

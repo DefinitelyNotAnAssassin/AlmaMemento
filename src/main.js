@@ -1,8 +1,12 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
+import { Quasar, Dialog } from 'quasar'
 import App from './App.vue'
 import router from './router'
+
+//Quasar libraries
+import 'quasar/src/css/index.sass'
 
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
@@ -23,4 +27,9 @@ const firestore = getFirestore(firebaseApp)
 const auth = getAuth(firebaseApp)
 
 const app = createApp(App)
+app.use(Quasar, {
+  plugins: {
+    Dialog
+  }, // import Quasar plugins and add here
+})
 app.use(router).mount('#app')

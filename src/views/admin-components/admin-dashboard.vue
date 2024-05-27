@@ -97,3 +97,19 @@ onMounted(() => {
   fetchAlumniCount()
 })
 </script>
+
+<style scoped>
+.dashboard-bottom-title{
+  white-space: nowrap;
+}
+
+
+@media only screen and (max-width: 995px) {
+ .card-one, .card-two, .card-three,.card-four{
+   width: 95%;
+   min-width: 340px;
+  }
+}
+</style>
+
+
