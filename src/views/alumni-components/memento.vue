@@ -14,11 +14,33 @@
         <MementoSideBar />
         <div class="main-content">
           <div style="display: flex; justify-content: space-between; padding: 0.5rem 1rem;">
-            <button @click="showPostModal" class="btn btn-dark m-2">
+            <!-- <button @click="showPostModal" class="btn btn-dark m-2">
               Add Post
-            </button>
+            </button> -->
+     
+          <div class="d-flex justify-content-center">
+            <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
+              <div class="d-flex align-items-center">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+                  style="height: 40px !important; width: 40px !important; border-radius: 50%;"
+                />
+                <input
+                  style="height: 40px"
+                  type="text"
+                  class="form-control m-0 mx-1"
+                  v-model="caption"
+                  placeholder="Tell us about your school experiences..."
+                />
+                <button @click="savePost" class="btn btn-light" style="height: 40px">Post</button>
+              </div>
+              <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
+                <i class="bi bi-card-image"></i> Photo
+              </button>
+            </div>
+          </div>  
 
-            <select v-model="selectedStatus" class="btn btn-dark m-2">
+            <select v-model="selectedStatus" class="btn btn-dark m-2" style="height: min-content">
               <option>Approved</option>
               <option>Rejected</option>
               <option>Pending</option>
@@ -38,6 +60,7 @@
                   id="schoolYear"
                   v-model="selectedSchoolYear"
                   class="form-control"
+               
                 >
                   <option
                     v-for="year in schoolYears"
@@ -295,6 +318,11 @@ function uploadImages(event) {
 }
 
 async function savePost() {
+  if(caption.value.length == 0) {
+    alert("Enter caption.")
+    return
+  }
+
   isLoading.value = true
   const success = ref(false)
   try {
@@ -488,5 +516,10 @@ onMounted(async () => {
   color: #fff;
   padding: 10px 15px 10px 15px;
   border-radius: 15px;
+}
+
+.input-container select{
+
+  background: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4gPHBhdGggZD0iTTEuNDI4IDMuMjE3YTEuMzc5IDEuMzc5IDAgMCAxIDEuOTU0LS4wMDhsNS42MDcgNS42MDcgNS42MDctNS42MDdhMS4zNzggMS4zNzggMCAxIDEgMS45NTQgMS45NTRsLTYuNTg0IDYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLTEuOTU0IDBsLTYuNTg0LTYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLS4wMDgtMS45NTR6Ii8+PC9zdmc+') no-repeat right 0.75rem center/8px 8px;
 }
 </style>

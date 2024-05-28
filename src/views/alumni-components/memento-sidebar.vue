@@ -9,7 +9,7 @@
         class="d-flex align-items-center"
         style="position: absolute; top: -150px; padding-left: 200px"
       >
-        <div>
+        <div class="profile-image">
           <img
             :src="
               userData.photoURL ||
@@ -19,7 +19,7 @@
             alt="profile"
             style="height: 150px; width: 150px; border-radius: 50%"
           />
-          <button type="button" class="btn btn-sm" @click="triggerFileInput">
+          <button type="button" class="btn btn-sm btn-camera" @click="triggerFileInput">
             <i class="bi bi-camera"></i>
           </button>
           <input
@@ -454,5 +454,28 @@ fetchUserData();
   width: 30%;
   max-width: 800px;
 }
+.profile-image{
+  position: relative;
+  padding: 0.3rem;
+  border-radius: 50%;
+  border: 0.3rem solid #400;
 
+}
+
+.profile-image .btn-camera{
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
+  width: 50%;
+}
+
+.profile-image .btn-camera i{
+  color: white;
+}
 </style>

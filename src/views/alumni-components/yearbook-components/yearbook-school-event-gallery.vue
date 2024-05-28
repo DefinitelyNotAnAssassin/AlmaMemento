@@ -14,14 +14,29 @@
     </div>
 
     <div class="image-container d-flex flex-wrap mt-2">
-      <img
+      <div class="image"   v-for="image in images">
+        <img
         class="m-1"
         style="height: 200px; width: 200px"
-        v-for="image in images"
+      
         :key="image.id"
         :src="image.url"
         alt="Uploaded Image"
       />
+      <div class="dot-container">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <button class="btn btn-dark btn-details">Details</button>
+      <div class="image-details">
+        <h6>Details</h6>
+        <p>{{ image.eventsubfolder || "No Details" }}</p>
+      </div>
+      </div>
+     
+    
+      
     </div>
   </div>
 </template>
@@ -48,6 +63,7 @@ const emit = defineEmits(["update:currentPage"]);
 const currentAlbumPage = ref("School Events Gallery");
 const images = ref([]);
 
+
 const backToGrad = async () => {
   currentAlbumPage.value = "School Events";
   emit("update:currentPage", "School Events");
@@ -63,7 +79,7 @@ onSnapshot(
     images.value = [];
     snapshot.forEach((doc) => {
       const data = doc.data();
-      images.value.push({ id: doc.id, url: data.url });
+      images.value.push({ id: doc.id, url: data.url, eventsubfolder: data.eventsubfolder });
     });
   }
 );
@@ -110,10 +126,57 @@ onSnapshot(
   flex-wrap: wrap;
 }
 
+.image-container .image{
+  position: relative;
+  overflow: visible !important;
+
+}
+
 .image-container img {
   width: 200px;
   height: 200px;
   margin: 10px;
   object-fit: cover;
 }
+
+
+
+.image .dot-container{
+  cursor: pointer;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  height: 1.5rem;
+  width: 0.5rem;
+
+  display: flex;
+  flex-direction: column; 
+}
+
+.dot-container span{
+  width: 0.3rem;
+  height: 0.3rem;
+  margin-bottom: 0.1rem;
+  background: #323232;
+  border-radius: 50%;
+  align-self: flex-end;
+}
+
+.image .btn{
+  position: absolute;
+  right: -4.5rem;
+  top: 0.5rem;
+  z-index: 1;
+  display: none;
+}
+
+.image .btn:hover{
+  display: block;
+}
+
+.image .dot-container:hover + .btn{
+  display: block;
+}
+
+
 </style>
