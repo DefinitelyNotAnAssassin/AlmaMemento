@@ -122,13 +122,13 @@ const setCurrentAlbumPage = (page) => {
 };
 
 const updateSelectedEventFolder = (folderName) => {
-  console.log("Folder name selected:", folderName);
+  console.log("Folder name selected 1:", folderName);
   selectedFolderName.value = folderName;
   currentAlbumPage.value = "School Events";
 };
 
 const updateSelectedEventSubFolder = (subfolderName) => {
-  console.log("Folder name selected:", subfolderName);
+  console.log("Folder name selected 2:", subfolderName);
   selectedSubFolderName.value = subfolderName;
   currentAlbumPage.value = "School Events Gallery";
 };

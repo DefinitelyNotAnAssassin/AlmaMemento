@@ -5,7 +5,7 @@
   >
     <img
       class="mt-5"
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+      :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
       alt="profile"
     />
     <h4 class="mt-2">{{ userData.name }}</h4>

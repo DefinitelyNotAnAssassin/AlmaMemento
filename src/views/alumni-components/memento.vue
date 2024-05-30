@@ -22,8 +22,9 @@
             <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
               <div class="d-flex align-items-center">
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+                  :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
                   style="height: 40px !important; width: 40px !important; border-radius: 50%;"
+                  alt="Profile Picture"
                 />
                 <input
                   style="height: 40px"
@@ -35,7 +36,7 @@
                 <button @click="savePost" class="btn btn-light" style="height: 40px">Post</button>
               </div>
               <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
-                <i class="bi bi-card-image"></i> Photo
+                <i class="bi bi-card-image"></i> Photos
               </button>
             </div>
           </div>  
@@ -87,7 +88,7 @@
                 <button class="btn btn-secondary m-1" @click="closeModal">
                   Cancel
                 </button>
-                <button class="btn btn-primary m-1" @click="continueModal">
+                <button class="btn btn-primary m-1" @click="continueModal" :disabled="!isValidSelected">
                   Continue
                 </button>
               </div>
@@ -134,7 +135,10 @@
                   </div>
                 </div>
                 <div class="container mt-3">
-                  <button class="btn-post" @click="savePost">Post</button>
+                  <button class="btn btn-secondary" @click="showPostModal">
+                  Back
+                </button>
+                <button class="btn-post btn btn-secondary" @click="savePost" style="border-radius: 0.5rem; padding: 0.45rem 1rem; margin-left: 0.5rem;">Post</button>
                 </div>
               </div>
             </div>
@@ -190,7 +194,7 @@ import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
 import MementoSideBar from "./memento-sidebar.vue";
 import { db, storage } from "../../firebase/index.js";
-import { collection, getDocs, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, addDoc, onSnapshot,getDoc } from "firebase/firestore";
 import {
   ref as storageRef,
   uploadBytesResumable,
@@ -243,7 +247,6 @@ const CustomDialog = (title,message)=> {
 
 
 const fetchUserData = async () => {
-
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
@@ -267,6 +270,11 @@ fetchUserData();
 
 function showPostModal() {
   showModal.value = true;
+  if(showModal.value){
+    showImageModal.value = false;
+  }else{
+    showImageModal.value = true;
+  }
 }
 
 function closeModal() {
@@ -362,7 +370,7 @@ async function savePost() {
     success.value = false
   }finally{
     isLoading.value = false
-    if(success.value) CustomDialog("Successful", "Post has been added.")
+    if(success.value) CustomDialog("Waiting for Approval", "We will notify you once your post has been approved.")
   }
  
 }
@@ -412,6 +420,19 @@ function getLatestApprovalDate(post) {
 
 watch(approvedPosts, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
+});
+
+const isValidSelected = computed(() => {
+  return selectedSchoolYear.value !== "" && selectedEvent.value !== "";
+});
+
+
+watch(approvedPosts, (newPosts, oldPosts) => {
+  console.log("New approved posts:", newPosts);
+});
+
+watch(isValidSelected, (newSelect, oldSelect) => {
+  console.log("isSelected:", newSelect);
 });
 
 onMounted(async () => {

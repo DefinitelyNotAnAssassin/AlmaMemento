@@ -4,7 +4,8 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h4>{{ props.subfolderName }} - {{ props.folderName }}</h4>
+      <h4>EVENTS</h4>
+      <h5>{{ props.folderName }}</h5>
     </div>
 
     <div class="d-flex justify-content-between">
@@ -28,15 +29,10 @@
         <span></span>
         <span></span>
       </div>
-      <button class="btn btn-dark btn-details">Details</button>
-      <div class="image-details">
-        <h6>Details</h6>
-        <p>{{ image.eventsubfolder || "No Details" }}</p>
+      <button class="btn btn-dark btn-details"
+      @click="backToGrad"
+      >Details</button>
       </div>
-      </div>
-     
-    
-      
     </div>
   </div>
 </template>
@@ -62,7 +58,6 @@ const emit = defineEmits(["update:currentPage"]);
 
 const currentAlbumPage = ref("School Events Gallery");
 const images = ref([]);
-
 
 const backToGrad = async () => {
   currentAlbumPage.value = "School Events";

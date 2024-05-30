@@ -9,7 +9,7 @@
             <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
               <div class="d-flex align-items-center">
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s"
+                  :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
                   style="height: 40px !important; width: 40px !important; border-radius: 50%;"
                 />
                 <input
@@ -22,7 +22,7 @@
                 <button @click="saveStory" class="btn btn-light" style="height: 40px">Post</button>
               </div>
               <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
-                <i class="bi bi-card-image"></i> Photo
+                <i class="bi bi-card-image"></i> Photos
               </button>
             </div>
           </div>
@@ -126,6 +126,7 @@
               :key="post.id"
               class="container card p-3 background-color-brown text-light my-2"
             >
+            
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
               <div
@@ -270,6 +271,36 @@ const showAllImages = ref(false);
 const posts = ref([]);
 const isOpen = ref(false);
 const imageUrl = ref("");
+
+const userData = ref({
+  name: "",
+  email: "",
+  idNumber: "",
+  pab: "",
+  classYear: "",
+  phone: "",
+  photoURL: "",
+});
+
+const fetchUserData = async () => {
+  const userId = router.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data();
+    const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+
+    userData.value = {
+      ...user,
+      name: name.trim(),
+      photoURL: user.profilePicture,
+    };
+  } else {
+    console.log("User not found");
+  }
+};
+
+fetchUserData();
 
 const openImageModal = (url) => {
   imageUrl.value = url;
