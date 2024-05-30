@@ -237,7 +237,7 @@ async function userIdToName(adminId) {
 
 async function approvePost(item, index) { 
   const adminName = await userIdToName(adminId);
-  const approvalTime = new Date();
+  // const approvalTime = new Date();
   const userId = item.userId;
 
   if (adminName) {
@@ -247,7 +247,7 @@ async function approvePost(item, index) {
       status: "approved",
       history: [
         ...(item.history || []),
-        { admin: adminName, status: "approved", time: approvalTime },
+        { admin: adminName, status: "approved"},
       ],
     });
     items.value[index].status = "approved";
@@ -258,7 +258,6 @@ async function approvePost(item, index) {
     for: "alumni",
     name: adminName,
     status: "unread",
-    time: approvalTime,
     type: "newpost",
     action: "approved",
     userId: userId

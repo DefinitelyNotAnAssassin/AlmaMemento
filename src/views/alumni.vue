@@ -1,4 +1,5 @@
 <template>
+   <Loading v-if="isLoading" />
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
@@ -6,23 +7,43 @@
         <SideBar />
         <div class="main-content">
           <div class="d-flex justify-content-center">
-            <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
+            <div
+              class="background-color-brown card m-3 p-2 pb-5"
+              style="position: relative; width: 500px"
+            >
               <div class="d-flex align-items-center">
                 <img
-                  :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
-                  style="height: 40px !important; width: 40px !important; border-radius: 50%;"
+                  :src="
+                    userData.photoURL ||
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+                  "
+                  style="
+                    height: 40px !important;
+                    width: 40px !important;
+                    border-radius: 50%;
+                  "
                 />
                 <input
                   style="height: 40px"
                   type="text"
                   class="form-control m-0 mx-1"
-                  v-model="message"
+                  v-model="caption"
                   placeholder="Tell us about your school experiences..."
                 />
-                <button @click="saveStory" class="btn btn-light" style="height: 40px">Post</button>
+                <button
+                  @click="saveStory"
+                  class="btn btn-light"
+                  style="height: 40px"
+                >
+                  Post
+                </button>
               </div>
-              <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
-                <i class="bi bi-card-image"></i> Photos
+              <button
+                @click="showPostModal"
+                class="btn m-2 text-light"
+                style="position: absolute; bottom: 0; right: 0"
+              >
+                <i class="bi bi-card-image"></i> Photo
               </button>
             </div>
           </div>
@@ -66,7 +87,11 @@
                 <button class="btn btn-secondary m-1" @click="closeModal">
                   Cancel
                 </button>
-                <button class="btn btn-primary m-1" @click="continueModal">
+                <button
+                  class="btn btn-primary m-1"
+                  @click="continueModal"
+                  :disabled="!isValidSelected"
+                >
                   Continue
                 </button>
               </div>
@@ -113,21 +138,31 @@
                   </div>
                 </div>
                 <div class="container mt-3">
-                  <button class="btn" @click="savePost">Post</button>
+                  <button class="btn btn-secondary" @click="showPostModal" style="margin-left: -0.5rem;">
+                  Back
+                </button>
+                  <button class="btn-post btn btn-primary" @click="savePost" style="margin-left: 0.5rem; background: #400; border-color: #400;">Post</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="d-flex flex-column align-items-center" style="height: calc(100vh - 130px); overflow-y: auto">
+          <div
+            class="d-flex flex-column align-items-center"
+            style="height: calc(100vh - 130px); overflow-y: auto"
+          >
             <div
               style="width: 400px"
               v-for="post in approvedPosts"
               :key="post.id"
               class="container card p-3 background-color-brown text-light my-2"
             >
-            
-              <h3>{{ post.name }}</h3>
+            <router-link
+        :to="{ path: `/memento`, query: { userId: post.userIdOrig, alumniId: post.userId } }"
+      
+        style="font-size: 1rem; text-decoration: none; color: white;"
+        >{{ post.name }}</router-link>
+
               <h5>{{ post.caption }}</h5>
               <div
                 v-if="post.imageUrls && post.imageUrls.length > 0"
@@ -179,7 +214,7 @@
               </div>
               <div v-else>No images available</div>
 
-               <!-- Likes -->
+              <!-- Likes -->
               <div class="d-flex align-items-center mt-2">
                 <a
                   href="#"
@@ -187,7 +222,14 @@
                   class="text-light"
                   style="text-decoration: none !important"
                 >
-                  <i class="bi" :class="{'bi-heart-fill': post.likedBy.includes(userId.value), 'bi-heart': !post.likedBy.includes(userId.value)}"></i> {{ post.likes }}
+                  <i
+                    class="bi"
+                    :class="{
+                      'bi-heart-fill': post.likedBy.includes(userId),
+                      'bi-heart': !post.likedBy.includes(userId),
+                    }"
+                  ></i>
+                  {{ post.likes }}
                 </a>
                 <a
                   href="#"
@@ -201,18 +243,27 @@
               <!-- Comments -->
               <div v-if="!post.showComments">
                 <div v-if="post.latestComment" class="mt-3">
-                  <strong>{{ post.latestComment.user }}</strong>: {{ post.latestComment.text }}
+                  <strong>{{ post.latestComment.user }}</strong
+                  >: {{ post.latestComment.text }}
                 </div>
               </div>
               <div v-if="post.showComments">
                 <div v-for="comment in post.comments" :key="comment.id">
-                  <strong>{{ comment.user }}</strong>: {{ comment.text }}
+                  <strong>{{ comment.user }}</strong
+                  >: {{ comment.text }}
                 </div>
-                <input v-model="post.newComment" @keyup.enter="addComment(post)" type="text" placeholder="Add a comment..." />
+                <input
+                  v-model="post.newComment"
+                  @keyup.enter="addComment(post)"
+                  type="text"
+                  placeholder="Add a comment..."
+                />
               </div>
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
-              <p>Approved on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}</p>
+              <p>
+                Posted on: {{ formatApprovalDate(getLatestApprovalDate(post)) }}
+              </p>
             </div>
           </div>
         </div>
@@ -220,19 +271,19 @@
     </div>
   </div>
   <div v-if="isOpen" class="modal">
-      <div class="modal-content">
-        <span @click="closePostImageModal" class="close">&times;</span>
-        <img
-          :src="imageUrl"
-          alt="Preview Image"
-          style="max-width: 100%; max-height: 80vh"
-        />
-      </div>
+    <div class="modal-content">
+      <span @click="closePostImageModal" class="close">&times;</span>
+      <img
+        :src="imageUrl"
+        alt="Preview Image"
+        style="max-width: 100%; max-height: 80vh"
+      />
     </div>
+  </div>
 </template>
 
-
 <script setup>
+import Loading from "./loading.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
@@ -252,6 +303,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { useRouter } from "vue-router";
+import { useQuasar } from 'quasar'
+import { query } from "express";
+const $q = useQuasar()
 
 const showModal = ref(false);
 const showImageModal = ref(false);
@@ -271,7 +325,8 @@ const showAllImages = ref(false);
 const posts = ref([]);
 const isOpen = ref(false);
 const imageUrl = ref("");
-
+const isLoading = ref(false);
+const isLiked = ref(false)
 const userData = ref({
   name: "",
   email: "",
@@ -281,6 +336,21 @@ const userData = ref({
   phone: "",
   photoURL: "",
 });
+
+
+const CustomDialog = (title,message)=> {
+      $q.dialog({
+        title,
+        message
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
@@ -314,6 +384,11 @@ const closePostImageModal = () => {
 
 function showPostModal() {
   showModal.value = true;
+  if(showModal.value){
+    showImageModal.value = false;
+  }else{
+    showImageModal.value = true;
+  }
 }
 
 function closeModal() {
@@ -373,38 +448,58 @@ function uploadImages(event) {
 }
 
 async function savePost() {
-  const userSnapshot = await getDocs(collection(db, "users"));
-  const userData = userSnapshot.docs
-    .find((doc) => doc.id === userId.value)
-    ?.data();
-  const userName = `${userData.fName} ${userData.lName}`;
+  if(caption.value.length == 0) {
+    alert("Enter caption.")
+    return
+  }
+  const success = ref(false)
+  isLoading.value = true
+  try {
+          
+      const userSnapshot = await getDocs(collection(db, "users"));
+      const userData = userSnapshot.docs
+      .find((doc) => doc.id === userId.value)
+      ?.data();
+      const userName = `${userData.fName} ${userData.lName}`;
+      const post = {
+      userIdOrig: userId.value  ,
+      userId: alumniId.value,
+      name: userName,
+      schoolYear: selectedSchoolYear.value,
+      event: selectedEvent.value,
+      caption: caption.value,
+      imageUrls: selectedImages.value,
+      status: "pending",
+      time: new Date(),
+      date: new Date().toLocaleDateString(),
+      history: [{ admin: userName, status: "pending", time: new Date()},],
+      likedBy: [], 
+      likes: 0,
+    };
+      await addDoc(collection(db, "posts"), post);
 
-  const post = {
-    userId: alumniId.value,
-    name: userName,
-    schoolYear: selectedSchoolYear.value,
-    event: selectedEvent.value,
-    caption: caption.value,
-    imageUrls: selectedImages.value,
-    status: "pending",
-    history: [],
-    likedBy: [], // Initialize with an empty array
-    likes: 0, // Initialize likes count
-  };
-  await addDoc(collection(db, "posts"), post);
+      const notification = {
+        userId: alumniId.value,
+        name: userName,
+        time: new Date(),
+        date: new Date().toLocaleDateString(),
+        status: "unread",
+        for: "modandadmin",
+        type: "newpost",
+      };
+      await addDoc(collection(db, "notifications"), notification);
 
-  const notification = {
-    userId: alumniId.value,
-    name: userName,
-    time: new Date(),
-    date: new Date().toLocaleDateString(),
-    status: "unread",
-    for: "modandadmin",
-    type: "newpost",
-  };
-  await addDoc(collection(db, "notifications"), notification);
-
-  closeImageModal();
+      closeImageModal();
+      success.value = true
+    } 
+    catch (error) {
+      CustomDialog("Error", error.message)
+    success.value = false
+    }
+    finally{
+      isLoading.value = false
+      if(success.value) CustomDialog("Waiting for Approval", "We will notify you once your post has been approved.")
+    }
 }
 
 async function saveStory() {
@@ -417,7 +512,7 @@ async function saveStory() {
   const post = {
     userId: alumniId.value,
     name: userName,
-    caption: message.value,
+    caption: caption.value,
     status: "pending",
     history: [],
     likedBy: [], // Initialize with an empty array
@@ -467,6 +562,10 @@ function formatApprovalDate(timestamp) {
   return `${month} ${day}, ${year}, ${time}`;
 }
 
+const isValidSelected = computed(() => {
+  return selectedSchoolYear.value !== "" && selectedEvent.value !== "";
+});
+
 function getLatestApprovalDate(post) {
   if (!post.history || post.history.length === 0) {
     return "No approval date available";
@@ -480,6 +579,10 @@ function getLatestApprovalDate(post) {
 }
 
 watch(approvedPosts, (newPosts, oldPosts) => {
+  console.log("New approved posts:", newPosts);
+});
+
+watch(query, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
 });
 
@@ -531,6 +634,7 @@ const toggleLike = async (post) => {
   if (likedBy.includes(userId.value)) {
     // If the user has already liked the post, unlike it
     const updatedLikes = likedBy.filter((id) => id !== userId.value);
+    isLiked.value = updatedLikes
     await updateDoc(postRef, {
       likedBy: updatedLikes,
       likes: updatedLikes.length,

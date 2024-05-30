@@ -64,6 +64,10 @@ const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
 
+const NavigateCurrentUser = ()=> {
+
+}
+
 const notificationsVisible = ref(false);
 const unreadPostsCount = ref(0);
 const newPosts = ref([]);

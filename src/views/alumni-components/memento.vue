@@ -175,7 +175,7 @@
               <hr class="pt-1" />
               <p>{{ post.schoolYear }} - {{ post.event }}</p>
               <p>
-                Approved on:
+                Posted on:
                 {{ formatApprovalDate(getLatestApprovalDate(post)) }}
               </p>
             </div>
@@ -187,7 +187,7 @@
 </template>
 
 <script setup>
-import Loading from "../loading.vue";
+import Loading from "../loading.vue"
 import { useQuasar } from 'quasar'
 import { ref, onMounted, computed, watch, defineProps } from "vue";
 import NavBar from "./alumni-navbar.vue";
@@ -341,14 +341,19 @@ async function savePost() {
   const userName = `${userData.lName}, ${userData.fName}`;
 
   const post = {
+    userIdOrig: userId.value,
     userId: alumniId.value,
     name: userName,
     schoolYear: selectedSchoolYear.value,
     event: selectedEvent.value,
     caption: caption.value,
     imageUrls: selectedImages.value,
+    time: new Date(),
+    date: new Date().toLocaleDateString(),
     status: "pending",
-    history: [],
+    history: [{ admin: userName, status: "pending", time: new Date()},],
+    likedBy: [], 
+      likes: 0,
   };
   await addDoc(collection(db, "posts"), post);
 
@@ -390,6 +395,7 @@ const approvedPosts = computed(() => {
 });
 
 function formatApprovalDate(timestamp) {
+  console.log(timestamp)
   if (!timestamp || !timestamp.seconds) {
     return "Invalid timestamp";
   }
@@ -407,6 +413,7 @@ function formatApprovalDate(timestamp) {
 }
 
 function getLatestApprovalDate(post) {
+  console.log(post)
   if (!post.history || post.history.length === 0) {
     return "No approval date available";
   }
@@ -414,7 +421,7 @@ function getLatestApprovalDate(post) {
   const latestTime = post.history.reduce((latest, entry) => {
     return entry.time > latest ? entry.time : latest;
   }, post.history[0].time);
-
+  console.log(latestTime)
   return latestTime;
 }
 

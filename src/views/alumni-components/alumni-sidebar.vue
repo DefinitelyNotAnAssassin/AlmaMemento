@@ -10,7 +10,7 @@
     />
     <h4 class="mt-2">{{ userData.name }}</h4>
     <p>{{ userData.alumna_email }}</p>
-    <div class="mt-5 profile-table-container">
+    <div class="mt-2 profile-table-container">
       <h4>Profile</h4>
       <table>
         <tr>
@@ -31,7 +31,7 @@
         </tr>
       </table>
     </div>
-    <button @click="logout" class="logout-butto btn btn-sm btn-light mt-5">
+    <button @click="logout" class="logout-button btn btn-sm btn-light mt-5" >
       <i class="fas fa-power-off"></i> Logout
     </button>
   </aside>
