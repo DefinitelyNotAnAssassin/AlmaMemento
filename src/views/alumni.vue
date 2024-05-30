@@ -158,9 +158,9 @@
               class="container card p-3 background-color-brown text-light my-2"
             >
             <router-link
-        :to="{ path: `/memento`, query: { userId: post.userIdOrig, alumniId: post.userId } }"
-      
-        style="font-size: 1rem; text-decoration: none; color: white;"
+        :to="{ path: '/memento', query: { userId: post.userIdOrig, alumniId: post.userId } }"
+
+        style="font-size: 1.5rem; text-decoration: none; color: white;"
         >{{ post.name }}</router-link>
 
               <h5>{{ post.caption }}</h5>
@@ -304,7 +304,6 @@ import {
 } from "firebase/storage";
 import { useRouter } from "vue-router";
 import { useQuasar } from 'quasar'
-import { query } from "express";
 const $q = useQuasar()
 
 const showModal = ref(false);
@@ -566,6 +565,7 @@ const isValidSelected = computed(() => {
   return selectedSchoolYear.value !== "" && selectedEvent.value !== "";
 });
 
+
 function getLatestApprovalDate(post) {
   if (!post.history || post.history.length === 0) {
     return "No approval date available";
@@ -579,10 +579,6 @@ function getLatestApprovalDate(post) {
 }
 
 watch(approvedPosts, (newPosts, oldPosts) => {
-  console.log("New approved posts:", newPosts);
-});
-
-watch(query, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
 });
 
