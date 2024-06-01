@@ -89,13 +89,16 @@ const logout = async () => {
 
       loadingProgress.value = 75;
 
-      router.push({ name: "login" });
+      // router.push({ name: "login" });
       console.log("Logout successful. Redirecting to login page...");
       console.log("Current URL:", window.location.href);
     } else {
       isLoading.value = false;
       console.log("No logged in user found");
     }
+
+    localStorage.clear()
+    router.push({ name: "login" });
   } catch (error) {
     isLoading.value = false;
     console.error("Error:", error.message);
@@ -108,7 +111,8 @@ const logout = async () => {
 };
 
 const fetchUserData = async () => {
-  const userId = router.currentRoute.value.query.userId;
+
+  const userId =  localStorage.getItem("userId") || router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
   if (userDocSnap.exists()) {

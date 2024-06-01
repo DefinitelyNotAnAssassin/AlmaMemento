@@ -445,6 +445,7 @@ watch(isValidSelected, (newSelect, oldSelect) => {
 onMounted(async () => {
   console.log(userId.value);
   console.log(alumniId.value);
+
   const coursesSnapshot = await getDocs(collection(db, "classYears"));
   schoolYears.value = coursesSnapshot.docs.map((doc) => ({
     id: doc.id,

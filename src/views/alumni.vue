@@ -113,6 +113,14 @@
                     v-model="caption"
                     placeholder="Enter caption"
                   ></textarea>
+                  <div class="post-images">
+                    <div class="image" v-for="image in selectedImages" :key="image">
+                      <img :src="image" alt="Post Image" width="100" height="100"/>  
+                      <button @click="deleteImage(index)" class="delete-btn">
+                        <i class="bi bi-x-circle"></i>
+                      </button>
+                    </div>
+                  </div>
                   <input
                     class="form-control mt-2"
                     type="file"
@@ -157,10 +165,20 @@
               :key="post.id"
               class="container card p-3 background-color-brown text-light my-2"
             >
+
+            <div class="btn-dot" v-if="post.isCurrentUser" >
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="post-actions">
+               <button class="btn btn-dark btn-edit" @click="EditPostDialog(post)">Edit</button> 
+               <button class="btn btn-danger btn-delete" @click="ConfirmDeleteDialog(post)">Delete</button> 
+            </div>
             <router-link
         :to="{ path: '/memento', query: { userId: post.userIdOrig, alumniId: post.userId } }"
 
-        style="font-size: 1.5rem; text-decoration: none; color: white;"
+        style="font-size: 1.5rem; text-decoration: none; color: white; width: max-content"
         >{{ post.name }}</router-link>
 
               <h5>{{ post.caption }}</h5>
@@ -296,6 +314,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  deleteDoc
 } from "firebase/firestore";
 import {
   ref as storageRef,
@@ -304,6 +323,7 @@ import {
 } from "firebase/storage";
 import { useRouter } from "vue-router";
 import { useQuasar } from 'quasar'
+
 const $q = useQuasar()
 
 const showModal = ref(false);
@@ -326,6 +346,9 @@ const isOpen = ref(false);
 const imageUrl = ref("");
 const isLoading = ref(false);
 const isLiked = ref(false)
+const isAction = ref(false)
+const isEdit = ref(false)
+const isEditPostId = ref("")
 const userData = ref({
   name: "",
   email: "",
@@ -335,6 +358,11 @@ const userData = ref({
   phone: "",
   photoURL: "",
 });
+
+const deleteImage = (index) => {
+  selectedImages.value.splice(index, 1);
+};
+
 
 
 const CustomDialog = (title,message)=> {
@@ -350,11 +378,38 @@ const CustomDialog = (title,message)=> {
       })
     }
 
+  const ConfirmDeleteDialog = (post) => {
+      $q.dialog({
+        title: 'Confirmation',
+        message: 'Are you sure you want to delete this post?',
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {
+        DeletePost(post);
+      }).onCancel(() => {
+        // Action on Cancel
+      }).onDismiss(() => {
+        // Action on Dismiss
+      });
+};    
+
+const DeletePost = async (post) =>{
+  try {
+    const postRef = doc(db, "posts", post.id);
+    await deleteDoc(postRef);
+    posts.value = posts.value.filter(p => p.id !== post.id); // Remove locally for immediate UI feedback
+    CustomDialog("Success", "Post has been deleted successfully.")
+  } catch (error) {
+    CustomDialog("Error", error.message)
+  }
+}
+
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
+
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
@@ -406,6 +461,8 @@ function closeImageModal() {
   caption.value = "";
   selectedImages.value = [];
   progressBars.value = [];
+  isEdit.value = false;
+  isEditPostId.value = ""
 }
 
 function uploadImages(event) {
@@ -428,6 +485,9 @@ function uploadImages(event) {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         progressBars.value[i] = progress;
+        if(progressBars.value[i] == 100){
+          progressBars.value = 0
+        }
       },
       (error) => {
         console.error("Error uploading image:", error);
@@ -443,6 +503,8 @@ function uploadImages(event) {
           });
       }
     );
+
+    
   }
 }
 
@@ -453,15 +515,58 @@ async function savePost() {
   }
   const success = ref(false)
   isLoading.value = true
-  try {
-          
+
+  if(isEdit.value){
+    try {
+      const userSnapshot = await getDocs(collection(db, "users"));
+      const userData = userSnapshot.docs
+      .find((doc) => doc.id === userId.value)
+      ?.data();
+      const userName = `${userData.fName} ${userData.lName}`;
+      const postRef = doc(db, "posts", isEditPostId.value);
+
+      const post = {
+      schoolYear: selectedSchoolYear.value,
+      event: selectedEvent.value,
+      caption: caption.value,
+      imageUrls: selectedImages.value,
+      status: "pending",
+      time: new Date(),
+      date: new Date().toLocaleDateString(),
+      history: [{ admin: userName, status: "pending", time: new Date()},],
+    };
+      await updateDoc(postRef, post);
+
+      const notification = {
+        userId: alumniId.value,
+        name: userName,
+        time: new Date(),
+        date: new Date().toLocaleDateString(),
+        status: "unread",
+        for: "modandadmin",
+        type: "newpost",
+      };
+      await addDoc(collection(db, "notifications"), notification);
+      success.value = true
+    } 
+    catch (error) {
+      CustomDialog("Error", error.message)
+    success.value = false
+    }
+    finally{
+      isLoading.value = false
+      closeImageModal();
+      if(success.value) CustomDialog("Waiting for Approval", "We will notify you once your post has been approved.")
+    }
+  }else{
+    try {
       const userSnapshot = await getDocs(collection(db, "users"));
       const userData = userSnapshot.docs
       .find((doc) => doc.id === userId.value)
       ?.data();
       const userName = `${userData.fName} ${userData.lName}`;
       const post = {
-      userIdOrig: userId.value  ,
+      userIdOrig: userId.value,
       userId: alumniId.value,
       name: userName,
       schoolYear: selectedSchoolYear.value,
@@ -499,6 +604,8 @@ async function savePost() {
       isLoading.value = false
       if(success.value) CustomDialog("Waiting for Approval", "We will notify you once your post has been approved.")
     }
+  }
+ 
 }
 
 async function saveStory() {
@@ -530,6 +637,48 @@ async function saveStory() {
     type: "newpost",
   };
   await addDoc(collection(db, "notifications"), notification);
+}
+
+const EditPostDialog = (post)=>{
+  isEdit.value = true
+  showPostModal()
+  selectedSchoolYear.value = post.schoolYear
+  selectedEvent.value = post.event
+  caption.value = post.caption
+  selectedImages.value = post.imageUrls
+  isEditPostId.value = post.id
+  console.log("Edit Post: ", isEdit.value);
+  console.log("Post Id: ", post.id)
+  // $q.dialog({
+  //       title: post.name,
+  //       message: 'Edit Post Caption',
+  //       prompt: {
+  //         model: '',
+  //         type: 'text' // optional
+  //       },
+  //       cancel: true,
+  //       persistent: true
+  //     }).onOk(data => {
+  //       EditPost(post, data)
+  //     }).onCancel(() => {
+  //       // console.log('>>>> Cancel')
+  //     }).onDismiss(() => {
+  //       // console.log('I am triggered on both OK and Cancel')
+  //     })
+}
+
+const EditPost = async (post, caption)=> {
+
+  try {
+    const postRef = doc(db, "posts", post.id);
+    await updateDoc(postRef, {
+      caption: caption,
+    });
+    post.caption = caption; 
+    CustomDialog("Success", "Post caption has been updated successfully") 
+  } catch (error) {
+    CustomDialog("Error", error.message) 
+  }
 }
 
 const approvedPosts = computed(() => {
@@ -606,8 +755,10 @@ onSnapshot(collection(db, "posts"), (snapshot) => {
       comments: data.comments || [], // Ensure comments is always an array
       showComments: false,
       commentsLoaded: false,
+      isCurrentUser: data.userIdOrig === userId.value,
       newComment: "",
     };
+   
   });
   approvedPosts.value = posts.value.filter((post) => post.status === "approved");
 });
@@ -764,5 +915,65 @@ async function addComment(post) {
   height: auto;
   width: 100% !important;
   overflow-y: auto;
+}
+
+.btn-dot{
+  height: 1.5rem;
+  width: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.btn-dot span{
+  display: block;
+ width: 0.4rem;
+ height: 0.4rem;
+ background: white;
+ border-radius: 50%;
+}
+
+.btn-dot:hover + .post-actions{
+  display: flex;
+}
+
+.post-actions{
+  background: white;
+  padding: 1rem;
+  border-radius: 0.3rem;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  width: 10rem;
+  gap: 0.5rem;
+  right: -8rem;
+  top: 1rem;
+  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
+}
+
+.post-actions:hover{
+  display: flex;
+}
+
+.post-images{
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px; 
+  padding: 0.5rem 1rem;
+}
+
+.post-images .image{
+  position: relative;
+}
+
+.post-images .image button{
+  position: absolute;
+  right: 0.2rem;
+  top: 0.2rem;
+  background: none;
+  border: none;
 }
 </style>

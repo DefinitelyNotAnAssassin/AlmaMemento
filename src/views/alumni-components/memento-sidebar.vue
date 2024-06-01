@@ -19,7 +19,7 @@
             alt="profile"
             style="height: 150px; width: 150px; border-radius: 50%"
           />
-          <button type="button" class="btn btn-sm btn-camera" @click="triggerFileInput">
+          <button type="button" class="btn btn-sm btn-camera" @click="triggerFileInput" v-if="isCurrentUser">
             <i class="bi bi-camera"></i>
           </button>
           <input
@@ -37,6 +37,7 @@
             class="btn btn-sm btn-success"
            
             @click="showEditProfileModal = true"
+            v-if="isCurrentUser"
           >
             Edit Profile
           </button>
@@ -46,7 +47,7 @@
       <div style="margin-top: 90px">
         <h5>Personal Information</h5>
         <table>
-          <tr>
+          <tr v-if="isCurrentUser">
             <td>ID number:</td>
             <td>{{ userData.alumnaID }}</td>
           </tr>
@@ -78,6 +79,7 @@
           class="btn btn-sm text-light background-color-brown"
       style="background-color: #400;"
           @click="showChangePasswordModal = true"
+          v-if="isCurrentUser"
         >
           Change Password
         </button>
@@ -193,6 +195,7 @@ const $q = useQuasar();
 const isOpen = ref(false);
 const imageUrl = ref("");
 const isLoading = ref(false);
+const isCurrentUser = ref(false);
 
 const openImageModal = (url) => {
   imageUrl.value = url;
@@ -239,6 +242,14 @@ const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
+
+  const currentUser = localStorage.getItem("userId")
+  if(userId !== currentUser){
+      isCurrentUser.value = false
+  }else{
+    isCurrentUser.value = true
+  }
+
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
     const name = `${user.fName} ${user.mInitial} ${user.lName}`;

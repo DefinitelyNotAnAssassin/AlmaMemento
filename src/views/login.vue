@@ -128,7 +128,7 @@ const signin = async () => {
     }
   } catch (error) {
     isLoading.value = false;
-    console.error("Error:", error.message);
+    console.error("Error:", error);
     errMsg.value = "An error occurred";
   }
 };
