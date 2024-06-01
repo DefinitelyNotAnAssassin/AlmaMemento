@@ -193,7 +193,8 @@
                     v-for="(imageUrl, index) in post.imageUrls"
                     :key="index"
                     class="carousel-item"
-                    :class="{ active: index == 0 }"
+                    
+                    :class="{ 'carousel-item': true, 'active': index === currentIndex }"
                   >
                     <img
                       :src="imageUrl"
@@ -209,6 +210,7 @@
                   type="button"
                   data-bs-target="#imageCarousel"
                   data-bs-slide="prev"
+                  @click="prevImage(post)"
                 >
                   <span
                     class="carousel-control-prev-icon"
@@ -222,6 +224,7 @@
                   type="button"
                   data-bs-target="#imageCarousel"
                   data-bs-slide="next"
+                  @click="nextImage(post)"
                 >
                   <span
                     class="carousel-control-next-icon"
@@ -349,6 +352,7 @@ const isLiked = ref(false)
 const isAction = ref(false)
 const isEdit = ref(false)
 const isEditPostId = ref("")
+const currentIndex = ref(0);
 const userData = ref({
   name: "",
   email: "",
@@ -363,6 +367,21 @@ const deleteImage = (index) => {
   selectedImages.value.splice(index, 1);
 };
 
+function nextImage(post) {
+  if (currentIndex.value < post.imageUrls.length - 1) {
+    currentIndex.value++;
+  } else {
+    currentIndex.value = 0; // Reset to the first image if at the end
+  }
+}
+
+function prevImage(post) {
+  if (currentIndex.value > 0) {
+    currentIndex.value--;
+  } else {
+    currentIndex.value = post.imageUrls.length - 1; // Go to the last image if at the beginning
+  }
+}
 
 
 const CustomDialog = (title,message)=> {
