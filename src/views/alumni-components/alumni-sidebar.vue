@@ -56,6 +56,7 @@ const loadingProgress = ref(0);
 const userData = ref({
   name: "",
   email: "",
+  full_name: "",
   idNumber: "",
   pab: "",
   classYear: "",
@@ -118,10 +119,11 @@ const fetchUserData = async () => {
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
-
+    const fullName = `${user.fName} ${user.lName}`
     userData.value = {
       ...user,
       name: name.trim(),
+      full_name: fullName.trim(),
       photoURL: user.profilePicture,
     };
   } else {

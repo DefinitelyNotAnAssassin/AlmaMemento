@@ -272,11 +272,17 @@
                 <div v-for="comment in post.comments" :key="comment.id">
                   <strong>{{ comment.user }}</strong
                   >: {{ comment.text }}
+                  <div>
+                  <button @click="editComment(comment, post)" class="btn-edit-comment" v-if="comment.userId === userId" style="background: none; color: white; border: none; text-decoration: underline; font-size: 0.8rem;">Edit</button>
+                  <button @click="deleteComment(comment, post)" class="btn-delete-comment" v-if="post.userIdOrig === userId || comment.userId === userId" style="background: none; color: white; border: none; text-decoration: underline; font-size: 0.8rem; margin-left: 0.5rem;">Delete</button>
+                  </div>
                 </div>
+
                 <input
                   v-model="post.newComment"
                   @keyup.enter="addComment(post)"
                   type="text"
+                  style="padding: 0.5rem 1rem; border: none; margin-top: 0.5rem; width: 100%; outline: none;"
                   placeholder="Add a comment..."
                 />
               </div>
@@ -353,8 +359,13 @@ const isAction = ref(false)
 const isEdit = ref(false)
 const isEditPostId = ref("")
 const currentIndex = ref(0);
+const editCommentText = ref("");
+const currentComment = ref(null);
+const currentPost = ref(null);
+import { v4 as uuidv4 } from 'uuid';
 const userData = ref({
   name: "",
+  full_name: "",
   email: "",
   idNumber: "",
   pab: "",
@@ -423,6 +434,67 @@ const DeletePost = async (post) =>{
   }
 }
 
+const editComment = (comment, post) => {
+  currentComment.value = comment;
+  currentPost.value = post;
+  editCommentText.value = comment.text;
+  $q.dialog({
+        title: 'Comment',
+        message: 'Enter your new Comment?',
+        prompt: {
+          model: comment.text,
+          type: 'text'
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        saveEditComment(data)
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+};
+
+
+const saveEditComment = async (data) => {
+  const commentIndex = currentPost.value.comments.findIndex(c => c.id === currentComment.value.id);
+  if (commentIndex !== -1) {
+    currentPost.value.comments[commentIndex].text = data;
+    try {
+      await updateDoc(doc(db, "posts", currentPost.value.id), {
+        comments: currentPost.value.comments,
+        latestComment: currentPost.value.comments[commentIndex]
+      });
+    } catch (error) {
+      console.error("Error updating comment: ", error);
+      $q.dialog({ title: 'Error', message: 'Failed to update comment' });
+    }
+  }
+};
+
+const deleteComment = async (comment, post) => {
+  $q.dialog({
+    title: 'Confirm',
+    message: 'Are you sure you want to delete this comment?',
+    cancel: true,
+    persistent: true
+  }).onOk(async () => {
+    const commentIndex = post.comments.findIndex(c => c.id === comment.id);
+    if (commentIndex !== -1) {
+      post.comments.splice(commentIndex, 1);
+      try {
+        await updateDoc(doc(db, "posts", post.id), {
+          comments: post.comments,
+          latestComment: post.comments.length > 0 ? post.comments[post.comments.length - 1] : null
+        });
+      } catch (error) {
+        console.error("Error deleting comment: ", error);
+        $q.dialog({ title: 'Error', message: 'Failed to delete comment' });
+      }
+    }
+  }).onCancel(() => { });
+};
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
@@ -432,10 +504,12 @@ const fetchUserData = async () => {
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
+    const fullName = `${user.fName} ${user.lName}`;
 
     userData.value = {
       ...user,
       name: name.trim(),
+      full_name: fullName.trim(),
       photoURL: user.profilePicture,
     };
   } else {
@@ -840,7 +914,7 @@ async function loadComments(post) {
 
 async function addComment(post) {
   if (post.newComment.trim() === "") return;
-
+  const newId = uuidv4();
   const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
@@ -848,6 +922,8 @@ async function addComment(post) {
   const userName = `${userData.fName} ${userData.lName}`;
 
   const newComment = {
+    id: newId,
+    userId: userId.value,
     user: userName,
     text: post.newComment,
   };
