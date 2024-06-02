@@ -8,6 +8,8 @@ import memento from '../views/alumni-components/memento.vue'
 import contact from '../views/alumni-components/contact.vue'
 import modDashboard from '../views/mod.vue'
 import forgotPassword from '../views/forgot-password.vue'
+import signUp from "../views/sign-up.vue"
+import registrationSuccess from '@/views/sign-up-components/registration-success.vue'
 
 const routes = [
   { path: '/', component: Home,  name: 'home', meta: { requiresAuth: true } },
@@ -19,6 +21,8 @@ const routes = [
   { path: '/contact', component: contact, name: 'contact' },
   { path: '/modDashboard', component: modDashboard, name: 'modDashboard' },
   { path: '/forgotPassword', component: forgotPassword, name: 'forgotPassword' },
+  { path: '/signUp', component: signUp, name: 'signUp' },
+  { path: '/success', component: registrationSuccess, name: 'success' },
 ]
 
 const router = createRouter({

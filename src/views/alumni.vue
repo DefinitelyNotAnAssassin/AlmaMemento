@@ -937,7 +937,19 @@ async function addComment(post) {
       comments: updatedComments,
       latestComment: newComment,
     });
-    post.newComment = "";
+
+    const notification = {
+        userId: alumniId.value,
+        name: userName,
+        time: new Date(),
+        date: new Date().toLocaleDateString(),
+        status: "unread",
+        message: `${userName} commented on your post.`,
+        for: "modandadmin",
+        type: "newComment",
+      };
+    await addDoc(collection(db, "notifications"), notification);
+     post.newComment = "";
   } catch (error) {
     console.error("Error adding comment:", error);
   }
@@ -1046,6 +1058,7 @@ async function addComment(post) {
   gap: 0.5rem;
   right: -8rem;
   top: 1rem;
+  z-index: 1000;
   box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
 }
 

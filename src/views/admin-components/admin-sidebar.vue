@@ -178,12 +178,14 @@ const logout = async () => {
 
       loadingProgress.value = 75;
 
-      router.push({ name: "login" });
+     
       console.log("Logout successful. Redirecting to login page...");
       console.log("Current URL:", window.location.href);
     } else {
       console.log("No logged in user found");
     }
+    localStorage.clear()
+    router.push({ name: "login" });
   } catch (error) {
     console.error("Error:", error.message);
   } finally {

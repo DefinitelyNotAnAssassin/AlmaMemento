@@ -48,7 +48,7 @@
           :class="{ unread: post.status === 'unread', clickable: post.type === 'concern' }"
         >
           <span style="color: black">Your post have been {{ post.action }}</span>
-          <span style="color: black">{{ timeDifference(post.time.toDate()) }}</span>
+          <span style="color: black">{{ timeDifference(post.time) }}</span>
         </li>
       </ul>
     </div>

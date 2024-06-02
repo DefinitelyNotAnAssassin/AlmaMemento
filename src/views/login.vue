@@ -47,7 +47,12 @@
         <button type="submit" class="btn-login">Login</button>
         <div>
           <router-link to="/forgotPassword" class="forgot-password-link"
-            >Forgot Password?</router-link
+            >Forgot Password?</router-link>
+        </div>
+        <div>
+          Don’t have an account?
+          <router-link to="/signUp" class="forgot-password-link" style="color: #000; font-weight: bolder;"
+            >Sign up</router-link
           >
         </div>
       </form>
