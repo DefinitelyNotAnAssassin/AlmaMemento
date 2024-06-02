@@ -89,7 +89,7 @@ import SchoolEventMain from "./yearbook-components/yearbook-school-event-main.vu
 import SchoolEvents from "./yearbook-components/yearbook-school-event.vue";
 import SchoolEventGallery from "./yearbook-components/yearbook-school-event-gallery.vue";
 
-const currentAlbumPage = ref("");
+const currentAlbumPage = ref("Grad Main");
 const selectedFolderName = ref("");
 const selectedSubFolderName = ref("");
 const selectedGradSubFolderName = ref("");

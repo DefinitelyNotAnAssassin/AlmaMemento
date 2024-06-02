@@ -194,11 +194,12 @@ import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
 import MementoSideBar from "./memento-sidebar.vue";
 import { db, storage } from "../../firebase/index.js";
-import { collection, getDocs, addDoc, onSnapshot,getDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, onSnapshot,getDoc,doc } from "firebase/firestore";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
+
 } from "firebase/storage";
 import { useRouter } from "vue-router";
 

@@ -1,17 +1,24 @@
 <template>
    <Loading v-if="isLoading" />
   <div class="components-page-main-container p-3 profile-container container">
-    <div class="user-profile mt-2">
-      <div class="profile-pic-container">
+    <h2 style="font-size: 1.5rem;">Profile</h2>
+    <div style="background: lightblue; padding: 2rem;">
+    <div class="user-profile mt-2" >
+      <div class="profile-pic-container" style="margin-right: 2rem;">
+        <div style="position: relative;">
         <img
-          style="border-radius: 50%; height: 100px; width: 100px"
-          @click="openImageModal"
+          style="border-radius: 50%; height: 170px; width: 170px"
           :src="userData.profilePicture || userImage"
           alt="profile-picture"
         />
-        <button @click="editProfile" class="btn-edit-profile btn btn-sm">
-          <i class="bi bi-pencil-square"></i>
+        <button 
+        style="border: none; background: darkblue; width: 2rem; height: 2rem; color: white; border-radius: 50%;
+         position: absolute; font-size: 1rem; bottom: 0; right: 1rem;"
+        @click="openImageModal"
+        >
+          <i class="bi bi-camera"></i>
         </button>
+        </div>
         <h5 class="mt-1" style="text-align: center">
           {{ userData.userlevel }}
         </h5>
@@ -21,6 +28,8 @@
         <a>{{ userData.alumna_email }}</a>
         <div style="display: flex; align-items: center">
           <h4 style="margin-right: 10px">{{ userData.address }}</h4>
+      
+        
           <!-- <img
             @click="editProfile"
             width="25"
@@ -29,6 +38,7 @@
             alt="create-new"
           /> -->
         </div>
+        <button class="btn btn-dark" @click="editProfile">Edit Information</button>
       </div>
     </div>
     <div class="profile-info mt-2">
@@ -85,8 +95,9 @@
           name="address"
           v-model="userData.address"
         />
+        <button class="btn btn-success mt-2"  @click="showChangePasswordModal = true">Change Password</button>
       </div>
-
+      
       <div>
         <label for="year">Year of Administratorship:</label>
         <input
@@ -108,7 +119,7 @@
         </button>
       </div>
     </div>
-
+  </div>
     <div v-if="isModalOpen" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -120,6 +131,53 @@
           Cancel
         </button>
       </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div
+      v-if="showChangePasswordModal"
+      class="modal-overlay"
+      @click.self="showChangePasswordModal = false"
+    >
+      <div class="modal-password">
+        <h3>Change Password</h3>
+        <div>
+          <label>Current Password</label>
+          <input
+            class="form-control"
+            type="password"
+            v-model="passwordData.currentPassword"
+          />
+        </div>
+        <div>
+          <label>New Password</label>
+          <input
+            class="form-control"
+            type="password"
+            v-model="passwordData.newPassword"
+          />
+        </div>
+        <div>
+          <label>Confirm Password</label>
+          <input
+            class="form-control"
+            type="password"
+            v-model="passwordData.confirmPassword"
+          />
+        </div>
+        <div style="margin-top: 1rem;">
+        <button class="btn btn-sm btn-primary" @click="ConfirmationChangePassword">
+          Update Password
+        </button>
+        <button
+          class="btn btn-sm btn-dark mx-1"
+          @click="showChangePasswordModal = false"
+        >
+          Cancel
+        </button>
+        </div>
+      </div>
+      
     </div>
 
     <div v-if="isImageModalOpen" class="modal">
@@ -166,6 +224,12 @@ import {
 
 const storage = getStorage();
 const $q = useQuasar(); 
+const showChangePasswordModal = ref(false);
+const passwordData = ref({
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: ""
+});
 
 const route = useRoute();
 const userId = route.query.userId;
@@ -201,6 +265,70 @@ onMounted(async () => {
     console.error("Error getting document:", error);
   }
 });
+
+const SuccessfulMessage = (message)=> {
+      $q.dialog({
+        title: 'Successful',
+        message
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
+const ConfirmationChangePassword = ()=> {
+  if(passwordData.value.newPassword != passwordData.value.confirmPassword){
+    $q.dialog({
+    title: 'ERROR',
+    message: "Your password doesn't match",
+    })
+
+    return
+  }
+
+  $q.dialog({
+    title: 'Confirmation',
+    message: 'Are you sure you want to change your password?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    changePassword()
+  }).onCancel(() => {
+    // Action on Cancel
+  }).onDismiss(() => {
+    // Action on Dismiss
+  });
+}
+
+const changePassword = async () => {
+  isLoading.value = true
+  // const userId = route.currentRoute.value.query.userId;
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  if (userDocSnap.exists()) {
+    const user = userDocSnap.data();
+    if (user.alumna_password === passwordData.value.currentPassword) {
+      try {
+        await updateDoc(userDocRef, {
+          alumna_password: passwordData.value.newPassword,
+        });
+        showChangePasswordModal.value = false;
+      } catch (error) {
+        console.error("Error updating password: ", error);
+      }finally{
+        isLoading.value = false
+        SuccessfulMessage('Password has been updated.')
+      }
+    } else {
+      alert("Current password is incorrect");
+    }
+  } else {
+    console.log("User not found");
+  }
+};
 
 const showSaveDialog = () => {
   $q.dialog({
@@ -321,6 +449,34 @@ const deletePhoto = async () => {
 </script>
 
 <style>
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.modal-password {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+
+}
+
 .modal {
   display: flex;
   position: fixed;

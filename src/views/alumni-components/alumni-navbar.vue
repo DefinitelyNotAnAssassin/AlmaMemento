@@ -45,10 +45,14 @@
           v-for="post in filteredPosts"
           :key="post.id"
           @click="viewPost(post)"
+          style="cursor: pointer;"
+          class="notification"
           :class="{ unread: post.status === 'unread', clickable: post.type === 'concern' }"
         >
-          <span style="color: black">Your post have been {{ post.action }}</span>
-          <span style="color: black">{{ timeDifference(post.time) }}</span>
+          <span style="color: black" v-if="post?.message">{{ post?.message}}</span>
+          <span style="color: black" v-else-if="post?.reason">{{ "Your post has been rejected due to " + post?.reason}}</span>
+          <span style="color: black" v-else-if="post?.action">{{ "Your post has been " + post?.action}}</span>
+          <span style="color: black">&Tab;{{ timeDifference(post?.date) }}</span>
         </li>
       </ul>
     </div>
@@ -160,7 +164,7 @@ onMounted(() => {
         data.id = change.doc.id;
         return data;
       })
-      .filter((notification) => notification.for == "alumni");
+      .filter((notification) => notification.for == "alumni" && notification.authorId == userId.value);
 
     newPosts.value = allNotifications;
     unreadPostsCount.value = allNotifications.filter(
@@ -218,5 +222,9 @@ onMounted(() => {
 
 .clickable {
   cursor: pointer;
+}
+
+.notification:hover{
+  background: rgba(0, 0, 0, 0.2)
 }
 </style>

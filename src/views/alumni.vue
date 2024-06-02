@@ -742,22 +742,6 @@ const EditPostDialog = (post)=>{
   isEditPostId.value = post.id
   console.log("Edit Post: ", isEdit.value);
   console.log("Post Id: ", post.id)
-  // $q.dialog({
-  //       title: post.name,
-  //       message: 'Edit Post Caption',
-  //       prompt: {
-  //         model: '',
-  //         type: 'text' // optional
-  //       },
-  //       cancel: true,
-  //       persistent: true
-  //     }).onOk(data => {
-  //       EditPost(post, data)
-  //     }).onCancel(() => {
-  //       // console.log('>>>> Cancel')
-  //     }).onDismiss(() => {
-  //       // console.log('I am triggered on both OK and Cancel')
-  //     })
 }
 
 const EditPost = async (post, caption)=> {
@@ -866,10 +850,31 @@ onSnapshot(collection(db, "posts"), (snapshot) => {
 });
 
 const toggleLike = async (post) => {
+  const userSnapshot = await getDocs(collection(db, "users"));
+  const userData = userSnapshot.docs
+    .find((doc) => doc.id === userId.value)
+    ?.data();
+  const userName = `${userData.fName} ${userData.lName}`;
+
   const postRef = doc(db, "posts", post.id);
   const postSnapshot = await getDoc(postRef);
   const postData = postSnapshot.data();
   const likedBy = postData.likedBy || [];
+  const postId = postData.id
+  const postAuthor = postData.userIdOrig
+
+  const notification = {
+        userId: alumniId.value,
+        postId: postId,
+        authorId: post.userIdOrig,
+        name: userName,
+        time: new Date(),
+        date: new Date().toLocaleDateString(),
+        status: "unread",
+        message: `${userName} liked your post.`,
+        for: "alumni",
+        type: "newLike",
+    };
 
   if (likedBy.includes(userId.value)) {
     // If the user has already liked the post, unlike it
@@ -880,12 +885,15 @@ const toggleLike = async (post) => {
       likes: updatedLikes.length,
     });
   } else {
-    // If the user has not liked the post, like it
     const updatedLikes = [...likedBy, userId.value];
     await updateDoc(postRef, {
       likedBy: updatedLikes,
       likes: updatedLikes.length,
     });
+
+    if(userId.value !== postAuthor){
+    await addDoc(collection(db, "notifications"), notification);
+    }
   }
 };
 
@@ -915,11 +923,26 @@ async function loadComments(post) {
 async function addComment(post) {
   if (post.newComment.trim() === "") return;
   const newId = uuidv4();
+  const postId = post.id
+  const postAuthor = post.userIdOrig
   const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
     ?.data();
   const userName = `${userData.fName} ${userData.lName}`;
+
+  const notification = {
+        userId: alumniId.value,
+        postId: postId,
+        name: userName,
+        authorId: post.userIdOrig,
+        time: new Date(),
+        date: new Date().toLocaleDateString(),
+        status: "unread",
+        message: `${userName} commented on your post.`,
+        for: "alumni",
+        type: "newComment",
+    };
 
   const newComment = {
     id: newId,
@@ -937,19 +960,10 @@ async function addComment(post) {
       comments: updatedComments,
       latestComment: newComment,
     });
-
-    const notification = {
-        userId: alumniId.value,
-        name: userName,
-        time: new Date(),
-        date: new Date().toLocaleDateString(),
-        status: "unread",
-        message: `${userName} commented on your post.`,
-        for: "modandadmin",
-        type: "newComment",
-      };
-    await addDoc(collection(db, "notifications"), notification);
      post.newComment = "";
+     if(userId.value !== postAuthor){
+    await addDoc(collection(db, "notifications"), notification);
+    }
   } catch (error) {
     console.error("Error adding comment:", error);
   }

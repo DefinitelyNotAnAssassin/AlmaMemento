@@ -194,6 +194,11 @@ const showFolderOptions = (folderId) => {
   toggleFolderOptions(folderId);
 };
 
+const editFolder = (index) => {
+  editIndex.value = index;
+  editFolderName.value = folders.value[index].name;
+};
+
 const deleteFolder = async (folderId) => {
   const folder = folders.value.find((folder) => folder.id === folderId);
   if (folder) {

@@ -54,7 +54,7 @@
     <td>{{ item.event }}</td>
     <td>{{ item.caption }}</td>
     <td>
-      <a class="btn-view-image" @click="showImagePreview(item.imageUrls)">
+      <a class="btn-view-image" @click="showImagePreview(item.imageUrls)" v-if="item.imageUrls">
         View Image
       </a>
     </td>
@@ -68,7 +68,7 @@
         </button>
         <button
           class="btn btn-sm btn-danger mx-1"
-          @click="rejectPost(item, index)"
+          @click="showRejectReasonDialog(item, index)"
         >
           Reject
         </button>
@@ -140,6 +140,34 @@
       </div>
     </div>
   </div>
+  <div v-if="showRejectReason" class="modal">
+      <div class="modal-content">
+        <h3>Please Select a Reason</h3>
+        <select v-model="reason" class="form-select mb-2">
+          <option>Spam</option>
+          <option>Nudity</option>
+          <option>Violence</option>
+          <option>Hate Speech</option>
+          <option>False Information</option>
+          <option>Suicide or Self-Injury</option>
+          <option>Other</option>
+        </select>
+        <div v-if="reason === 'Other'">
+          <label for="other">Others: </label>
+          <input type="text" id="other" v-model="otherReason" placeholder="Enter other reason" class="form-control mb-2"/>
+        </div>
+       
+        <button class="btn btn-sm btn-danger" @click="rejectPost(rejectItem, rejectIndex)">
+          Reject
+        </button>
+        <button
+          class="btn btn-sm btn-secondary mt-1"
+          @click="showRejectReason = false"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
 </template>
 
 <script setup>
@@ -169,7 +197,11 @@ const filterStatus = ref("pending");
 const isModalVisible = ref(false);
 const selectAllChecked = ref(false); 
 const currentIndex = ref(0);
-
+const showRejectReason = ref(false);
+const rejectIndex = ref(null)
+const rejectItem = ref(null)
+const reason = ref("Spam")
+const otherReason = ref("")
 const router = useRouter();
 const adminId = router.currentRoute.value.query.userId;
 
@@ -273,6 +305,12 @@ async function approvePost(item, index) {
   }
 }
 
+const showRejectReasonDialog = (item, index)=>{
+  showRejectReason.value = true  
+  rejectIndex.value = index
+  rejectItem.value = item
+}
+
 
 async function rejectPost(item, index) {
   const adminId = router.currentRoute.value.query.userId;
@@ -299,10 +337,13 @@ async function rejectPost(item, index) {
     name: adminName,
     status: "unread",
     time: approvalTime,
+    reason: otherReason.value || reason.value,
     type: "newpost",
     action: "rejected",
     userId: userId
   });
+
+  showRejectReason.value = false
 }
 
 function showImagePreview(imageUrls) {
@@ -429,7 +470,12 @@ onMounted(async () => {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+}
+
+.modal-content img{
+  width: 20rem;
+  height: 20rem;
+  object-fit: contain;
 }
 
 .close {
