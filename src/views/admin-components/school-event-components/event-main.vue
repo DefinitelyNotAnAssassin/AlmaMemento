@@ -1,7 +1,7 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>School Events</h3>
+      <h3>School Events Year</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input

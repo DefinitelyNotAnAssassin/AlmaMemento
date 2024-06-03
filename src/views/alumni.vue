@@ -75,7 +75,7 @@
                 <label for="event">Event:</label>
                 <select id="event" v-model="selectedEvent" class="form-control">
                   <option
-                    v-for="event in events"
+                    v-for="event in filterEvents"
                     :key="event.id"
                     :value="event.name"
                   >
@@ -803,24 +803,41 @@ function getLatestApprovalDate(post) {
 
   return latestTime;
 }
+const filterEvents = computed(()=>{
+  const newEvents = events.value.filter(event => event.year === selectedSchoolYear.value);
+  const filteredEvents = newEvents.map((doc) => ({
+    id: doc.id,
+    name: doc.name,
+    year: doc.year
+  }))
+
+  return filteredEvents;
+})
+watch(filterEvents, (newEvents, oldEvents) => {
+  console.log("Selected: ", newEvents);
+});
 
 watch(approvedPosts, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
 });
 
 onMounted(async () => {
-  const coursesSnapshot = await getDocs(collection(db, "classYears"));
+  const coursesSnapshot = await getDocs(collection(db, "folders"));
   schoolYears.value = coursesSnapshot.docs.map((doc) => ({
     id: doc.id,
     name: doc.data().name,
   }));
 
-  const classYearsSnapshot = await getDocs(collection(db, "events"));
+  const classYearsSnapshot = await getDocs(collection(db, "subfolders"));
   events.value = classYearsSnapshot.docs.map((doc) => ({
     id: doc.id,
     name: doc.data().name,
+    year: doc.data().year
   }));
 
+
+
+  console.log(events)
 onSnapshot(collection(db, "posts"), (snapshot) => {
   posts.value = snapshot.docs.map((doc) => {
     const data = doc.data();
@@ -848,6 +865,10 @@ onSnapshot(collection(db, "posts"), (snapshot) => {
     post.newComment = "";
   });
 });
+
+
+
+
 
 const toggleLike = async (post) => {
   const userSnapshot = await getDocs(collection(db, "users"));
