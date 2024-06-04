@@ -14,7 +14,7 @@
         <div class="card-two">
             <div class="top-content">
                 <img width="100" height="100" src="https://img.icons8.com/dusk/64/contact-card.png" alt="contact-card"/>
-                <h1 class="text-white">4</h1>
+                <h1 class="text-white">{{ contactCount }}</h1>
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Contact Support</h3>
@@ -24,7 +24,7 @@
         <div class="card-three">
             <div class="top-content">
                 <img width="100" height="100" src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/100/external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2.png" alt="external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2"/>
-                <h1 class="text-white">7</h1>
+                <h1 class="text-white">{{moderatorCount}}</h1>
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Total Moderators</h3>
@@ -35,7 +35,7 @@
         <div class="card-four">
             <div class="top-content">
                 <img width="100" height="100" src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/100/external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2.png" alt="external-courses-recruitment-agency-flaticons-lineal-color-flat-icons-2"/>
-                <h1 class="text-white">7</h1>
+                <h1 class="text-white">{{approvalCount}}</h1>
             </div>
             <div class="bottom-content">
                 <h3 class="dashboard-bottom-title">Pending for Approval</h3>
@@ -52,6 +52,9 @@ import { db } from '../../firebase/index.js'
 import { collection, getDocs } from 'firebase/firestore'
 
 const alumniCount = ref(0);
+const contactCount = ref(0);
+const moderatorCount = ref(0);
+const approvalCount = ref(0);
 const currentPage = ref('Dashboard');
 
 const emit = defineEmits(["update:currentPage"]);
@@ -81,13 +84,43 @@ const fetchAlumniCount = async () => {
     const q = collection(db, 'users')
     const querySnapshot = await getDocs(q)
     let count = 0
+    let countModerators = 0
     querySnapshot.forEach(doc => {
       const userData = doc.data()
       if (userData.hasOwnProperty('userlevel') && userData.userlevel === 'alumni') {
         count++
       }
+
+      if(userData.hasOwnProperty('userlevel') && userData.userlevel === 'moderator'){
+        countModerators++
+      }
     })
     alumniCount.value = count
+    moderatorCount.value = countModerators
+
+    const concerns = collection(db, 'concerns')
+    const concernsQuerySnapshot = await getDocs(concerns)
+    let concernsCount = 0
+    concernsQuerySnapshot.forEach(doc => {
+      const userData = doc.data()
+      if (userData.hasOwnProperty('name')) {
+        concernsCount++
+      }
+    })
+    contactCount.value = concernsCount
+
+    const pending = collection(db, 'posts')
+    const pendingQuerySnapshot = await getDocs(pending)
+    let pendingCount = 0
+    pendingQuerySnapshot.forEach(doc => {
+      const userData = doc.data()
+      if (userData.hasOwnProperty('status') && userData.userlevel === 'pending')  {
+        pendingCount++
+      }
+    })
+    approvalCount.value = pendingCount
+
+
   } catch (error) {
     console.error('Error fetching alumni count:', error.message)
   }

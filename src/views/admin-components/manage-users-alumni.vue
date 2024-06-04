@@ -165,6 +165,7 @@
                   name="fName"
                   v-model="fName"
                   placeholder="First Name"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -176,6 +177,7 @@
                   name="mInitial"
                   v-model="mInitial"
                   placeholder="Middle Initial"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -187,6 +189,7 @@
                   name="lName"
                   v-model="lName"
                   placeholder="Last Name"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -229,6 +232,7 @@
                   id="year"
                   name="year"
                   v-model="year"
+                  v-on:keypress="NumberWithDash($event)"
                 />
               </div>
               <div>
@@ -251,6 +255,7 @@
                   name="phone"
                   v-model="phone"
                   placeholder="Phone"
+                  v-on:keypress="NumberOnly($event)"
                 />
               </div>
               <div>
@@ -264,7 +269,7 @@
                   placeholder="Address"
                 />
               </div>
-              <div>
+              <div v-if="false">
                 <label for="bio">Bio</label>
                 <input
                   class="form-control"
@@ -301,6 +306,7 @@
                   name="fName"
                   v-model="fName"
                   placeholder="First Name"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -312,6 +318,7 @@
                   name="mInitial"
                   v-model="mInitial"
                   placeholder="Middle Initial"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -323,6 +330,7 @@
                   name="lName"
                   v-model="lName"
                   placeholder="Last Name"
+                  v-on:keypress="LetterOnly($event)"
                 />
               </div>
               <div>
@@ -345,6 +353,7 @@
                   id="year"
                   name="year"
                   v-model="year"
+                  v-on:keypress="NumberWithDash($event)"
                 />
               </div>
               <div>
@@ -367,6 +376,7 @@
                   name="phone"
                   v-model="phone"
                   placeholder="Phone"
+                  v-on:keypress="NumberOnly($event)"
                 />
               </div>
               <div>
@@ -380,7 +390,7 @@
                   placeholder="Address"
                 />
               </div>
-              <div>
+              <div v-if="false">
                 <label for="bio">Bio</label>
                 <input
                   class="form-control"
@@ -426,6 +436,8 @@ import {
   deleteDoc,
   onSnapshot,
 } from "firebase/firestore";
+import { useQuasar } from "quasar";
+import { LetterOnly, NumberOnly, NumberWithDash } from "@/Utils/KeyPressRole.js";
 
 const items = ref([]);
 const selectedItems = ref([]);
@@ -456,6 +468,7 @@ const isWarningVisible = ref(false);
 const warningMessage = ref("");
 const isSuccessVisible = ref(false);
 const successMessage = ref("");
+const $q = useQuasar()
 
 const filteredItems = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -497,18 +510,45 @@ const fetchData = async () => {
 };
 
 const fetchProgramAndBlockAndClassYears = async () => {
-  const pabsSnapshot = await query(collection(db, "pabs"));
-  onSnapshot(pabsSnapshot, (snapshot) => {
-    pabs.value = snapshot.docs
-      .map((doc) => ({ id: doc.id, name: doc.data().name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+  const pabsSnapshot = await query(collection(db, "users"));
+   onSnapshot(pabsSnapshot, (snapshot) => {
+    const pabData = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    name: doc.data()?.pab || "", 
+    }));
+
+    const filteredPabData = pabData.filter((entry) => entry.name);
+
+    const uniquePabData = Array.from(new Set(filteredPabData.map(entry => entry.name)))
+      .map(name => filteredPabData.find(entry => entry.name === name));
+
+    const sortedPabData = uniquePabData.sort((a, b) => a.name.localeCompare(b.name));
+
+    pabs.value = sortedPabData;
+    // pabs.value = snapshot.docs
+    //   .map((doc) => ({ id: doc.id, name: doc?.pab }))
+    //   .sort((a, b) => a?.pab.localeCompare(b?.pab));
   });
 
-  const classYearsSnapshot = await query(collection(db, "classYears"));
+  const classYearsSnapshot = await query(collection(db, "users"));
   onSnapshot(classYearsSnapshot, (snapshot) => {
-    classYears.value = snapshot.docs
-      .map((doc) => ({ id: doc.id, name: doc.data().name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const classYearData = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    name: doc.data()?.classYear || "", 
+    }));
+
+    const filteredClassYearData = classYearData.filter((entry) => entry.name);
+
+    // Use Set to ensure unique values
+    const uniqueClassYearData = Array.from(new Set(filteredClassYearData.map(entry => entry.name)))
+      .map(name => filteredClassYearData.find(entry => entry.name === name));
+
+    const sortedClassYearData = uniqueClassYearData.sort((a, b) => a.name.localeCompare(b.name));
+
+    classYears.value = sortedClassYearData;
+    // classYears.value = snapshot.docs
+    //   .map((doc) => ({ id: doc.id, name: doc.data().name }))
+    //   .sort((a, b) => a.name.localeCompare(b.name));
   });
 };
 
@@ -684,7 +724,7 @@ const submitModal = async () => {
     const userData = {
       alumnaID: alumnaID.value,
       fName: fName.value,
-      mInitial: mInitial.value,
+      mInitial: mInitial.value + ".",
       lName: lName.value,
       pab: name,
       classYear: year.value,
@@ -816,56 +856,75 @@ const checkAllItems = (event) => {
   }
   selectAllChecked.value = isChecked;
 };
-
 const importUsers = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  try {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const data = new Uint8Array(e.target.result);
-    const workbook = read(data, { type: "array" });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const usersData = utils.sheet_to_json(worksheet, { header: 2 });
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = read(data, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const usersData = utils.sheet_to_json(worksheet, { header: 2 });
 
-    for (const user of usersData) {
-      const {
-        alumnaID,
-        fName,
-        mInitial,
-        lName,
-        pab,
-        classYear,
-        alumna_email,
-        phone,
-        address,
-        bio
-      } = user;
-      const lastName = lName;
-      const last4Digits = alumnaID.toString().slice(-4);
-      const alumna_password = `${lastName}${last4Digits}`;
+      // Check for duplicate alumnaIDs
+      const alumnaIDs = new Set();
+      let hasDuplicates = false;
+      for (const user of usersData) {
+        const { ID_Number } = user;
+        if (alumnaIDs.has(ID_Number)) {
+          hasDuplicates = true;
+          break;
+        }
+        alumnaIDs.add(ID_Number);
+      }
 
-      await addDoc(collection(db, "users"), {
-        alumnaID,
-        fName,
-        mInitial,
-        lName,
-        pab,
-        classYear,
-        alumna_email,
-        phone,
-        address,
-        alumna_password,
-        userlevel: "alumni",
-        status: "active",
-        bio
-      });
-    }
+      if (hasDuplicates) {
+        $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found. Import canceled." });
+        return;
+      }
 
-    alert("Users imported successfully");
-    fetchData();
-  };
-  reader.readAsArrayBuffer(file);
+      // No duplicates, proceed with importing
+      for (const user of usersData) {
+        const {
+          ID_Number: alumnaID,
+          First_Name: fName,
+          Middle_Initial: mInitial,
+          Last_Name: lName,
+          Program_AND_Block: pab,
+          Class_Year: classYear,
+          Email: alumna_email,
+          Phone: phone,
+          Address: address,
+          Bio: bio
+        } = user;
+
+        await addDoc(collection(db, "users"), {
+          alumnaID,
+          fName,
+          mInitial,
+          lName,
+          pab: pab || "",
+          classYear: classYear || "",
+          alumna_email: alumna_email || "",
+          phone: phone || "",
+          address: address || "",
+          alumna_password: "",
+          userlevel: "alumni",
+          status: "active",
+          bio: bio || ""
+        });
+      }
+
+      $q.dialog({ title: "Success", message: "Users imported successfully" });
+      fetchData();
+    };
+    reader.readAsArrayBuffer(file);
+  } catch (error) {
+    $q.dialog({ title: "Error", message: error.message });
+  }
 };
+
 </script>

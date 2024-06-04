@@ -1,10 +1,10 @@
 <template>
   <div class="components-page-main-container p-3">
     <h3 class="text-center">Contact Support</h3>
-    <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
-      <i class="bi bi-arrow-return-left"></i>
+    <button class="btn btn-sm btn-dark mx-1" @click="closeMessageModal">
+      <i class="bi bi-x-square"></i>
     </button>
-    <button class="btn btn-sm btn-dark mx-1" @click="closeConversation">
+    <button class="btn btn-sm btn-dark mx-1" @click="closeConversation" v-if="documentData.status !== 'closed'">
       Close this Conversation
     </button>
     <div class="convo-container p-5" style="background: white;">
@@ -36,7 +36,7 @@
                       {{alumniReply.name  }} - {{ alumniReply.date }}
                     </span>
                 </div>
-            </div>       
+            </div>     
         </div> 
         </div>
       </div>
@@ -60,19 +60,17 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, defineProps, defineEmits } from "vue";
 import {
   doc,
   getDoc,
   updateDoc,
-  onSnapshot,
+  onSnapshot
 } from "firebase/firestore";
 import { db } from "../../../firebase/index.js";
 import { useRouter } from "vue-router";
 
-const props = defineProps(["id"]);
 const currentPage = ref("Contact Message");
 const documentData = ref({});
 const showReply = ref(false);
@@ -80,14 +78,11 @@ const replyMessage = ref("");
 const router = useRouter();
 const userId = router.currentRoute.value.query.userId;
 const userName = ref("");
+const showMessage = ref(false)
 
-const emit = defineEmits(["update:currentPage", "id"]);
+const props = defineProps(["id"])
+const emit = defineEmits(['update:showMessage']);
 let unsubscribe;  // Variable to store the unsubscribe function
-
-const backToMain = () => {
-  currentPage.value = "Contact";
-  emit("update:currentPage", "Contact");
-};
 
 const sendReply = async () => {
   const userDoc = await getUserDoc(userId);
@@ -97,7 +92,7 @@ const sendReply = async () => {
   const replies = docSnapshot.data().replies || []; // Get existing replies or an empty array if not present
 
   const updatedReplies = [
-    ...replies, // Spread existing replies
+    ...replies, 
     {
       userId: userId,
       message: replyMessage.value,
@@ -130,7 +125,12 @@ const setupRealtimeListener = () => {
   });
 };
 
-async function closeConversation(){
+const closeMessageModal = () => {
+  showMessage.value = false;
+  emit("update:showMessage", false);
+};
+
+const closeConversation = async () => {
   const docRef = doc(db, "concerns", props.id);
   await updateDoc(docRef, {
     status: "closed"
@@ -138,12 +138,28 @@ async function closeConversation(){
 };
 
 onMounted(() => {
-  setupRealtimeListener();  // Set up real-time listener on mount
+  setupRealtimeListener();  
 });
 
 onUnmounted(() => {
   if (unsubscribe) {
-    unsubscribe();  // Clean up the listener when the component is unmounted
+    unsubscribe();  
   }
 });
 </script>
+
+<style scoped>
+.components-page-main-container{
+  position: absolute;
+  inset: 0 0 0 0 !important;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3rem !important;
+}
+
+.convo-container{
+  height: 70vh;
+  overflow-y: scroll;
+}
+</style>

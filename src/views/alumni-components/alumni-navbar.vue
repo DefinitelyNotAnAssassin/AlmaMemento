@@ -51,8 +51,8 @@
         >
           <span style="color: black" v-if="post?.message">{{ post?.message}}</span>
           <span style="color: black" v-else-if="post?.reason">{{ "Your post has been rejected due to " + post?.reason}}</span>
-          <span style="color: black" v-else-if="post?.action">{{ "Your post has been " + post?.action}}</span>
-          <span style="color: black">&Tab;{{ timeDifference(post?.date) }}</span>
+          <span style="color: black" v-else-if="post?.action">{{ "Your post has been " + post?.action}} </span>
+          <span style="color: black">{{ " " + timeDifference(post?.date) }}</span>
         </li>
       </ul>
     </div>
@@ -100,6 +100,7 @@ const markAllAsRead = async () => {
 
 const timeDifference = (timestamp) => {
   const postTime = new Date(timestamp).getTime();
+ 
   const now = new Date().getTime();
   const difference = now - postTime;
 
@@ -155,25 +156,33 @@ const filterBy = (status) => {
 
 onMounted(() => {
   const notificationsCollection = collection(db, "notifications");
-  onSnapshot(notificationsCollection, (snapshot) => {
-    const allNotifications = snapshot
-      .docChanges()
-      .filter((change) => change.type === "added")
-      .map((change) => {
-        const data = change.doc.data();
-        data.id = change.doc.id;
-        return data;
-      })
-      .filter((notification) => notification.for == "alumni" && notification.authorId == userId.value);
+  const unsubscribe = onSnapshot(notificationsCollection, (snapshot) => {
 
+    // Filter notifications for the current user
+    const allNotifications = snapshot.docChanges().map((change) => {
+      const data = change.doc.data();
+      data.id = change.doc.id;
+      return data;
+    }).filter((notification) => {
+      return notification.for === "alumni" && notification.authorId === userId.value;
+    });
+
+    // Update the reactive variables
     newPosts.value = allNotifications;
     unreadPostsCount.value = allNotifications.filter(
       (notification) => notification.status === "unread"
     ).length;
+
+    // Assign filtered posts to the reactive variable
     filteredPosts.value = [...newPosts.value];
 
+    // Sort the filtered posts by time
     filteredPosts.value.sort((a, b) => b.time.toDate() - a.time.toDate());
+    console.log("FilteredNotification: ", filteredPosts.value);
   });
+
+  // Return the unsubscribe function to stop listening to snapshot changes when the component is unmounted
+  return unsubscribe;
 });
 </script>
 

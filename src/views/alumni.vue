@@ -13,10 +13,7 @@
             >
               <div class="d-flex align-items-center">
                 <img
-                  :src="
-                    userData.photoURL ||
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
-                  "
+                  :src="userData.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
                   style="
                     height: 40px !important;
                     width: 40px !important;
@@ -60,7 +57,7 @@
                 <select
                   id="schoolYear"
                   v-model="selectedSchoolYear"
-                  class="form-control"
+                  class="form-control form-select"
                 >
                   <option
                     v-for="year in schoolYears"
@@ -73,7 +70,7 @@
               </div>
               <div class="input-container mt-2">
                 <label for="event">Event:</label>
-                <select id="event" v-model="selectedEvent" class="form-control">
+                <select id="event" v-model="selectedEvent" class="form-control form-select">
                   <option
                     v-for="event in filterEvents"
                     :key="event.id"
@@ -161,17 +158,17 @@
           >
             <div
               style="width: 400px"
-              v-for="post in approvedPosts"
+              v-for="post in approvedPosts.slice().reverse()"
               :key="post.id"
               class="container card p-3 background-color-brown text-light my-2"
             >
 
-            <div class="btn-dot" v-if="post.isCurrentUser" >
+            <div class="btn-dot" v-if="post.isCurrentUser" @click="toggleEdit(post)" >
               <span></span>
               <span></span>
               <span></span>
             </div>
-            <div class="post-actions">
+            <div class="post-actions" v-if="post.isEdit">
                <button class="btn btn-dark btn-edit" @click="EditPostDialog(post)">Edit</button> 
                <button class="btn btn-danger btn-delete" @click="ConfirmDeleteDialog(post)">Delete</button> 
             </div>
@@ -510,7 +507,7 @@ const fetchUserData = async () => {
       ...user,
       name: name.trim(),
       full_name: fullName.trim(),
-      photoURL: user.profilePicture,
+
     };
   } else {
     console.log("User not found");
@@ -851,6 +848,7 @@ onSnapshot(collection(db, "posts"), (snapshot) => {
       commentsLoaded: false,
       isCurrentUser: data.userIdOrig === userId.value,
       newComment: "",
+      isEdit: false,
     };
    
   });
@@ -924,6 +922,10 @@ function toggleComments(post) {
     loadComments(post);
     post.commentsLoaded = true;
   }
+}
+
+function toggleEdit(post){
+  post.isEdit = !post.isEdit;
 }
 
 async function loadComments(post) {
@@ -1008,6 +1010,7 @@ async function addComment(post) {
 /* Modal content */
 .main-content {
   width: calc(100% - 400px);
+  overflow-y: hidden;
 }
 
 .modal-content {
@@ -1078,27 +1081,19 @@ async function addComment(post) {
  border-radius: 50%;
 }
 
-.btn-dot:hover + .post-actions{
-  display: flex;
-}
-
 .post-actions{
   background: white;
   padding: 1rem;
   border-radius: 0.3rem;
   position: absolute;
-  display: none;
+  display: flex;
   flex-direction: column;
   width: 10rem;
   gap: 0.5rem;
-  right: -8rem;
-  top: 1rem;
+  right: -9rem;
+  top: 3rem;
   z-index: 1000;
   box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
-}
-
-.post-actions:hover{
-  display: flex;
 }
 
 .post-images{

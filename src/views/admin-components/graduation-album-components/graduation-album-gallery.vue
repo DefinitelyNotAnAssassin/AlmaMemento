@@ -20,6 +20,7 @@
         <input
           class="form-control"
           type="file"
+          multiple
           ref="imageInput"
           @change="handleFileUpload"
         />
@@ -30,14 +31,20 @@
     </div>
 
     <div class="image-container d-flex flex-wrap mt-2">
-      <img
+      <div  v-for="image in images">
+        <img
         class="m-1"
         style="height: 200px; width: 200px"
-        v-for="image in images"
+       
         :key="image.id"
         :src="image.url"
         alt="Uploaded Image"
       />
+      <button @click="deleteImage(image)" class="btn btn-delete">
+        <i class="bi bi-x-square"></i>
+      </button>
+      </div>
+     
     </div>
   </div>
 </template>
@@ -47,6 +54,7 @@ import { ref, defineEmits, defineProps } from "vue";
 import {
   uploadBytes,
   getDownloadURL,
+  deleteObject,
   ref as storageRef,
 } from "firebase/storage";
 import {
@@ -55,15 +63,17 @@ import {
   query,
   where,
   onSnapshot,
+  deleteDoc,
+  doc
 } from "firebase/firestore";
 import { db, storage } from "../../../firebase/index.js";
-
+import { useQuasar } from "quasar";
 const props = defineProps(["folderName", "subfolderName", "gradsubfolderName"]);
 const emit = defineEmits(["update:currentPage"]);
-
+const $q = useQuasar()
 const currentAlbumPage = ref("Gallery");
 const showModal = ref(false);
-let selectedFile = null;
+const selectedFiles = ref([]);
 const images = ref([]);
 
 const backToGrad = async () => {
@@ -72,22 +82,44 @@ const backToGrad = async () => {
 };
 
 const handleFileUpload = (event) => {
-  selectedFile = event.target.files[0];
+  selectedFiles.value = Array.from(event.target.files);
 };
 
 const uploadImage = async () => {
-  if (!selectedFile) return;
+  if (selectedFiles.value.length === 0) {
+    return $q.dialog({ title: "Warning", message: "Image required." });
+  }
 
-  const imageRef = storageRef(storage, `gallery/${selectedFile.name}`);
-  await uploadBytes(imageRef, selectedFile);
-  const imageUrl = await getDownloadURL(imageRef);
+  const uploadPromises = selectedFiles.value.map(async (file) => {
+    const imageRef = storageRef(storage, `gallery/${file.name}`);
+    await uploadBytes(imageRef, file);
+    const imageUrl = await getDownloadURL(imageRef);
 
-  await addDoc(collection(db, "gallery"), {
-    folder: props.folderName,
-    subfolder: props.gradsubfolderName,
-    gradsubfolder: props.subfolderName,
-    url: imageUrl,
+    await addDoc(collection(db, "gallery"), {
+      folder: props.folderName,
+      subfolder: props.subfolderName,
+      gradsubfolder: props.gradsubfolderName,
+      url: imageUrl,
+      storagePath: imageRef.fullPath,
+    });
   });
+
+  await Promise.all(uploadPromises);
+  showModal.value = false;
+};
+
+const deleteImage = async (image) => {
+  try {
+    const imageRef = storageRef(storage, image.url);
+    await deleteObject(imageRef);
+
+    const docRef = doc(db, "gallery", image.id);
+    await deleteDoc(docRef);
+
+    images.value = images.value.filter((img) => img.id !== image.id);
+  } catch (error) {
+    $q.dialog({ title: "Error", message: error.message });
+  }
 };
 
 onSnapshot(
@@ -153,5 +185,18 @@ onSnapshot(
   height: 200px;
   margin: 10px;
   object-fit: cover;
+}
+
+.image-container div{
+  position: relative;
+  margin: 0.5rem;
+}
+
+.btn-delete{
+  position: absolute;
+  right: -0.5rem;
+  top: -0.5rem;
+  font-size: 1.5rem;
+  z-index: 1000;
 }
 </style>

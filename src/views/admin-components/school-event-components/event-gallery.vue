@@ -20,6 +20,7 @@
         <input
           class="form-control"
           type="file"
+          multiple
           ref="imageInput"
           @change="handleFileUpload"
         />
@@ -100,6 +101,7 @@
               type="file"
               id="eventImage"
               ref="eventImageInput"
+              multiple
               @change="uploadEventImage"
               accept="image/*"
             />

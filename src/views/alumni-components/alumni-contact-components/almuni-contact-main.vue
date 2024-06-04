@@ -2,23 +2,19 @@
   <div class="components-page-main-container p-3">
     <h3 class="text-center">Contact Support</h3>
     <div class="d-flex justify-content-between align-items-center">
-      <input
-        class="search-bar form-control"
-        style="width: 250px"
-        type="text"
-        v-model="searchQuery"
-        placeholder="Search by ID or Name"
-      />
       <button
         class="btn btn-sm btn-danger mx-1"
-        v-if="selectedMessages.length > 0"
+        v-if="selectedMessages.length > 0"  
         @click="confirmDelete"
       >
         <i class="bi bi-trash3"></i>
       </button>
     </div>
     <ul class="list-group">
-      <li v-for="message in messages" :key="message.id" class="list-group-item">
+      <li v-for="message in messages.slice().reverse()" :key="message.id" class="list-group-item"
+      @click="openMessageDialog(message.id)" 
+              @closeModal="closeModalMessage"
+       style="cursor: pointer">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center">
             <div>
@@ -30,14 +26,13 @@
             </div>
             <div
               class="mx-2"
-              @click="navigateToMessage(message.id)"
               style="cursor: pointer"
+           
             >
               {{ message.name }}
             </div>
           </div>
           <div
-            @click="navigateToMessage(message.id)"
             style="
               cursor: pointer;
               max-width: 400px;
@@ -52,7 +47,7 @@
               {{ message.message }}
             </span>
           </div>
-          <div @click="navigateToMessage(message.id)" style="cursor: pointer">
+          <div>
             {{ message.date }}
           </div>
           <div >
@@ -62,11 +57,16 @@
       </li>
     </ul>
   </div>
+  <ContactMessage 
+  @update:showMessage="closeMessageModal" 
+  :id="concernId"
+  v-if="showMessage"/>
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, computed} from "vue";
 import { db } from "../../../firebase/index.js";
+import { useRouter } from "vue-router";
 import {
   collection,
   query,
@@ -78,24 +78,45 @@ import {
   deleteDoc,
   onSnapshot,
 } from "firebase/firestore";
+import ContactMessage from "./alumni-contact-message.vue"
+
+const emit = defineEmits(["update:showMessage"])
 
 const messages = ref([]);
 const selectedMessages = ref([]);
 const searchQuery = ref("");
 const currentPage = ref("Contact");
+const userId = computed(() => router.currentRoute.value.query.userId);
+const alumniId = computed(() => router.currentRoute.value.query.alumniId);
+const router = useRouter()
+const showMessage = ref(false)
+const concernId = ref("")
+
+const openMessageDialog = (id)=>{
+  showMessage.value = true
+  concernId.value = id
+  emit("update:showMessage", true);
+  emit("id", id);
+}
+function closeMessageModal (){
+  showMessage.value = false
+}
 
 const fetchMessages = async () => {
   const q = query(collection(db, "concerns"));
   const querySnapshot = await getDocs(q);
-  messages.value = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    name: doc.data().name,
-    subject: doc.data().subject,
-    message: doc.data().message,
-    date: doc.data().date,
-    replies: doc.data().replies,
-    status: doc.data().status
-  }));
+  
+  messages.value = querySnapshot.docs
+    .filter(data => data.data().userId === userId.value) 
+    .map((doc) => ({
+      id: doc.id,
+      name: doc.data().name,
+      subject: doc.data().subject,
+      alumniReplies: doc.data().alumniReplies,
+      adminReplies: doc.data().adminReplies,
+      date: doc.data().date,
+      status: doc.data().status
+    }));
 };
 
 const confirmDelete = async () => {
@@ -106,14 +127,6 @@ const confirmDelete = async () => {
     }
     selectedMessages.value = [];
   }
-};
-
-const emit = defineEmits(["update:currentPage"]);
-
-const navigateToMessage = (id) => {
-  currentPage.value = "Contact Message";
-  emit("update:currentPage", "Contact Message");
-  emit("id", id);
 };
 
 fetchMessages();

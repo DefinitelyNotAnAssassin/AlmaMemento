@@ -53,6 +53,7 @@ const searchQuery = ref("");
 
 const fetchFolders = async () => {
   const querySnapshot = await getDocs(collection(db, "folders"));
+
   folders.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     name: doc.data().name,
@@ -70,11 +71,17 @@ const changeAlbumPage = (folderName) => {
 };
 
 const filteredFolders = computed(() => {
+
+
   return folders.value
-    .filter((folder) =>
-      folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
+  .filter((folder) =>
+    folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  ).sort((a, b) => {
+    const [aStart, aEnd] = a.name.split('-').map(Number);
+    const [bStart, bEnd] = b.name.split('-').map(Number);
+
+    return bStart - aStart || bEnd - aEnd;
+  });
 });
 </script>
 

@@ -2,6 +2,7 @@
   <Loading v-if="isLoading" />
   <aside
     class="sidebar-container d-flex flex-column align-items-center text-light m-0 background-color-brown"
+    style="position: sticky; top: 4rem;"
   >
     <img
       class="mt-5"
@@ -14,15 +15,15 @@
       <h4>Profile</h4>
       <table>
         <tr>
-          <td>ID number:</td>
+          <td style="white-space: nowrap;">ID number:</td>
           <td class="td-padding-left">{{ userData.alumnaID }}</td>
         </tr>
         <tr>
           <td>Course:</td>
-          <td class="td-padding-left">{{ userData.pab }}</td>
+          <td style="white-space: nowrap;" class="td-padding-left">{{ userData.pab }}</td>
         </tr>
         <tr>
-          <td>Class Year:</td>
+          <td style="white-space: nowrap;">Class Year:</td>
           <td class="td-padding-left">{{ userData.classYear }}</td>
         </tr>
         <tr>

@@ -17,11 +17,11 @@
           @click="changeAlbumPage(folder.name)"
         >
           <div class="folder-box bg-secondary">
-            <div class="folder-options" @click.stop="showFolderOptions(index)">
+            <div class="folder-options" @click.stop="folder.isEdit = !folder.isEdit">
               <i class="bi bi-three-dots-vertical"></i>
             </div>
-            <div class="folder-options-content" v-if="folder.showOptions">
-              <span @click.stop="editFolder(index)">Edit</span>
+            <div class="folder-options-content" v-if="folder.isEdit">
+              <span @click.stop="editFolder(folder)">Edit</span>
               <span @click.stop="showDeleteFolderConfirmation(index)"
                 >Delete</span
               >
@@ -112,6 +112,8 @@
     folders.value = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       name: doc.data().name,
+      isEdit: false,
+      isMenu: false,
     }));
   };
   
@@ -160,15 +162,14 @@
     fetchFolders();
   };
   
-  const editFolder = (index) => {
-    editIndex.value = index;
-    editFolderName.value = folders.value[index].name;
+  const editFolder = (folder) => {
+    editIndex.value = folder.id
+    editFolderName.value = folder.name;
   };
   
   const saveEditFolder = async () => {
-    if (editIndex.value === null) return;
     if (!editFolderName.value.trim()) return;
-    const folderId = folders.value[editIndex.value].id;
+    const folderId = editIndex.value;
     const folderRef = doc(db, "folders", folderId);
     await updateDoc(folderRef, { name: editFolderName.value });
     editIndex.value = null;

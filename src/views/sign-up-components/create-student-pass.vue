@@ -20,6 +20,7 @@
               required
               placeholder="First Name"
               style="margin-bottom: 0.5rem"
+              :disabled="isFirstName"
             />
             <input
               class="form-control"
@@ -29,6 +30,7 @@
               required
               placeholder="Last Name"
               style="margin-bottom: 0.5rem"
+              :disabled="isLastName"
             />
           </div>
           <div style="display: flex; gap: 1rem">
@@ -40,6 +42,7 @@
               required
               placeholder="Class Year"
               style="margin-bottom: 0.5rem"
+              :disabled="isClassYear"
             />
             <input
               class="form-control"
@@ -48,6 +51,7 @@
               id="programBlock"
               required
               placeholder="Program Block"
+              :disabled="isProgramBlock"
               style="margin-bottom: 0.5rem"
             />
           </div>
@@ -58,6 +62,7 @@
             id="address"
             required
             placeholder="Address"
+            :disabled="isAddress"
             style="margin-bottom: 0.5rem"
           />
           <input
@@ -67,6 +72,7 @@
             id="phoneNumber"
             required
             placeholder="Phone Number"
+            :disabled="isPhoneNumber"
             style="margin-bottom: 0.5rem"
           />
           <input
@@ -95,7 +101,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
   collection,
@@ -111,14 +117,21 @@ const $q = useQuasar();
 const props = defineProps(["id"]);
 const router = useRouter();
 
+const isFirstName = ref(false)
 const firstName = ref("");
+const isLastName = ref(false)
 const lastName = ref("");
+const isClassYear = ref(false)
 const classYear = ref("");
+const isProgramBlock = ref(false)
 const programBlock = ref("");
+const isAddress = ref(false)
 const address = ref("");
+const isPhoneNumber= ref(false)
 const phoneNumber = ref("");
 const newPass = ref("");
 const confPass = ref("");
+
 
 const CustomDialog = (title, message) => {
   $q.dialog({
@@ -180,4 +193,30 @@ const registration = async () => {
     CustomDialog("Error", error.message);
   }
 };
+
+onMounted(async ()=>{
+  const usersCollection = collection(db, "users");
+    const q = query(usersCollection, where("alumnaID", "==", props.id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0];
+      const userDocData = userDoc.data();
+      console.log("Data: ",userDocData)
+
+      isFirstName.value = userDocData.fName !== ""
+      isLastName.value = userDocData.lName !== ""
+      isProgramBlock.value = userDocData.pab !== ""
+      isClassYear.value = userDocData.classYear !== ""
+      isAddress.value = userDocData.address !== ""
+      isPhoneNumber.value = userDocData.phone !== ""
+
+      firstName.value = userDocData.fName || ""
+      lastName.value = userDocData.lName || ""
+      phoneNumber.value = userDocData.phone || ""
+      address.value = userDocData.address || ""
+      classYear.value = userDocData.classYear || ""
+      programBlock.value =  userDocData.pab || ""
+    }
+})
 </script>

@@ -4,7 +4,7 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h4>EVENTS</h4>
+      <h4>{{ props.subfolderName }}</h4>
       <h5>{{ props.folderName }}</h5>
     </div>
 
@@ -24,14 +24,18 @@
         :src="image.url"
         alt="Uploaded Image"
       />
-      <div class="dot-container">
+      <div class="details" v-if="image.isDetails">
+        <h3>Details</h3>
+        <p>Name: <span>{{ image.name }}</span></p>
+        <p>Program & Block: <br/><span>{{ image.pab }}</span></p>
+        <p>Time: <br/><span>{{ image.time }}</span></p>
+      </div>
+      <div class="dot-container" @click="image.isMenu = !image.isMenu">
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <button class="btn btn-dark btn-details"
-      @click="backToGrad"
-      >Details</button>
+      <button class="btn btn-dark btn-details" v-if="image.isMenu" @click="image.isDetails = !image.isDetails" >Details</button>
       </div>
     </div>
   </div>
@@ -50,6 +54,8 @@ import {
   query,
   where,
   onSnapshot,
+  getDoc,
+  doc
 } from "firebase/firestore";
 import { db, storage } from "../../../firebase/index.js";
 
@@ -64,17 +70,55 @@ const backToGrad = async () => {
   emit("update:currentPage", "School Events");
 };
 
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  };
+  return date.toLocaleString('en-US', options);
+};
+
 onSnapshot(
   query(
-    collection(db, "eventgallery"),
-    where("eventsubfolder", "==", props.subfolderName),
-    where("eventfolder", "==", props.folderName)
+    collection(db, "posts"),
+    where("event", "==", props.subfolderName),
+    where("schoolYear", "==", props.folderName),
+    where("status", "==", "approved"),
   ),
   (snapshot) => {
-    images.value = [];
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      images.value.push({ id: doc.id, url: data.url, eventsubfolder: data.eventsubfolder });
+    const imagePromises = snapshot.docs.map(async (docSnapshot) => {
+      const data = docSnapshot.data();
+      const userDocRef = doc(db, "users", data.userIdOrig); // Correctly create a reference to the user's document
+      const userDocSnap = await getDoc(userDocRef);
+      let pab = "";
+
+      if (userDocSnap.exists()) {
+        const user = userDocSnap.data();
+        pab = user.pab;
+      }
+
+      return {
+        id: docSnapshot.id,
+        url: data.imageUrls,
+        eventsubfolder: data.event,
+        isMenu: false,
+        isDetails: false,
+        caption: data.caption,
+        name: data.name,
+        schoolYear: data.schoolYear,
+        event: data.event,
+        time: formatDate(data.time),
+        pab: pab,
+      };
+    });
+
+    Promise.all(imagePromises).then((results) => {
+      images.value = results;
     });
   }
 );
@@ -119,6 +163,7 @@ onSnapshot(
 .image-container {
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .image-container .image{
@@ -159,19 +204,36 @@ onSnapshot(
 
 .image .btn{
   position: absolute;
-  right: -4.5rem;
-  top: 0.5rem;
+  right: -4rem;
+  top: 2rem;
   z-index: 1;
-  display: none;
-}
-
-.image .btn:hover{
   display: block;
 }
 
-.image .dot-container:hover + .btn{
-  display: block;
+.details{
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: 0.3rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  line-height: 0.9rem;
 }
 
+
+
+.details p{
+  text-wrap: wrap;
+  font-weight: bold;
+}
+
+.details h3{
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.details span{
+  font-weight: normal;
+}
 
 </style>

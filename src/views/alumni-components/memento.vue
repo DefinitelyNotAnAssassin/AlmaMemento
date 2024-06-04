@@ -18,8 +18,10 @@
               Add Post
             </button> -->
      
-          <div class="d-flex justify-content-center">
-            <div class="background-color-brown card m-3 p-2 pb-5" style="position: relative; width: 500px">
+          <div class="d-flex justify-content-center" v-if="isCurrentUser">
+            <div class="background-color-brown card m-3 p-2 pb-5" 
+            v-if="selectedStatus !== 'Rejected'"
+            style="position: relative; left: 45%; width: 500px;">
               <div class="d-flex align-items-center">
                 <img
                   :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
@@ -39,9 +41,13 @@
                 <i class="bi bi-card-image"></i> Photos
               </button>
             </div>
+         
           </div>  
-
-            <select v-model="selectedStatus" class="btn btn-dark m-2" style="height: min-content">
+          <select 
+            v-model="selectedStatus" 
+            class="btn btn-dark m-2" 
+            style="position: relative; top: -5rem; z-index: 100; height: min-content"  
+            v-if="isCurrentUser">
               <option>Approved</option>
               <option>Rejected</option>
               <option>Pending</option>
@@ -146,13 +152,14 @@
 
           <div
             class="d-flex flex-column align-items-center"
-            style="height: calc(100vh - 130px); overflow-y: auto"
+            style=" overflow-y: auto"
           >
             <div
-              style="width: 400px"
+              style="width: 400px; overflow-y: hidden;"
               v-for="post in approvedPosts"
               :key="post.id"
               class="container card p-3 background-color-brown text-light mt-2"
+        
             >
               <h3>{{ post.name }}</h3>
               <h5>{{ post.caption }}</h5>
@@ -221,6 +228,7 @@ const showAllImages = ref(false);
 const posts = ref([]);
 const isLoading = ref(false);
 const $q = useQuasar()
+const isCurrentUser = ref(false);
 
 // Edited start
 const userData = ref({
@@ -251,6 +259,14 @@ const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
+
+  const currentUser = localStorage.getItem("userId")
+  if(userId !== currentUser){
+      isCurrentUser.value = false
+  }else{
+    isCurrentUser.value = true
+  }
+
   if (userDocSnap.exists()) {
     const user = userDocSnap.data();
     const name = `${user.fName} ${user.mInitial} ${user.lName}`;
@@ -551,5 +567,9 @@ onMounted(async () => {
 .input-container select{
 
   background: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4gPHBhdGggZD0iTTEuNDI4IDMuMjE3YTEuMzc5IDEuMzc5IDAgMCAxIDEuOTU0LS4wMDhsNS42MDcgNS42MDcgNS42MDctNS42MDdhMS4zNzggMS4zNzggMCAxIDEgMS45NTQgMS45NTRsLTYuNTg0IDYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLTEuOTU0IDBsLTYuNTg0LTYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLS4wMDgtMS45NTR6Ii8+PC9zdmc+') no-repeat right 0.75rem center/8px 8px;
+}
+
+.main{
+  overflow-x: hidden;
 }
 </style>

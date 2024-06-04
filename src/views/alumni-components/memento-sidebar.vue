@@ -416,7 +416,8 @@ fetchUserData();
 <style scoped>
 .memento-sidebar {
   border-right: 5px solid #330303;
-  height: calc(100vh - 300px);
+  height: 100%;
+  min-height: 50vh;
   width: 400px;
 }
 
@@ -470,7 +471,6 @@ fetchUserData();
   padding: 0.3rem;
   border-radius: 50%;
   border: 0.3rem solid #400;
-
 }
 
 .profile-image .btn-camera{

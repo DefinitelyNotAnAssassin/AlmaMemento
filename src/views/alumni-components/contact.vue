@@ -1,7 +1,8 @@
 <template>
   <NavBar />
   <div class="container px-5">
-    <div class="container card bg-light mt-5 p-5">
+    <Contact/>
+    <div class="container card bg-light mt-5 mb-5 p-5">
       <h3 class="text-center">What can we help you with?</h3>
       <form @submit.prevent="uploadImage" class="mt-5">
         <div class="mt-3">
@@ -23,7 +24,7 @@
             v-model="message"
           ></textarea>
         </div>
-        <div class="mt-4">
+        <div class="mt-4" v-if="false">
           <label for="file">Select an image to upload:</label><br />
           <input
             class="form-control"
@@ -54,6 +55,7 @@ import {
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db, storage } from "../../firebase/index.js";
 import { useRouter } from "vue-router";
+import Contact from "./alumni-contact-components/almuni-contact-main.vue"
 
 let selectedFile = null;
 let subject = ref("");
@@ -68,11 +70,11 @@ const handleFileUpload = (event) => {
 };
 
 const uploadImage = async () => {
-  if (!selectedFile) return;
+  // if (!selectedFile) return;
 
-  const imageRef = storageRef(storage, `concernsgallery/${selectedFile.name}`);
-  await uploadBytes(imageRef, selectedFile);
-  const imageUrl = await getDownloadURL(imageRef);
+  // const imageRef = storageRef(storage, `concernsgallery/${selectedFile.name}`);
+  // await uploadBytes(imageRef, selectedFile);
+  // const imageUrl = await getDownloadURL(imageRef);
 
   const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
@@ -81,12 +83,18 @@ const uploadImage = async () => {
   const userName = `${userData.lName}, ${userData.fName}`;
 
   await addDoc(collection(db, "concerns"), {
-    userId: alumniId.value,
-    name: userName,
+    almuniId: alumniId.value,
+    userId: userId.value,
     subject: subject.value,
-    message: message.value,
+    replies: [{
+      userId: userId.value,
+      name: userName,
+      message: message.value,
+      date: new Date().toLocaleDateString(),
+    }],
     date: new Date().toLocaleDateString(),
-    url: imageUrl,
+    url: "",
+    status: "open"
   });
   await addDoc(collection(db, "notifications"), {
     userId: alumniId.value,

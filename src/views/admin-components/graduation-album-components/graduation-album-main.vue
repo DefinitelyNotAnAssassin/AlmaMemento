@@ -20,7 +20,7 @@
     <div class="folders d-flex flex-wrap">
       <div
         class="folder m-2"
-        v-for="folder in filteredFolders"
+        v-for="folder in filteredFolders.slice().reverse()"
         :key="folder.id"
         @click="changeAlbumPage(folder.name)"
       >

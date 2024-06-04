@@ -4,11 +4,10 @@
       <h3>Manage Content</h3>
     </div>
     <div class="d-flex justify-content-between">
-      <select class="select-status form-control" v-model="filterStatus">
+      <select class="select-status form-control form-select" v-model="filterStatus">
         <option value="pending">Pending</option>
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
-        <option value="history">History</option>
       </select>
       <input
         class="txt-search form-control"
@@ -89,8 +88,8 @@
     <td>
       <template v-if="item.history && item.history.length > 0">
         <ul>
-          <li v-for="historyItem in item.history" :key="historyItem.id">
-            {{ historyItem.admin }} - {{ historyItem.status }} 
+          <li >
+            {{ item.history.slice().reverse()[0].admin }} - {{ item.history.slice().reverse()[0].status }} 
           </li>
         </ul>
       </template>
@@ -317,7 +316,7 @@ async function rejectPost(item, index) {
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
   const userId = item.userId;
-
+  const authorId = item.userIdOrig
   if (adminName) {
     const postRef = doc(db, "posts", item.id);
     await updateDoc(postRef, {
@@ -337,10 +336,12 @@ async function rejectPost(item, index) {
     name: adminName,
     status: "unread",
     time: approvalTime,
+    date: new Date().toLocaleDateString(),
     reason: otherReason.value || reason.value,
     type: "newpost",
     action: "rejected",
-    userId: userId
+    userId: userId,
+    authorId: authorId
   });
 
   showRejectReason.value = false
@@ -503,4 +504,6 @@ onMounted(async () => {
 .btn-view-image {
   cursor: pointer;
 }
+
+
 </style>
