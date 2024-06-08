@@ -1,5 +1,5 @@
 <template>
-  <h1 class="dashboard-title">Welcome Admin!</h1>
+  <h4 class="dashboard-title">Welcome Admin!</h4>
     <div class="cards-container">
         <div class="card-one">
             <div class="top-content">
@@ -103,7 +103,7 @@ const fetchAlumniCount = async () => {
     let concernsCount = 0
     concernsQuerySnapshot.forEach(doc => {
       const userData = doc.data()
-      if (userData.hasOwnProperty('name')) {
+      if (userData.hasOwnProperty('replies')) {
         concernsCount++
       }
     })
@@ -114,7 +114,7 @@ const fetchAlumniCount = async () => {
     let pendingCount = 0
     pendingQuerySnapshot.forEach(doc => {
       const userData = doc.data()
-      if (userData.hasOwnProperty('status') && userData.userlevel === 'pending')  {
+      if (userData.hasOwnProperty('status') && userData.status === 'pending')  {
         pendingCount++
       }
     })

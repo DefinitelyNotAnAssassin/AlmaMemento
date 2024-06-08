@@ -1,11 +1,12 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>{{ props.subfolderName }} - {{ props.folderName }}</h3>
+      <h4>{{ props.subfolderName }}</h4>
+      <h3>{{ props.folderName }}</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input
-        class="form-control"
+        class="form-control mb-2"
         style="width: 250px;"
         type="text"
         v-model="searchQuery"

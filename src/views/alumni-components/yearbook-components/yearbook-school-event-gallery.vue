@@ -12,37 +12,46 @@
       <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">
         <i class="bi bi-arrow-return-left"></i>
       </button>
+      <div class="d-flex justify-content-end">
+      <input
+        class="form-control"
+        style="width: 250px"
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search"
+      />
+
+    </div>
     </div>
 
     <div class="image-container d-flex flex-wrap mt-2">
-      <div class="image"   v-for="image in images">
-        <img
-        class="m-1"
-        style="height: 200px; width: 200px"
-      
-        :key="image.id"
-        :src="image.url"
-        alt="Uploaded Image"
-      />
-      <div class="details" v-if="image.isDetails">
-        <h3>Details</h3>
-        <p>Name: <span>{{ image.name }}</span></p>
-        <p>Program & Block: <br/><span>{{ image.pab }}</span></p>
-        <p>Time: <br/><span>{{ image.time }}</span></p>
-      </div>
-      <div class="dot-container" @click="image.isMenu = !image.isMenu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <button class="btn btn-dark btn-details" v-if="image.isMenu" @click="image.isDetails = !image.isDetails" >Details</button>
+      <div class="d-flex gap-1 m-2" v-for="(image, index) in filteredImages" :key="image.id">
+        <div
+
+        class="image" style="position: relative; height: 250px; width: 250px;" v-for="(file, idx) in image.url" :key="idx">
+          <img style="height: 100%; width: 100%;" v-if="file.type.startsWith('image/')" :src="file.url" class="m-1" />
+          <video  style="height: 100%; width: 100%;" v-else :src="file.url" controls></video>
+
+          <div class="details" v-if="file.isDetails">
+            <h3>Details</h3>
+            <p>Name: <span>{{ image.name }}</span></p>
+            <p>Program & Block: <br /><span>{{ image.pab }}</span></p>
+            <p>Time: <br /><span>{{ image.time }}</span></p>
+          </div>
+          <div class="dot-container" @click="file.isMenu = !file.isMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <button class="btn btn-dark btn-details" v-if="file.isMenu" @click="file.isDetails = !file.isDetails">Details</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps } from "vue";
+import { ref, defineEmits, defineProps, computed } from "vue";
 import {
   uploadBytes,
   getDownloadURL,
@@ -61,6 +70,7 @@ import { db, storage } from "../../../firebase/index.js";
 
 const props = defineProps(["folderName", "subfolderName"]);
 const emit = defineEmits(["update:currentPage"]);
+const searchQuery = ref("");
 
 const currentAlbumPage = ref("School Events Gallery");
 const images = ref([]);
@@ -104,10 +114,10 @@ onSnapshot(
 
       return {
         id: docSnapshot.id,
-        url: data.imageUrls,
-        eventsubfolder: data.event,
+        url: data.imageUrls, 
         isMenu: false,
         isDetails: false,
+        eventsubfolder: data.event,
         caption: data.caption,
         name: data.name,
         schoolYear: data.schoolYear,
@@ -122,6 +132,24 @@ onSnapshot(
     });
   }
 );
+
+const filteredImages = computed(() => {
+
+  if(searchQuery.value.trim() !== ""){
+    return images.value
+    .filter((image) =>
+    image.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    image.pab.toLowerCase().includes(searchQuery.value.toLowerCase()) 
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  return images.value
+});
+
+
+
+
 </script>
 
 <style>
@@ -206,18 +234,22 @@ onSnapshot(
   position: absolute;
   right: -4rem;
   top: 2rem;
-  z-index: 1;
+  z-index: 3;
   display: block;
 }
 
 .details{
   position: absolute;
-  inset: 0 0 0 0;
-  margin: 0.3rem;
+  top: -105%;
+  left: -1rem;
+
+  width: 105%;
+  height: 100%;
   padding: 0.5rem;
   background: rgba(0, 0, 0, 0.4);
   color: white;
   line-height: 0.9rem;
+  z-index: 2;
 }
 
 

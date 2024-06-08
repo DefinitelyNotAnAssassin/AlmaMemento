@@ -1,8 +1,8 @@
 <template>
    <Loading v-if="isLoading" />
   <div class="components-page-main-container p-3 profile-container container">
-    <h2 style="font-size: 1.5rem;">Profile</h2>
-    <div style="background: lightblue; padding: 2rem;">
+    <h4 style="font-size: 1.5rem;">Profile</h4>
+    <div style="background: rgba(0,0,0,0.1); padding: 2rem;">
     <div class="user-profile mt-2" >
       <div class="profile-pic-container" style="margin-right: 2rem;">
         <div style="position: relative;">
@@ -12,7 +12,7 @@
           alt="profile-picture"
         />
         <button 
-        style="border: none; background: darkblue; width: 2rem; height: 2rem; color: white; border-radius: 50%;
+        style="border: none; background: black; width: 2rem; height: 2rem; color: white; border-radius: 50%;
          position: absolute; font-size: 1rem; bottom: 0; right: 1rem;"
         @click="openImageModal"
         >
@@ -25,9 +25,9 @@
       </div>
       <div class="profile-details">
         <h2>{{ userData.name }}</h2>
-        <a>{{ userData.alumna_email }}</a>
+        <h6>{{ userData.alumna_email }}</h6>
         <div style="display: flex; align-items: center">
-          <h4 style="margin-right: 10px">{{ userData.address }}</h4>
+          <p style="margin-right: 10px">{{ userData.address }}</p>
       
         
           <!-- <img
@@ -95,7 +95,7 @@
           name="address"
           v-model="userData.address"
         />
-        <button class="btn btn-success mt-2"  @click="showChangePasswordModal = true">Change Password</button>
+        <button class="btn btn-sm btn-success mt-3 p-2"  @click="showChangePasswordModal = true">Change Password</button>
       </div>
       
       <div>
@@ -107,17 +107,13 @@
           name="year"
           v-model="userData.year"
         />
-      </div>
-
-      <div class="btn-save-container">
-        <button
-          class="btn btn-sm btn-dark"
-          v-if="isEditable"
-          @click="showModal"
-        >
+        <button class="btn btn-sm btn-primary mt-3 p-2" v-if="isEditable" @click="showModal" style="width: 295px;">
           Save Changes
         </button>
+      
       </div>
+
+      
     </div>
   </div>
     <div v-if="isModalOpen" class="modal">

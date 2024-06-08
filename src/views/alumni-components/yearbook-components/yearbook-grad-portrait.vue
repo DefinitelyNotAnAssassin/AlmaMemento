@@ -4,10 +4,9 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h3>
-        {{ props.folderName }}
-      </h3>
-      <h4>{{ props.gradsubfolderName }} - {{ props.subfolderName }} -</h4>
+      <h4>{{ props.gradsubfolderName }}</h4>
+      <h3>{{ props.subfolderName }}&nbsp;&nbsp; {{ props.folderName }}</h3>
+       
     </div>
     <div class="d-flex justify-content-between">
       <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">

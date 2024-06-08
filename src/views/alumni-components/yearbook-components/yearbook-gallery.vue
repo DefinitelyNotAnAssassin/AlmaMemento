@@ -4,8 +4,8 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h3>{{ props.gradsubfolderName }}</h3>
-      <h4>{{ props.subfolderName }} - {{ props.folderName }}</h4>
+      <h4>{{ props.gradsubfolderName }}</h4>
+      <h3>{{ props.subfolderName }}&nbsp;&nbsp; {{ props.folderName }}</h3>
     </div>
 
     <div class="d-flex justify-content-between">

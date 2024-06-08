@@ -18,13 +18,13 @@
           >
             Delete
           </button>
-          <button class="btn btn-sm btn-success mx-1" @click="addUser">
+          <button class="btn btn-sm btn-success mx-1 mt-2 mb-2" @click="addUser">
             Add User
           </button>
         </div>
       </div>
-      <table class="table table-striped">
-        <thead>
+      <table class="table table-hover">
+        <thead class="table-success">
           <tr>
             <th>
               <input
@@ -143,7 +143,7 @@
               </div>
             </div>
             <div class="mx-1">
-              <<div>
+              <div>
                 <label for="alumna_password">Password</label>
                 <input
                   class="form-control"

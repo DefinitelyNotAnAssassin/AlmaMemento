@@ -1,7 +1,7 @@
 <template>
   <div class="components-page-main-container p-3">
     <h3 class="text-center">Contact Support</h3>
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center mb-2">
       <input
         class="search-bar form-control"
         style="width: 250px"
@@ -9,15 +9,31 @@
         v-model="searchQuery"
         placeholder="Search by ID or Name"
       />
-      <button
+     
+      <button style="margin-left: 800px !important; padding: 6px;"
         class="btn btn-sm btn-danger mx-1"
         v-if="selectedMessages.length > 0"
         @click="confirmDelete"
       >
         <i class="bi bi-trash3"></i>
+        Delete
       </button>
+      <select v-model="selectStatus" class="form-control form-select" style="width: min-content;">
+        <option selected>All</option>
+        <option>Open</option>
+        <option>Pending</option>
+        <option>Closed</option>
+      </select>
     </div>
     <ul class="list-group">
+      <li style="list-style: none; background: black; font-weight: bold; color: white;" class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>Action</div>
+          <div style="margin-left: -2rem;">Subject</div>
+          <div>Date</div>
+          <div>Status</div>
+        </div>
+      </li>
       <li v-for="message in messages" :key="message.id" class="list-group-item">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center">
@@ -48,7 +64,7 @@
           >
             {{ message.subject }}
             <span class="text-secondary">
-              -
+              
               {{ message.message }}
             </span>
           </div>
@@ -65,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, watch } from "vue";
 import { db } from "../../../firebase/index.js";
 import {
   collection,
@@ -83,10 +99,12 @@ const messages = ref([]);
 const selectedMessages = ref([]);
 const searchQuery = ref("");
 const currentPage = ref("Contact");
+const selectStatus = ref("All")
 
 const fetchMessages = async () => {
   const q = query(collection(db, "concerns"));
   const querySnapshot = await getDocs(q);
+
   messages.value = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     name: doc.data().name,
@@ -95,8 +113,19 @@ const fetchMessages = async () => {
     date: doc.data().date,
     replies: doc.data().replies,
     status: doc.data().status
-  }));
+  }))
+
+  if(selectStatus.value !== "All"){
+    messages.value = messages.value.filter((message)=> message.status === selectStatus.value.toLocaleLowerCase());
+  }
+
+  
 };
+
+watch(selectStatus, (newSelect, oldSelect)=>{
+  fetchMessages()
+  console.log("Selected: ", newSelect)
+})
 
 const confirmDelete = async () => {
   if (confirm("Are you sure you want to delete the selected messages?")) {

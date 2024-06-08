@@ -1,11 +1,11 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>School Events Year</h3>
+      <h4>Program and Block</h4>
     </div>
     <div class="d-flex justify-content-end">
       <input
-        class="form-control"
+        class="form-control mb-2"
         style="width: 250px"
         type="text"
         v-model="searchQuery"

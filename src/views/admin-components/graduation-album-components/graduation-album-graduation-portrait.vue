@@ -1,10 +1,10 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
+      <h4>{{ props.gradsubfolderName }}</h4>
       <h3>
-        {{ props.folderName }}
+        {{ props.subfolderName }} - {{ props.folderName }}
       </h3>
-      <h4>{{ props.gradsubfolderName }} - {{ props.subfolderName }} -</h4>
     </div>
     <div class="d-flex justify-content-between">
       <button class="btn btn-sm btn-dark mx-1" @click="backToGrad">

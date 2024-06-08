@@ -1,13 +1,13 @@
 <template>
     <div class="components-page-main-container p-3 photo-album">
       <div class="text-center">
-        <h3>School Events Year</h3>
+        <h4>School Events Year</h4>
       </div>
       <div class="d-flex justify-content-end">
         <input class="form-control" style="width: 250px" type="text" v-model="searchQuery" placeholder="Search Folder" />
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-sm btn-success" @click="showModal = true"> Add Folder </button>
+        <button class="btn btn-sm btn-success mt-2" @click="showModal = true"> Add Folder </button>
       </div>
       <div class="folders d-flex flex-wrap">
         <div
@@ -22,7 +22,7 @@
             </div>
             <div class="folder-options-content" v-if="folder.isEdit">
               <span @click.stop="editFolder(folder)">Edit</span>
-              <span @click.stop="showDeleteFolderConfirmation(index)"
+              <span @click.stop="showDeleteFolderConfirmation(folder)"
                 >Delete</span
               >
             </div>
@@ -157,8 +157,8 @@
     });
   };
   
-  const deleteFolder = async (index) => {
-    await deleteDoc(doc(db, "folders", folders.value[index].id));
+  const deleteFolder = async (folder) => {
+    await deleteDoc(doc(db, "folders", folder));
     fetchFolders();
   };
   
@@ -188,8 +188,8 @@
     }
   };
   
-  const showDeleteFolderConfirmation = (index) => {
-    folderToDeleteIndex = index;
+  const showDeleteFolderConfirmation = (folder) => {
+    folderToDeleteIndex = folder.id;
     showDeleteConfirmation.value = true;
   };
   

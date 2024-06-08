@@ -1,17 +1,17 @@
 <template>
   <div class="components-page-main-container p-3">
     <div class="text-center">
-      <h3>{{ props.subfolderName }}</h3>
-      <h4>{{ props.folderName }}</h4>
+      <h4>{{ props.subfolderName }}</h4>
+      <h3>{{ props.folderName }}</h3>
     </div>
 
     <div class="d-flex justify-content-between">
       <button class="btn btn-sm btn-dark mx-1" @click="backToEvent">
         <i class="bi bi-arrow-return-left"></i>
       </button>
-      <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
+      <!-- <button class="btn btn-sm btn-success mx-1" @click="showModal = true">
         Upload Image
-      </button>
+      </button> -->
     </div>
 
     <div v-if="showModal" class="modal">
@@ -30,12 +30,15 @@
       </div>
     </div>
     <div class="image-container">
-      <div class="image-container wh-150px p-0" style="position: relative"  v-for="image in images"  :key="image.id">
-      <img
-        :src="image.url"
+      <div class="image-container wh-150px p-0" style="position: relative"  v-for="media in images"  :key="media.id">
+      <img v-if="media.type.startsWith('image/')"
+        :src="media.url"
         alt="Uploaded Image"
-        @click="openImageModal(image.url)"
+        @click="openImageModal(media.url)"
       />
+      <video v-else-if="media.type.startsWith('video/')" controls @click="openImageModal(media.url)">
+        <source :src="media.url" :type="media.type" />
+      </video>
       <button
             class="btn btn-sm btn-light btn-togglemenu"
             @click="toggleEventMenu(image)"
@@ -245,33 +248,36 @@ const deleteEventNow = async (event) => {
   await deleteDoc(doc(db, "eventgallery", event.id));
 };
 
-const uploadImage = async () => {
-  if (!selectedFile) return;
+// const uploadImage = async () => {
+//   if (!selectedFile) return;
 
-  const imageRef = storageRef(storage, `eventgallery/${selectedFile.name}`);
-  await uploadBytes(imageRef, selectedFile);
-  const imageUrl = await getDownloadURL(imageRef);
+//   const imageRef = storageRef(storage, `eventgallery/${selectedFile.name}`);
+//   await uploadBytes(imageRef, selectedFile);
+//   const imageUrl = await getDownloadURL(imageRef);
 
-  await addDoc(collection(db, "eventgallery"), {
-    eventfolder: props.folderName,
-    eventsubfolder: props.subfolderName,
-    url: imageUrl,
-  });
-  showModal.value = false;
-};
+//   await addDoc(collection(db, "eventgallery"), {
+//     eventfolder: props.folderName,
+//     eventsubfolder: props.subfolderName,
+//     url: imageUrl,
+//   });
+//   showModal.value = false;
+// };
 
 onSnapshot(
   query(
-    collection(db, "eventgallery"),
-    where("eventfolder", "==", props.folderName),
-    where("eventsubfolder", "==", props.subfolderName)
+    collection(db, "eventsgallery"),
+    where("schoolYear", "==", props.folderName),
+    where("event", "==", props.subfolderName)
   ),
   (snapshot) => {
     images.value = [];
     snapshot.forEach((doc) => {
       const data = doc.data();
-      images.value.push({ id: doc.id, url: data.url, name: data.name, address: data.address, quotes: data.quotes });
-    });
+      const urls = data.imageUrl.map((item) => ({ url: item.url, type: item.type })); 
+      urls.forEach((media) => {
+        images.value.push({ id: doc.id, url: media.url, type: media.type});
+      });
+    }); 
   }
 );
 </script>
@@ -317,7 +323,7 @@ onSnapshot(
   flex-wrap: wrap;
 }
 
-.image-container img {
+.image-container img, video {
   width: 200px;
   height: 200px;
   margin: 10px;

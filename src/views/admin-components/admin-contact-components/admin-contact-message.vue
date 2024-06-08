@@ -1,17 +1,20 @@
 <template>
   <div class="components-page-main-container p-3">
     <h3 class="text-center">Contact Support</h3>
-    <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
-      <i class="bi bi-arrow-return-left"></i>
-    </button>
-    <button class="btn btn-sm btn-dark mx-1" @click="closeConversation">
-      Close this Conversation
-    </button>
-    <div class="convo-container p-5" style="background: white;">
+    <div class="convo-container p-5" style="background: #E5E4E2;">
+      
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
+          <i class="bi bi-arrow-return-left"></i>
+        </button> 
+        <button class="btn btn-sm btn-dark mx-1"  @click="closeConversation">
+          Close this Conversation
+        </button>
+      </div>
       <div class="mt-5">
         <div class="d-flex justify-content-between">
-          <h4>{{ documentData.subject }}</h4>
-          <span class="text-secondary" style="font-size: 14px"
+          <h5 class="mb-3">{{ documentData.subject }}</h5>
+          <span class="text-muted" style="font-size: 14px"
             >Date: {{ documentData.date }}</span
           >
         </div>
@@ -20,21 +23,20 @@
             <div style="display: flex; flex-direction: column;">
                 <div class="mt-2" v-for="alumniReply in documentData.replies"
                   style="width: 50%; align-self:" :style="{ alignSelf: alumniReply.userId === userId ? 'flex-end' : 'flex-start'}">
-                    <p 
-                    style="font-size: 
-                    1rem; background: lightgreen; 
-                    padding: 1rem; 
-                    border-radius: 0.5rem;"
-                    >{{ alumniReply.message }}</p>
-                    <span 
+                    <span class="text-muted"
                       style="
                         font-size: 0.8rem;
-                        font-weight: bold;
-                        color: gray;
+                        /* color: black; */
                         
                       ">
                       {{alumniReply.name  }} - {{ alumniReply.date }}
                     </span>
+                    <p 
+                    style="font-size: 
+                    0.9rem; background: white; 
+                    padding: 1rem; 
+                    border-radius: 0.5rem;"
+                    >{{ alumniReply.message }}</p>
                 </div>
             </div>       
         </div> 

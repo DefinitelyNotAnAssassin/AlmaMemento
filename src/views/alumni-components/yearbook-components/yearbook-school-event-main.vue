@@ -4,7 +4,7 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h3>School Academic Year</h3>
+      <h4>School Academic Year</h4>
     </div>
     <div class="d-flex justify-content-end">
       <input

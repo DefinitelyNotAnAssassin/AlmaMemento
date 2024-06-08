@@ -4,7 +4,8 @@
     style="width: 100vw !important"
   >
     <div class="text-center">
-      <h3>{{ props.subfolderName }} - {{ props.folderName }}</h3>
+      <h4 style="margin: 0">{{ props.subfolderName }}</h4>
+      <h3>{{ props.folderName }}</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input

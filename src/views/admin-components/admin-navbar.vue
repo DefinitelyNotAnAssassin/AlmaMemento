@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar" style="height: 70px;">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
       
@@ -129,6 +129,7 @@ onMounted(() => {
       .map((change) => {
         const data = change.doc.data();
         data.id = change.doc.id;
+      
         return data;
       })
       .filter((notification) => notification.for !== "alumni");
@@ -138,7 +139,7 @@ onMounted(() => {
       (notification) => notification.status === "unread"
     ).length;
     filteredPosts.value = [...newPosts.value];
-
+      
     filteredPosts.value.sort((a, b) => b.time.toDate() - a.time.toDate());
   });
 });

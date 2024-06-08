@@ -1,8 +1,8 @@
 <template>
   <div class="components-page-main-container p-3">
     <div class="text-center">
-      <h3>{{ props.gradsubfolderName }}</h3>
-      <h4>{{ props.subfolderName }} - {{ props.folderName }}</h4>
+      <h4>{{ props.gradsubfolderName }}</h4>
+      <h3>{{ props.subfolderName }} - {{ props.folderName }}</h3>
     </div>
 
     <div class="d-flex justify-content-between">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="image-container d-flex flex-wrap mt-2">
-      <div  v-for="image in images">
+      <div v-for="image in images">
         <img
         class="m-1"
         style="height: 200px; width: 200px"
@@ -40,7 +40,7 @@
         :src="image.url"
         alt="Uploaded Image"
       />
-      <button @click="deleteImage(image)" class="btn btn-delete">
+      <button @click="deleteImage(image)" class="btn btn-delete" style="z-index: 0;">
         <i class="bi bi-x-square"></i>
       </button>
       </div>
@@ -101,6 +101,7 @@ const uploadImage = async () => {
       gradsubfolder: props.gradsubfolderName,
       url: imageUrl,
       storagePath: imageRef.fullPath,
+      time: new Date()
     });
   });
 

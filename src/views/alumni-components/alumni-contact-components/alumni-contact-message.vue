@@ -1,17 +1,25 @@
 <template>
   <div class="components-page-main-container p-3">
-    <h3 class="text-center">Contact Support</h3>
-    <button class="btn btn-sm btn-dark mx-1" @click="closeMessageModal">
+    <!-- <h3 class="text-center">Contact Support</h3> -->
+    <!-- <button class="btn btn-sm btn-dark mx-1 mt-5 mb-2" @click="closeMessageModal">
       <i class="bi bi-x-square"></i>
     </button>
-    <button class="btn btn-sm btn-dark mx-1" @click="closeConversation" v-if="documentData.status !== 'closed'">
+    <button class="btn btn-sm btn-dark mx-1 mt-5 mb-2" @click="closeConversation" v-if="documentData.status !== 'closed'">
       Close this Conversation
-    </button>
-    <div class="convo-container p-5" style="background: white;">
+    </button> -->
+    <div class="convo-container" style="background: #E5E4E2; padding-left: 150px; padding-right: 150px; padding-top: 30px">
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-sm btn-dark mx-1" @click="closeMessageModal">
+          <i class="bi bi-arrow-return-left"></i>
+        </button> 
+        <button class="btn btn-sm btn-dark mx-1"  @click="closeConversation">
+          Close this Conversation
+        </button>
+      </div>
       <div class="mt-5">
         <div class="d-flex justify-content-between">
-          <h4>{{ documentData.subject }}</h4>
-          <span class="text-secondary" style="font-size: 14px"
+          <h5>{{ documentData.subject }}</h5>
+          <span class="text-dark" style="font-size: 14px"
             >Date: {{ documentData.date }}</span
           >
         </div>
@@ -20,13 +28,7 @@
             <div style="display: flex; flex-direction: column;">
                 <div class="mt-2" v-for="alumniReply in documentData.replies"
                   style="width: 50%; align-self:" :style="{ alignSelf: alumniReply.userId === userId ? 'flex-end' : 'flex-start'}">
-                    <p 
-                    style="font-size: 
-                    1rem; background: lightgreen; 
-                    padding: 1rem; 
-                    border-radius: 0.5rem;"
-                    >{{ alumniReply.message }}</p>
-                    <span 
+                    <!-- <span 
                       style="
                         font-size: 0.8rem;
                         font-weight: bold;
@@ -34,7 +36,13 @@
                         
                       ">
                       {{alumniReply.name  }} - {{ alumniReply.date }}
-                    </span>
+                    </span> -->
+                    <p 
+                    style="font-size: 
+                    1rem; background: white; 
+                    padding: 1rem; 
+                    border-radius: 0.5rem;"
+                    >{{ alumniReply.message }}</p>
                 </div>
             </div>     
         </div> 
@@ -155,11 +163,12 @@ onUnmounted(() => {
   width: 100%;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.4);
-  padding: 3rem !important;
+  padding: 2rem !important;
 }
 
 .convo-container{
-  height: 70vh;
+  height: 90vh;
   overflow-y: scroll;
+  overflow: hidden;
 }
 </style>

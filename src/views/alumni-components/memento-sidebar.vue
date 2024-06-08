@@ -64,7 +64,7 @@
             <td>{{ userData.alumna_email }}</td>
           </tr>
         </table>
-        <h5 class="mt-2">Academic Background:</h5>
+        <h5 class="mt-4">Academic Background</h5>
         <table>
           <tr>
             <td>Program & Block:</td>
@@ -77,7 +77,7 @@
         </table>
         <button
           class="btn btn-sm text-light background-color-brown"
-      style="background-color: #400;"
+      style="background-color: #400; margin-top: 30px"
           @click="showChangePasswordModal = true"
           v-if="isCurrentUser"
         >

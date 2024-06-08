@@ -1,5 +1,5 @@
 <template>
-    <Loading v-if="isLoading" />
+  <Loading v-if="isLoading" />
   <div class="main">
     <div class="container-fluid p-0">
       <NavBar />
@@ -13,41 +13,71 @@
       <div class="container-fluid p-0 d-flex">
         <MementoSideBar />
         <div class="main-content">
-          <div style="display: flex; justify-content: space-between; padding: 0.5rem 1rem;">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              padding: 0.5rem 1rem; margin-left: 125px;
+            "
+          >
             <!-- <button @click="showPostModal" class="btn btn-dark m-2">
               Add Post
             </button> -->
-     
-          <div class="d-flex justify-content-center" v-if="isCurrentUser">
-            <div class="background-color-brown card m-3 p-2 pb-5" 
-            v-if="selectedStatus !== 'Rejected'"
-            style="position: relative; left: 45%; width: 500px;">
-              <div class="d-flex align-items-center">
-                <img
-                  :src="userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'"
-                  style="height: 40px !important; width: 40px !important; border-radius: 50%;"
-                  alt="Profile Picture"
-                />
-                <input
-                  style="height: 40px"
-                  type="text"
-                  class="form-control m-0 mx-1"
-                  v-model="caption"
-                  placeholder="Tell us about your school experiences..."
-                />
-                <button @click="savePost" class="btn btn-light" style="height: 40px">Post</button>
+
+            <div class="d-flex justify-content-center" v-if="isCurrentUser">
+              <div
+                class="background-color-brown card m-3 p-2 pb-5"
+                v-if="selectedStatus !== 'Rejected'"
+                style="position: relative; left: 45%; width: 500px"
+              >
+                <div class="d-flex align-items-center">
+                  <img
+                    :src="
+                      userData.photoURL ||
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+                    "
+                    style="
+                      height: 40px !important;
+                      width: 40px !important;
+                      border-radius: 50%;
+                    "
+                    alt="Profile Picture"
+                  />
+                  <input
+                    style="height: 40px"
+                    type="text"
+                    class="form-control m-0 mx-1"
+                    v-model="caption"
+                    placeholder="Tell us about your school experiences..."
+                  />
+                  <button
+                    @click="savePost"
+                    class="btn btn-light"
+                    style="height: 40px"
+                  >
+                    Post
+                  </button>
+                </div>
+                <button
+                  @click="showPostModal"
+                  class="btn m-2 text-light"
+                  style="position: absolute; bottom: 0; right: 0"
+                >
+                  <i class="bi bi-card-image"></i> Photos
+                </button>
               </div>
-              <button @click="showPostModal" class="btn m-2 text-light" style="position: absolute; bottom: 0; right: 0">
-                <i class="bi bi-card-image"></i> Photos
-              </button>
             </div>
-         
-          </div>  
-          <select 
-            v-model="selectedStatus" 
-            class="btn btn-dark m-2" 
-            style="position: relative; top: -5rem; z-index: 100; height: min-content"  
-            v-if="isCurrentUser">
+            <select
+              v-model="selectedStatus"
+              class="btn btn-success m-2"
+              style="
+                position: relative;
+                top: -5rem;
+                z-index: 100;
+                height: min-content;
+              "
+              v-if="isCurrentUser"
+            >
               <option>Approved</option>
               <option>Rejected</option>
               <option>Pending</option>
@@ -67,7 +97,6 @@
                   id="schoolYear"
                   v-model="selectedSchoolYear"
                   class="form-control"
-               
                 >
                   <option
                     v-for="year in schoolYears"
@@ -94,7 +123,11 @@
                 <button class="btn btn-secondary m-1" @click="closeModal">
                   Cancel
                 </button>
-                <button class="btn btn-primary m-1" @click="continueModal" :disabled="!isValidSelected">
+                <button
+                  class="btn btn-primary m-1"
+                  @click="continueModal"
+                  :disabled="!isValidSelected"
+                >
                   Continue
                 </button>
               </div>
@@ -118,7 +151,7 @@
                   ></textarea>
                   <input
                     class="form-control mt-2"
-                    type="file" 
+                    type="file"
                     accept="image/*"
                     multiple
                     @change="uploadImages"
@@ -142,9 +175,19 @@
                 </div>
                 <div class="container mt-3">
                   <button class="btn btn-secondary" @click="showPostModal">
-                  Back
-                </button>
-                <button class="btn-post btn btn-secondary" @click="savePost" style="border-radius: 0.5rem; padding: 0.45rem 1rem; margin-left: 0.5rem;">Post</button>
+                    Back
+                  </button>
+                  <button
+                    class="btn-post btn btn-secondary"
+                    @click="savePost"
+                    style="
+                      border-radius: 0.5rem;
+                      padding: 0.45rem 1rem;
+                      margin-left: 0.5rem;
+                    "
+                  >
+                    Post
+                  </button>
                 </div>
               </div>
             </div>
@@ -152,31 +195,83 @@
 
           <div
             class="d-flex flex-column align-items-center"
-            style=" overflow-y: auto"
+            style="overflow-y: scroll;  "
           >
             <div
-              style="width: 400px; overflow-y: hidden;"
+              style="width: 500px; overflow-y: auto; "
               v-for="post in approvedPosts"
               :key="post.id"
               class="container card p-3 background-color-brown text-light mt-2"
-        
             >
               <h3>{{ post.name }}</h3>
-              <h5>{{ post.caption }}</h5>
+              <p>{{ post.caption }}</p>
               <div
-                class="d-flex flex-column align-items-center"
-                v-for="(imageUrl, index) in post.imageUrls"
-                :key="index"
-              >
-                <img
-                  class="m-1"
-                  style="width: 300px"
-                  v-if="index < 5 || showAllImages"
-                  :src="imageUrl"
-                  alt="Post Image"
-                />
-                <button v-else @click="showAllImages = true">
-                  View More Images
+                v-if="post.imageUrls && post.imageUrls.length > 0"
+                id="imageCarousel"
+                class="carousel slide"
+                data-bs-ride="carousel">
+                <div class="carousel-inner">
+              
+                  <div
+                  v-for="(imageUrl, index) in post.imageUrls"
+                    :key="index"
+                    
+                  class="carousel-item"
+                  :class="{
+                      'carousel-item': true,
+                      active: index === currentIndex,
+                    }"
+                    
+                    >
+                      <img
+                        v-if="imageUrl.type.startsWith('image/')"
+                        :src="imageUrl.url"
+                        class="d-block w-100"
+                      alt="Image Preview"
+                      style="width: 200px; height: 350px"
+                      
+                        controls
+                        @click="openImageModal(imageUrl)"
+                      />
+                      <video
+                        v-else
+                        :src="imageUrl.url"
+                        class="d-block w-100"
+                      alt="Video Preview"
+                      style="width: 100px; height: 350px"
+                        controls
+                        @click="openImageModal(imageUrl)"
+                      ></video>
+                   
+                  </div>
+                </div>
+                <button
+                  v-if="post.imageUrls.length > 1"
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="prev"
+                  @click="prevImage(post)"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  v-if="post.imageUrls.length > 1"
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#imageCarousel"
+                  data-bs-slide="next"
+                  @click="nextImage(post)"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <hr class="pt-1" />
@@ -194,19 +289,25 @@
 </template>
 
 <script setup>
-import Loading from "../loading.vue"
-import { useQuasar } from 'quasar'
+import Loading from "../loading.vue";
+import { useQuasar } from "quasar";
 import { ref, onMounted, computed, watch, defineProps } from "vue";
 import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
 import MementoSideBar from "./memento-sidebar.vue";
 import { db, storage } from "../../firebase/index.js";
-import { collection, getDocs, addDoc, onSnapshot,getDoc,doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
-
 } from "firebase/storage";
 import { useRouter } from "vue-router";
 
@@ -218,18 +319,18 @@ const selectedSchoolYear = ref("");
 const selectedEvent = ref("");
 const caption = ref("");
 const selectedImages = ref([]);
-const selectedStatus = ref('Approved')
+const selectedStatus = ref("Approved");
 const progressBars = ref([]);
 const router = useRouter();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
-const isImageSelected = computed(() => selectedImages.value.length > 0) ;
+const isImageSelected = computed(() => selectedImages.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
 const isLoading = ref(false);
-const $q = useQuasar()
+const $q = useQuasar();
 const isCurrentUser = ref(false);
-
+const currentIndex = ref(0);
 // Edited start
 const userData = ref({
   name: "",
@@ -241,30 +342,48 @@ const userData = ref({
   photoURL: "",
 });
 
-const CustomDialog = (title,message)=> {
-      $q.dialog({
-        title,
-        message
-      }).onOk(() => {
-        // console.log('OK')
-      }).onCancel(() => {
-        // console.log('Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
-    }
+const CustomDialog = (title, message) => {
+  $q.dialog({
+    title,
+    message,
+  })
+    .onOk(() => {
+      // console.log('OK')
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
 
+function nextImage(post) {
+  if (currentIndex.value < post.imageUrls.length - 1) {
+    currentIndex.value++;
+  } else {
+    currentIndex.value = 0; // Reset to the first image if at the end
+  }
+}
+
+function prevImage(post) {
+  if (currentIndex.value > 0) {
+    currentIndex.value--;
+  } else {
+    currentIndex.value = post.imageUrls.length - 1; // Go to the last image if at the beginning
+  }
+}
 
 const fetchUserData = async () => {
   const userId = router.currentRoute.value.query.userId;
   const userDocRef = doc(db, "users", userId);
   const userDocSnap = await getDoc(userDocRef);
 
-  const currentUser = localStorage.getItem("userId")
-  if(userId !== currentUser){
-      isCurrentUser.value = false
-  }else{
-    isCurrentUser.value = true
+  const currentUser = localStorage.getItem("userId");
+  if (userId !== currentUser) {
+    isCurrentUser.value = false;
+  } else {
+    isCurrentUser.value = true;
   }
 
   if (userDocSnap.exists()) {
@@ -287,9 +406,9 @@ fetchUserData();
 
 function showPostModal() {
   showModal.value = true;
-  if(showModal.value){
+  if (showModal.value) {
     showImageModal.value = false;
-  }else{
+  } else {
     showImageModal.value = true;
   }
 }
@@ -343,64 +462,69 @@ function uploadImages(event) {
 }
 
 async function savePost() {
-  if(caption.value.length == 0) {
-    alert("Enter caption.")
-    return
+  if (caption.value.length == 0) {
+    alert("Enter caption.");
+    return;
   }
 
-  isLoading.value = true
-  const success = ref(false)
+  isLoading.value = true;
+  const success = ref(false);
   try {
     const userSnapshot = await getDocs(collection(db, "users"));
-  const userData = userSnapshot.docs
-    .find((doc) => doc.id === userId.value)
-    ?.data();
-  const userName = `${userData.lName}, ${userData.fName}`;
+    const userData = userSnapshot.docs
+      .find((doc) => doc.id === userId.value)
+      ?.data();
+    const userName = `${userData.lName}, ${userData.fName}`;
 
-  const post = {
-    userIdOrig: userId.value,
-    userId: alumniId.value,
-    name: userName,
-    schoolYear: selectedSchoolYear.value,
-    event: selectedEvent.value,
-    caption: caption.value,
-    imageUrls: selectedImages.value,
-    time: new Date(),
-    date: new Date().toLocaleDateString(),
-    status: "pending",
-    history: [{ admin: userName, status: "pending", time: new Date()},],
-    likedBy: [], 
+    const post = {
+      userIdOrig: userId.value,
+      userId: alumniId.value,
+      name: userName,
+      schoolYear: selectedSchoolYear.value,
+      event: selectedEvent.value,
+      caption: caption.value,
+      imageUrls: selectedImages.value,
+      time: new Date(),
+      date: new Date().toLocaleDateString(),
+      status: "pending",
+      history: [{ admin: userName, status: "pending", time: new Date() }],
+      likedBy: [],
       likes: 0,
-  };
-  await addDoc(collection(db, "posts"), post);
+    };
+    await addDoc(collection(db, "posts"), post);
 
-  const notification = {
-    userId: alumniId.value,
-    name: userName,
-    time: new Date(),
-    date: new Date().toLocaleDateString(),
-    status: "unread",
-    for: "administrator",
-  };
-  await addDoc(collection(db, "notifications"), notification);
+    const notification = {
+      userId: alumniId.value,
+      name: userName,
+      time: new Date(),
+      date: new Date().toLocaleDateString(),
+      status: "unread",
+      for: "administrator",
+    };
+    await addDoc(collection(db, "notifications"), notification);
 
-  closeImageModal();
+    closeImageModal();
 
-  success.value = true
+    success.value = true;
   } catch (error) {
-    CustomDialog("Error", error.message)
-    success.value = false
-  }finally{
-    isLoading.value = false
-    if(success.value) CustomDialog("Waiting for Approval", "We will notify you once your post has been approved.")
+    CustomDialog("Error", error.message);
+    success.value = false;
+  } finally {
+    isLoading.value = false;
+    if (success.value)
+      CustomDialog(
+        "Waiting for Approval",
+        "We will notify you once your post has been approved."
+      );
   }
- 
 }
 
 const approvedPosts = computed(() => {
   return posts.value
     .filter(
-      (post) => post.status === selectedStatus.value.toLowerCase() && post.userId === alumniId.value
+      (post) =>
+        post.status === selectedStatus.value.toLowerCase() &&
+        post.userIdOrig === userId.value
     )
     .sort((a, b) => {
       const aLatestTime = a.history.reduce(
@@ -412,7 +536,7 @@ const approvedPosts = computed(() => {
 });
 
 function formatApprovalDate(timestamp) {
-  console.log(timestamp)
+  console.log(timestamp);
   if (!timestamp || !timestamp.seconds) {
     return "Invalid timestamp";
   }
@@ -430,7 +554,7 @@ function formatApprovalDate(timestamp) {
 }
 
 function getLatestApprovalDate(post) {
-  console.log(post)
+  console.log(post);
   if (!post.history || post.history.length === 0) {
     return "No approval date available";
   }
@@ -438,7 +562,7 @@ function getLatestApprovalDate(post) {
   const latestTime = post.history.reduce((latest, entry) => {
     return entry.time > latest ? entry.time : latest;
   }, post.history[0].time);
-  console.log(latestTime)
+  console.log(latestTime);
   return latestTime;
 }
 
@@ -450,7 +574,6 @@ const isValidSelected = computed(() => {
   return selectedSchoolYear.value !== "" && selectedEvent.value !== "";
 });
 
-
 watch(approvedPosts, (newPosts, oldPosts) => {
   console.log("New approved posts:", newPosts);
 });
@@ -460,9 +583,6 @@ watch(isValidSelected, (newSelect, oldSelect) => {
 });
 
 onMounted(async () => {
-  console.log(userId.value);
-  console.log(alumniId.value);
-
   const coursesSnapshot = await getDocs(collection(db, "classYears"));
   schoolYears.value = coursesSnapshot.docs.map((doc) => ({
     id: doc.id,
@@ -564,12 +684,13 @@ onMounted(async () => {
   border-radius: 15px;
 }
 
-.input-container select{
-
-  background: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4gPHBhdGggZD0iTTEuNDI4IDMuMjE3YTEuMzc5IDEuMzc5IDAgMCAxIDEuOTU0LS4wMDhsNS42MDcgNS42MDcgNS42MDctNS42MDdhMS4zNzggMS4zNzggMCAxIDEgMS45NTQgMS45NTRsLTYuNTg0IDYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLTEuOTU0IDBsLTYuNTg0LTYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLS4wMDgtMS45NTR6Ii8+PC9zdmc+') no-repeat right 0.75rem center/8px 8px;
+.input-container select {
+  background: url("data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4gPHBhdGggZD0iTTEuNDI4IDMuMjE3YTEuMzc5IDEuMzc5IDAgMCAxIDEuOTU0LS4wMDhsNS42MDcgNS42MDcgNS42MDctNS42MDdhMS4zNzggMS4zNzggMCAxIDEgMS45NTQgMS45NTRsLTYuNTg0IDYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLTEuOTU0IDBsLTYuNTg0LTYuNTg1YTEuMzc5IDEuMzc5IDAgMCAxLS4wMDgtMS45NTR6Ii8+PC9zdmc+")
+    no-repeat right 0.75rem center/8px 8px;
 }
 
-.main{
+.main {
   overflow-x: hidden;
+ 
 }
 </style>

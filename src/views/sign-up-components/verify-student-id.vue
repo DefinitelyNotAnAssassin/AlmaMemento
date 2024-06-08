@@ -52,7 +52,8 @@ const checkId = async () => {
       currentPage.value = "Verify";
       emit("update:currentPage", "Verify");
       emit("id", idNumber.value);
-    } else {
+    } 
+    else {
       errorMessage.value = "ID number does not exist";
     }
   } catch (error) {

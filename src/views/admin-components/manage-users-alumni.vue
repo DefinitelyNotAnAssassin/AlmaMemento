@@ -18,10 +18,10 @@
           >
             Delete
           </button>
-          <button class="btn btn-sm btn-success mx-1" @click="addUser">
+          <button class="btn btn-sm btn-success mx-1 mt-2 mb-2" @click="addUser">
             Add User
           </button>
-          <label class="btn btn-sm btn-dark">
+          <label class="btn btn-sm btn-dark mt-2 mb-2">
             <i class="bi bi-upload"></i> Import Users
             <input
               type="file"
@@ -32,7 +32,7 @@
           </label>
         </div>
       </div>
-      <table class="table table-striped">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th>
@@ -46,6 +46,7 @@
             <th>ID Number</th>
             <th>
               <div class="d-flex align-items-center">
+                <span class="mx-1">Program & Block</span>
                 <div class="dropdown">
                   <button
                     class="btn btn-sm dropdown-toggle"
@@ -71,11 +72,11 @@
                     </li>
                   </ul>
                 </div>
-                <span class="mx-1">Program & Block</span>
               </div>
             </th>
             <th>
               <div class="d-flex align-items-center">
+                <span class="mx-1">Class Year</span>
                 <div class="dropdown">
                   <button
                     class="btn btn-sm dropdown-toggle"
@@ -98,7 +99,6 @@
                     </li>
                   </ul>
                 </div>
-                <span class="mx-1">Class Year</span>
               </div>
             </th>
             <th>Email</th>
@@ -870,21 +870,30 @@ const importUsers = (event) => {
       const usersData = utils.sheet_to_json(worksheet, { header: 2 });
 
       // Check for duplicate alumnaIDs
-      const alumnaIDs = new Set();
+
+        // Assuming db is your Firestore database instance
+        const usersCollection = collection(db, "users");
+
+    // Get all documents in the users collection
+    const querySnapshot = await getDocs(usersCollection);
+
+    // Get all alumnaIDs
+        const alumnaIDs = new Set(querySnapshot.docs.map(doc => doc.data().alumnaID));
+
       let hasDuplicates = false;
       for (const user of usersData) {
         const { ID_Number } = user;
         if (alumnaIDs.has(ID_Number)) {
-          hasDuplicates = true;
-          break;
+        
+          $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found " + ID_Number });
+          continue;
         }
+        
         alumnaIDs.add(ID_Number);
       }
 
-      if (hasDuplicates) {
-        $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found. Import canceled." });
-        return;
-      }
+    
+    
 
       // No duplicates, proceed with importing
       for (const user of usersData) {
@@ -893,7 +902,7 @@ const importUsers = (event) => {
           First_Name: fName,
           Middle_Initial: mInitial,
           Last_Name: lName,
-          Program_AND_Block: pab,
+          Program_and_Block: pab,
           Class_Year: classYear,
           Email: alumna_email,
           Phone: phone,

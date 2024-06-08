@@ -13,17 +13,20 @@
           />
         </div>
         <div>
-          <input
+          <p v-if="errMsg" class="text-danger text-center" style="font-weight: bold">{{ errMsg }}</p>
+          <input class="form-control input-lg mb-2"
+            style="width: 400px"
             type="text"
             id="alumniID"
             name="alumniID"
             v-model="alumniID"
             required
-            placeholder="Alumni ID"
+            placeholder="ID Number"
           />
         </div>
         <div style="position: relative">
-          <input
+          <input class="form-control input-lg mb-1"
+            style="width: 400px"
             :type="isPwVisible ? 'text' : 'password'"
             id="password"
             name="password"
@@ -31,10 +34,14 @@
             required
             placeholder="Password"
           />
+          <div class="text-end">
+          <router-link to="/forgotPassword" class="forgot-password-link text-danger"
+            >Forgot Password?</router-link>
+        </div>
           <button
             type="button"
             class="btn mt-1"
-            style="position: absolute; right: 0"
+            style="position: absolute; right: 0; top: 30%; transform: translateY(-50%);"
             @click="showPw()"
           >
             <i
@@ -43,27 +50,20 @@
             ></i>
           </button>
         </div>
-        <p v-if="errMsg">{{ errMsg }}</p>
-        <button type="submit" class="btn-login">Login</button>
+        <button type="submit" class="btn-login rounded border-0" style="background: #871B23">Login</button>
+        
         <div>
-          <router-link to="/forgotPassword" class="forgot-password-link"
-            >Forgot Password?</router-link>
-        </div>
-        <div>
-          Don’t have an account?
-          <router-link to="/signUp" class="forgot-password-link" style="color: #000; font-weight: bolder;"
-            >Sign up</router-link
+          Don't have an account?
+          <router-link to="/signUp" class="forgot-password-link text-danger" style="font-weight: bold;">Sign up</router-link
           >
         </div>
       </form>
       <div class="mb-2">
-        <a class="login-footer text-dark"
-          >Copyright &copy; 2023 AlmaMemento. All Rights Reserved.</a
-        >
+        <a class="login-footer text-dark">Copyright &copy; 2024 AlmaMemento.</a>
       </div>
     </div>
     <div class="logo-container">
-      <img src="@/assets/images/ctu-logo.png" alt="Logo" />
+      <!-- <img src="@/assets/images/ctu-logo.png" alt="Logo" /> -->
     </div>
   </div>
 </template>
@@ -129,7 +129,7 @@ const signin = async () => {
     } else {
       isLoading.value = false;
       errMsg.value =
-        "No account with that alumni number and password was found";  
+        "Invalid ID Number or Password";  
     }
   } catch (error) {
     isLoading.value = false;

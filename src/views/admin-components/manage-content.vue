@@ -103,20 +103,49 @@
       <ul>
         <li v-for="item in filteredHistory" :key="item.id">
           <template v-for="(historyItem, historyIndex) in item.history">
-            <span v-if="historyIndex > 0">, </span>
+            <span v-if= "historyIndex > 0">, </span>
             <span>{{ historyItem.admin }} {{ historyItem.status }} the post of {{ item.name }} on {{ historyItem.time }} </span>
           </template>
         </li>
       </ul>
     </div>
     <div v-if="imagePreview" class="modal">
-    <div class="modal-content">
-      <span class="close" @click="closeModal">&times;</span>
+    <div class="modal-content bg-dark">
+      <span class="close text-white" @click="closeModal">&times;</span>
       <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-          <div v-for="(imageUrl, index) in imagePreview" :key="index" :class="{ 'carousel-item': true, 'active': index === currentIndex }">
-            <img :src="imageUrl" class="d-block w-100" alt="Image Preview">
-          </div>
+          <div
+          :key="index" :class="{ 'carousel-item': true, 'active': index === currentIndex }"
+                  v-for="(imageUrl, index) in imagePreview"
+                   
+                    
+                  class="carousel-item"
+                
+                    
+                    >
+                      <img
+                        v-if="imageUrl.type.startsWith('image/')"
+                        :src="imageUrl.url"
+                        class="d-block w-100"
+                      alt="Image Preview"
+                        width="100"
+                        height="600"
+                        controls
+                        @click="openImageModal(imageUrl.url)"
+                      />
+                      <video
+                        v-else
+                        :src="imageUrl.url"
+                        class="d-block w-100"
+                      alt="Video Preview"
+                        width="100"
+                        height="600"
+                        controls
+                        @click="openImageModal(imageUrl.url)"
+                      ></video>
+                   
+                  </div>
+         
         </div>
           <button class="carousel-control-prev" type="button" @click="prevImage">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -278,7 +307,7 @@ async function approvePost(item, index) {
       status: "approved",
       history: [
         ...(item.history || []),
-        { admin: adminName, status: "approved"},
+        { admin: adminName, status: "approved", time: new Date() },
       ],
     });
     items.value[index].status = "approved";

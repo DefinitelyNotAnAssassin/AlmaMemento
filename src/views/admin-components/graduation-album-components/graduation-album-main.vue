@@ -1,11 +1,11 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>Academic Year</h3>
+      <h4>Academic Year</h4>
     </div>
     <div class="d-flex justify-content-end">
       <input
-        class="form-control"
+        class="form-control mb-2"
         style="width: 250px"
         type="text"
         v-model="searchQuery"
@@ -20,7 +20,7 @@
     <div class="folders d-flex flex-wrap">
       <div
         class="folder m-2"
-        v-for="folder in filteredFolders.slice().reverse()"
+        v-for="folder in filteredFolders"
         :key="folder.id"
         @click="changeAlbumPage(folder.name)"
       >

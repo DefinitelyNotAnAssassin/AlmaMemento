@@ -1,7 +1,8 @@
 <template>
   <div class="components-page-main-container p-3 photo-album">
     <div class="text-center">
-      <h3>School Events Year</h3>
+      <h4>Events</h4>
+      <h3>{{ props.folderName }}</h3>
     </div>
     <div class="d-flex justify-content-end">
       <input
@@ -180,6 +181,8 @@ const addFolder = async () => {
   newFolderName.value = "";
   showModal.value = false;
   fetchFolders();
+
+  
 };
 
 const emit = defineEmits(["update:currentPage"]);
