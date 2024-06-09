@@ -47,6 +47,9 @@ const checkId = async () => {
     );
     const querySnapshot = await getDocs(q);
 
+    querySnapshot.docs.forEach(doc => {
+      console.log(doc.id, " => ", doc.data());
+    });
     if (!querySnapshot.empty) {
       errorMessage.value = "";
       currentPage.value = "Verify";
@@ -55,6 +58,7 @@ const checkId = async () => {
     } 
     else {
       errorMessage.value = "ID number does not exist";
+    
     }
   } catch (error) {
     console.error("Error checking ID:", error);

@@ -881,22 +881,28 @@ const importUsers = (event) => {
         const alumnaIDs = new Set(querySnapshot.docs.map(doc => doc.data().alumnaID));
 
       let hasDuplicates = false;
-      for (const user of usersData) {
-        const { ID_Number } = user;
-        if (alumnaIDs.has(ID_Number)) {
-        
-          $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found " + ID_Number });
-          return;
-        }
-        
-        alumnaIDs.add(ID_Number);
-      }
+     
 
     
     
 
       // No duplicates, proceed with importing
       for (const user of usersData) {
+
+        for (const user of usersData) {
+        const { ID_Number } = user;
+        let isFound = false;
+        if (alumnaIDs.has(String(ID_Number))) {
+          
+          $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found " + ID_Number });
+          hasDuplicates = true;
+          break;
+        }
+        
+      }
+
+      if (hasDuplicates) continue;
+
         const {
           ID_Number: alumnaID,
           First_Name: fName,
@@ -911,15 +917,15 @@ const importUsers = (event) => {
         } = user;
 
         await addDoc(collection(db, "users"), {
-          alumnaID,
+          alumnaID: String(alumnaID),
           fName,
           mInitial,
           lName,
           pab: pab || "",
-          classYear: classYear || "",
+          classYear: String(classYear) || "",
           alumna_email: alumna_email || "",
-          phone: phone || "",
-          address: address || "",
+          phone: String(phone) || "",
+          address: String(address) || "",
           alumna_password: "",
           userlevel: "alumni",
           status: "active",

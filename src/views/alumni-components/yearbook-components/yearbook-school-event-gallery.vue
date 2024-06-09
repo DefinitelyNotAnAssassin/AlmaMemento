@@ -32,7 +32,7 @@
           <img style="height: 100%; width: 100%;" v-if="file.type.startsWith('image/')" :src="file.url" class="m-1" />
           <video  style="height: 100%; width: 100%;" v-else :src="file.url" controls></video>
 
-          <div class="details" v-if="file.isDetails">
+          <div class="details" v-if="file.isDetails" @click = "file.isDetails = !file.isDetails">
             <h3>Details</h3>
             <p>Name: <span>{{ image.name }}</span></p>
             <p>Program & Block: <br /><span>{{ image.pab }}</span></p>
@@ -43,7 +43,7 @@
             <span></span>
             <span></span>
           </div>
-          <button class="btn btn-dark btn-details" v-if="file.isMenu" @click="file.isDetails = !file.isDetails">Details</button>
+          <button class="btn btn-dark btn-details" v-if="file.isMenu" @click="file.isDetails = !file.isDetails; file.isMenu = !file.isMenu">Details</button>
         </div>
       </div>
     </div>
@@ -139,7 +139,9 @@ const filteredImages = computed(() => {
     return images.value
     .filter((image) =>
     image.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    image.pab.toLowerCase().includes(searchQuery.value.toLowerCase()) 
+    image.pab.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+
+    String(image.time).includes(searchQuery.value)
     )
     .sort((a, b) => a.name.localeCompare(b.name));
   }

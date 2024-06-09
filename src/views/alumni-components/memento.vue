@@ -34,7 +34,7 @@
                   <img
                     :src="
                       userData.photoURL ||
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+                      'https://i.ibb.co/0Jd8csf/cb4572f19ab7505d552206ed5dfb3739.jpg'
                     "
                     style="
                       height: 40px !important;
@@ -281,7 +281,98 @@
                 Posted on:
                 {{ formatApprovalDate(getLatestApprovalDate(post)) }}
               </p>
+
+
+
+              <div class="d-flex align-items-center mt-2 mb-3">
+                <a
+                  href="#"
+                  @click.prevent="toggleLike(post)"
+                  class="text-light"
+                  style="text-decoration: none !important"
+                >
+                  <i
+                    class="bi"
+                    :class="{
+                      'bi-heart-fill': post.likedBy.includes(userId),
+                      'bi-heart': !post.likedBy.includes(userId),
+                    }"
+                  ></i>
+                  {{ post.likes }}
+                </a>
+
+
+              
+
+                <a
+                  href="#"
+                  @click.prevent="toggleComments(post)"
+                  class="text-light mx-2"
+                  style="text-decoration: none !important"
+                >
+                  <i class="bi bi-chat"></i> Comments
+                </a>
+          
+              
+                 
+              </div>
+              <div v-if="post.showComments">
+                <div v-for="comment in post.comments" :key="comment.id">
+                  <strong>{{ comment.user }}</strong
+                  >: {{ comment.text }}
+                  <div>
+                    <button
+                      @click="editComment(comment, post)"
+                      class="btn-edit-comment"
+                      v-if="comment.userId === userId"
+                      style="
+                        background: none;
+                        color: white;
+                        border: none;
+                        text-decoration: underline;
+                        font-size: 0.8rem;
+                      "
+                    >
+                      Edit
+                    </button>
+                    <button
+                      @click="deleteComment(comment, post)"
+                      class="btn-delete-comment"
+                      v-if="
+                        post.userIdOrig === userId || comment.userId === userId
+                      "
+                      style="
+                        background: none;
+                        color: white;
+                        border: none;
+                        text-decoration: underline;
+                        font-size: 0.8rem;
+                        margin-left: 0.5rem;
+                      "
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                <input
+                  v-model="post.newComment"
+                  @keyup.enter="addComment(post)"
+                  type="text"
+                  style="
+                    padding: 0.5rem 1rem;
+                    border: none;
+                    margin-top: 0.5rem;
+                    width: 100%;
+                    outline: none;
+                  "
+                  placeholder="Add a comment..."
+                />
+              </div>
             </div>
+
+
+            
           </div>
         </div>
       </div>
@@ -304,14 +395,18 @@ import {
   onSnapshot,
   getDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "vue-router";
 
+
+const isLiked = ref(false);
 const showModal = ref(false);
 const showImageModal = ref(false);
 const schoolYears = ref([]);
@@ -542,6 +637,88 @@ async function savePost() {
   }
 }
 
+
+
+function toggleComments(post) {
+  post.showComments = !post.showComments;
+  if (!post.commentsLoaded) {
+    loadComments(post);
+    post.commentsLoaded = true;
+  }
+}
+
+
+
+
+async function loadComments(post) {
+  try {
+    const postRef = doc(db, "posts", post.id);
+    const postDoc = await getDoc(postRef);
+    if (postDoc.exists()) {
+      const postData = postDoc.data();
+      if (postData.comments) {
+        post.comments = postData.comments;
+      }
+    }
+  } catch (error) {
+    console.error("Error loading comments:", error);
+  }
+}
+
+
+const toggleLike = async (post) => {
+  const userSnapshot = await getDocs(collection(db, "users"));
+  const userData = userSnapshot.docs
+    .find((doc) => doc.id === userId.value)
+    ?.data();
+  const userName = `${userData.fName} ${userData.lName}`;
+
+  const postRef = doc(db, "posts", post.id);
+  const postSnapshot = await getDoc(postRef);
+  const postData = postSnapshot.data();
+  const likedBy = postData.likedBy || [];
+  const postId = postData.id;
+  const postAuthor = postData.userIdOrig;
+
+  const notification = {
+    userId: alumniId.value,
+    postId: postId,
+    authorId: post.userId,
+    name: userName,
+    postCaption: post.caption,
+    time: new Date(),
+    date: new Date().toLocaleDateString(),
+    status: "unread",
+    message: `${userName} liked your post.`,
+    for: "alumni",
+    type: "newLike",
+  };
+
+  if (likedBy.includes(userId.value)) {
+    // If the user has already liked the post, unlike it
+    const updatedLikes = likedBy.filter((id) => id !== userId.value);
+    isLiked.value = updatedLikes;
+    await updateDoc(postRef, {
+      likedBy: updatedLikes,
+      likes: updatedLikes.length,
+    });
+  } else {
+    const updatedLikes = [...likedBy, userId.value];
+    await updateDoc(postRef, {
+      likedBy: updatedLikes,
+      likes: updatedLikes.length,
+    });
+
+    if (userId.value !== postAuthor) {
+      await addDoc(collection(db, "notifications"), notification);
+    }
+  }
+};
+
+
+
+
+
 const approvedPosts = computed(() => {
   return posts.value
     .filter(
@@ -555,6 +732,57 @@ const approvedPosts = computed(() => {
       
     });
 });
+
+
+async function addComment(post) {
+  if (post.newComment.trim() === "") return;
+  const newId = uuidv4();
+  const postId = post.id;
+  const postAuthor = post.userIdOrig;
+  const userSnapshot = await getDocs(collection(db, "users"));
+  const userData = userSnapshot.docs
+    .find((doc) => doc.id === userId.value)
+    ?.data();
+  const userName = `${userData.fName} ${userData.lName}`;
+
+  const notification = {
+    userId: alumniId.value,
+    postId: postId,
+    postCaption: post.caption,
+    name: userName,
+    authorId: post.userId,
+    time: new Date(),
+    date: new Date().toLocaleDateString(),
+    status: "unread",
+    message: `${userName} commented on your post.`,
+    for: "alumni",
+    type: "newComment",
+  };
+
+  const newComment = {
+    id: newId,
+    userId: userId.value,
+    user: userName,
+    text: post.newComment,
+  };
+
+  try {
+    const postRef = doc(db, "posts", post.id);
+    const updatedComments = post.comments
+      ? [...post.comments, newComment]
+      : [newComment];
+    await updateDoc(postRef, {
+      comments: updatedComments,
+      latestComment: newComment,
+    });
+    post.newComment = "";
+    if (userId.value !== postAuthor) {
+      await addDoc(collection(db, "notifications"), notification);
+    }
+  } catch (error) {
+    console.error("Error adding comment:", error);
+  }
+}
 
 function formatApprovalDate(timestamp) {
   console.log(timestamp);

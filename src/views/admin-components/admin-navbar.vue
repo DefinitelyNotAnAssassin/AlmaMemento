@@ -39,13 +39,13 @@
 <script setup>
 import { ref, onMounted, defineEmits } from "vue";
 import { db } from "../../firebase/index.js";
-import { collection, onSnapshot, updateDoc, doc } from "firebase/firestore";
-
+import { collection, onSnapshot, updateDoc, doc, getDocs } from "firebase/firestore";
+import { useRouter } from "vue-router";
 const notificationsVisible = ref(false);
 const unreadPostsCount = ref(0);
 const newPosts = ref([]);
 const filteredPosts = ref([]);
-
+const router = useRouter();
 const toggleNotifications = async () => {
   notificationsVisible.value = !notificationsVisible.value;
   if (!notificationsVisible.value) {

@@ -13,9 +13,9 @@
           <img
             :src="
               userData.photoURL ||
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+              'https://i.ibb.co/0Jd8csf/cb4572f19ab7505d552206ed5dfb3739.jpg'
             "
-            @click="openImageModal(userData.photoURL || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s')"
+            @click="openImageModal(userData.photoURL || 'https://i.ibb.co/G00VTpP/defaultprofile.png')"
             alt="profile"
             style="height: 150px; width: 150px; border-radius: 50%"
           />

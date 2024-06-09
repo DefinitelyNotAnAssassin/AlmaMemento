@@ -15,7 +15,7 @@
                 <img
                   :src="
                     userData.profilePicture ||
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
+                    'https://i.ibb.co/G00VTpP/defaultprofile.png'
                   "
                   style="
                     height: 40px !important;
@@ -256,7 +256,7 @@
                   class="carousel-item"
                   :class="{
                       'carousel-item': true,
-                      active: index === currentIndex,
+                        active: index === anotherIndex,
                     }"
                     
                     >
@@ -332,7 +332,7 @@
                 </a>
                 <a
                   href="#"
-                  @click="toggleComments(post)"
+                  @click.prevent="toggleComments(post)"
                   class="text-light mx-2"
                   style="text-decoration: none !important"
                 >
@@ -410,11 +410,12 @@
       </div>
     </div>
   </div>
-  <div v-if="isOpen" class="modal">
-    <span @click="closePostImageModal" class="close">&times;</span>
+  <div v-if="isOpen" @click="closePostImageModal" class="modal">
+    <span  class="close">&times;</span>
     <div class="justify-items-center align-items-center" style="z-index: 2;">
       
       <img
+      @click="closePostImageModal"
         v-if="fileType.startsWith('image/')"
         :src="imageUrl"
         alt="Preview Image"
@@ -438,6 +439,7 @@ import { ref, onMounted, computed, watch, nextTick } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
 import { db, storage } from "../firebase/index.js";
+
 import {
   collection,
   getDocs,
@@ -452,6 +454,7 @@ import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import { useRoute, useRouter } from "vue-router";
 import { useQuasar } from "quasar";
@@ -466,6 +469,7 @@ const selectedSchoolYear = ref("");
 const selectedEvent = ref("");
 const caption = ref("");
 const message = ref("");
+const anotherIndex = ref(0);
 const selectedFiles = ref([]);
 const progressBars = ref([]);
 const router = useRouter();
@@ -523,18 +527,19 @@ const deleteFile = (index) => {
 };
 
 function nextImage(post) {
-  if (currentIndex.value < post.imageUrls.length - 1) {
-    currentIndex.value++;
+  if (anotherIndex < post.imageUrls.length - 1) {
+    anotherIndex.value++;
   } else {
-    currentIndex.value = 0; // Reset to the first image if at the end
+    anotherIndex.value = 0; // Reset to the first image if at the end
   }
 }
 
 function prevImage(post) {
-  if (currentIndex.value > 0) {
-    currentIndex.value--;
+  console.log("Current Index: ", post)
+  if (anotherIndex > 0) {
+    anotherIndex.value--;
   } else {
-    currentIndex.value = post.imageUrls.length - 1; // Go to the last image if at the beginning
+    anotherIndex.value = post.imageUrls.length - 1; // Go to the last image if at the beginning
   }
 }
 
@@ -576,7 +581,27 @@ const ConfirmDeleteDialog = (post) => {
 const DeletePost = async (post) => {
   try {
     console.log("Deleting post: ", post)
+    try{
+      const imageUrls = post.imageUrls;
+      console.log("Image Urls: ", imageUrls)
+      imageUrls.forEach(async (url) => {
+        const filePath = url.url.split('/o/')[1].split('?')[0];
+        const decodedFilePath = decodeURIComponent(filePath);
+        const imageRef = storageRef(storage, decodedFilePath);
+        
+        try {
+          await deleteObject(imageRef);
+          console.log("Deleted image:", decodedFilePath);
+        } catch (error) {
+          console.error("Error deleting image:", decodedFilePath, error);
+          CustomDialog("Error", error.message);
+        }
+      });
+    } catch (error) {
+      CustomDialog("Error", error.message);
+    }
     const postRef = doc(db, "posts", post.id);
+    await deleteDoc(postRef);
 
     // also delete the images from storage
     
@@ -684,6 +709,7 @@ const openImageModal = (url) => {
   imageUrl.value = url.url;
   fileType.value = url.type
   isOpen.value = true;
+  
 };
 
 const closePostImageModal = () => {
@@ -725,7 +751,7 @@ import imageCompression from 'browser-image-compression';
 const uploadFiles = async (event) => {
   const maxFiles = 10;
   const files = event.target.files;
-  var uploadTask = null;
+
   if (selectedFiles.value.length + files.length > maxFiles) {
     $q.dialog({title: "Errors", message: "You can upload a maximum of 10 files."})
     selectedFiles.value = []
@@ -741,29 +767,11 @@ const uploadFiles = async (event) => {
         $q.dialog({title: "Errors", message: "Video length should not exceed 25 seconds."})
         return;
       }
-
-      const storageReference = storageRef(storage, `files/${file.name}`);
-      uploadTask = uploadBytesResumable(storageReference, file);
     }
 
-    else if (file.type.startsWith('image/')) {
-          try {
-            const compressedFile = await imageCompression(file, {
-              maxSizeMB: 3, // Maximum size in MB
-              maxWidthOrHeight: 1920, // Maximum width or height in pixels
-              useWebWorker: true
-            });
+    const storageReference = storageRef(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageReference, file);
 
-            const storageReference = storageRef(storage, `files/${compressedFile.name}`);
-            uploadTask = uploadBytesResumable(storageReference, compressedFile);
-           
-          } catch (error) {
-          
-            $q.dialog({ title: "Error", message: "There was an error processing the image. " + error });
-          }
-        }
-     
-   
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -932,6 +940,8 @@ async function saveStory() {
     history: [],
     likedBy: [], // Initialize with an empty array
     likes: 0, // Initialize likes count
+    time: new Date(),
+    date: new Date().toLocaleDateString(),
   };
   await addDoc(collection(db, "posts"), post);
   message.value = "";
@@ -981,7 +991,7 @@ const EditPost = async (post, caption) => {
 
 const approvedPosts = computed(() => {
  
-
+ 
   return posts.value
     .filter((post) => post.status === "approved").sort((a, b) => b.time - a.time);
    
@@ -1093,6 +1103,7 @@ onMounted(async () => {
     post.showComments = false;
     post.commentsLoaded = false;
     post.newComment = "";
+    post.counter = 0;
   });
 
 
@@ -1100,7 +1111,10 @@ onMounted(async () => {
 });
 
 const toggleLike = async (post) => {
-  const userSnapshot = await getDocs(collection(db, "users"));
+
+  console.log("Liking post: ", post)
+
+    const userSnapshot = await getDocs(collection(db, "users"));
   const userData = userSnapshot.docs
     .find((doc) => doc.id === userId.value)
     ?.data();
@@ -1113,7 +1127,10 @@ const toggleLike = async (post) => {
   const postId = postData.id;
   const postAuthor = postData.userIdOrig;
 
-  const notification = {
+ 
+
+ 
+    const notification = {
     userId: alumniId.value,
     postId: postId,
     authorId: post.userId,
@@ -1126,6 +1143,10 @@ const toggleLike = async (post) => {
     for: "alumni",
     type: "newLike",
   };
+
+  
+  
+  
 
   if (likedBy.includes(userId.value)) {
     // If the user has already liked the post, unlike it
@@ -1142,7 +1163,9 @@ const toggleLike = async (post) => {
       likes: updatedLikes.length,
     });
 
-    if (userId.value !== postAuthor) {
+
+  
+    if (alumniId.value !== post.userId) {
       await addDoc(collection(db, "notifications"), notification);
     }
   }

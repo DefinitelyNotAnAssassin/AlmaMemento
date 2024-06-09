@@ -287,7 +287,7 @@ async function userIdToName(adminId) {
   if (docSnap.exists()) {
     const userData = docSnap.data();
     const { fName, lName, mInitial } = userData;
-    const fullName = `${fName}, ${lName} ${mInitial}.`;
+    const fullName = `${fName} ${lName}`;
     return fullName;
   } else {
     console.log("No such document!");
@@ -321,7 +321,10 @@ async function approvePost(item, index) {
     type: "newpost",
     action: "approved",
     postId: item.id,
-    userId: userId
+    userId: userId,
+    authorId: userId,
+    time: new Date(),
+
   });
 
     if (item.imageUrls && item.imageUrls.length > 0) {

@@ -64,7 +64,9 @@
         <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Hate Speech'">[{{post.caption}}] The post included hate speech or discriminatory remarks, which violate our commitment to an inclusive and respectful community. -{{post.name}}</span>
         <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'False Information'">[{{post.caption}}] The post contained incorrect or misleading information. Accuracy is crucial to maintaining trust within our community. -{{post.name}}</span>
         <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Suicide or Self-Injury'">[{{post.caption}}] The post referenced or encouraged suicide or self-injury, which we take very seriously for the well-being of our members. -{{post.name}}</span>
-        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.action">{{ "Your post has been rejected due to: " + post?.reason}} -{{post.name }} </span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.action === 'Rejected'">{{ "Your post has been rejected due to: " + post?.reason}} -{{post.name }} </span>
+        <span  @click = "redirectToPost(post.postId)" style="color: black" v-else-if="post?.action">{{post?.name}} {{post?.action}} your post </span>
+        
       <span style="color: black" @click = "redirectToPost(post.postId)" v-else>[{{post?.postCaption}}]{{post?.message}}</span>
           
           <span style="color: black">{{ " " + timeDifference(post?.time) }}</span>

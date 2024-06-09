@@ -74,7 +74,7 @@ const filteredFolders = computed(() => {
     .filter((folder) =>
       folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => a.name.localeCompare(b.name)).reverse();
 });
 </script>
 
