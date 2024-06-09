@@ -134,6 +134,7 @@ const confirmDelete = async () => {
       await deleteDoc(docRef);
     }
     selectedMessages.value = [];
+    fetchMessages();
   }
 };
 

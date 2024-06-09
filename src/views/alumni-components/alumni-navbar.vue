@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar" style="position: sticky; top: 0; z-index: 1;">
+  <nav class="navbar" style="position: sticky; top: 0; z-index: 10;">
     <img src="../../assets/images/w-logo.png" alt="logo" style="height: 50px; margin-left: 120px">  
     <div class="navbar-brand">
       <a class="navbar-item" href="#"> </a>
@@ -32,38 +32,42 @@
       >
     </div>
     <div class="navbar-end ">
-      <button @click="logout" class=" btn btn-sm btn-light " >
-      <i class="fas fa-power-off"></i> Logout
-     </button>
+   
       <a class="notif-main navbar-item text-light" @click="toggleNotifications">
         <span class="icon">
           <i class="fas fa-bell"></i>
+          <span v-if="unreadPostsCount > 0" class="notif-badge badge rounded-pill bg-danger">{{ unreadPostsCount }}</span>
         </span>
-        <span v-if="unreadPostsCount > 0" class="notif-badge badge rounded-pill bg-danger">{{ unreadPostsCount }}</span>
+
+       
       </a>
+      
+      <button @click="logout" class=" btn btn-sm btn-light " >
+      <i class="fas fa-power-off"></i> 
+     </button>
     </div>
-    <div v-if="notificationsVisible" class="notification-panel">
+    <div v-if="notificationsVisible" class="notification-panel" style = "z-index: 20!important;">
       <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">All</button>
       <button class="btn btn-sm btn-light" @click="filterBy('Unread')">Unread</button>
       <ul>
         <li
           v-for="post in filteredPosts"
           :key="post.id"
-          @click="viewPost(post)"
+
           style="cursor: pointer;"
           class="notification"
           :class="{ unread: post.status === 'unread', clickable: post.type === 'concern' }"
         >
-        <span style="color: black" v-if="post?.reason === 'Spam'">[] The post was identified as spam or overly promotional. We aim to maintain a community free from unsolicited advertisements.</span>
-        <span style="color: black" v-else-if="post?.reason === 'Nudity'">The post included nudity or sexually explicit content, which is not allowed in our community to ensure a professional environment.</span>
-        <span style="color: black" v-else-if="post?.reason === 'Violence'">The post contained violent content or imagery, which is prohibited to ensure the safety and comfort of our members.</span>
-        <span style="color: black" v-else-if="post?.reason === 'Hate Speech'">The post included hate speech or discriminatory remarks, which violate our commitment to an inclusive and respectful community.</span>
-        <span style="color: black" v-else-if="post?.reason === 'False Information'">The post contained incorrect or misleading information. Accuracy is crucial to maintaining trust within our community.</span>
-        <span style="color: black" v-else-if="post?.reason === 'Suicide or Self-Injury'">The post referenced or encouraged suicide or self-injury, which we take very seriously for the well-being of our members.</span>
-        <span style="color: black" v-else-if="post?.action">{{ "Your post has been " + post?.action}} </span>
-<span style="color: black" v-else>{{ "Your post has been rejected due to " + post?.reason}}</span>
-        
-          <span style="color: black">{{ " " + timeDifference(post?.date) }}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-if="post?.reason === 'Spam'">[{{post.caption}}] The post was identified as spam or overly promotional. We aim to maintain a community free from unsolicited advertisements. -{{post.name }}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Nudity'">[{{post.caption}}] The post included nudity or sexually explicit content, which is not allowed in our community to ensure a professional environment. -{{post.name}}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Violence'">[{{post.caption}}] The post contained violent content or imagery, which is prohibited to ensure the safety and comfort of our members. -{{post.name}}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Hate Speech'">[{{post.caption}}] The post included hate speech or discriminatory remarks, which violate our commitment to an inclusive and respectful community. -{{post.name}}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'False Information'">[{{post.caption}}] The post contained incorrect or misleading information. Accuracy is crucial to maintaining trust within our community. -{{post.name}}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.reason === 'Suicide or Self-Injury'">[{{post.caption}}] The post referenced or encouraged suicide or self-injury, which we take very seriously for the well-being of our members. -{{post.name}}</span>
+        <span  @click = "redirectToMemento(post.postId)" style="color: black" v-else-if="post?.action">{{ "Your post has been rejected due to: " + post?.reason}} -{{post.name }} </span>
+      <span style="color: black" @click = "redirectToPost(post.postId)" v-else>[{{post?.postCaption}}]{{post?.message}}</span>
+          
+          <span style="color: black">{{ " " + timeDifference(post?.time) }}</span>
         </li>
       </ul>
     </div>
@@ -159,11 +163,7 @@ const markAllAsRead = async () => {
 };
 
 const timeDifference = (timestamp) => {
-  const postTime = new Date(timestamp).getTime();
- 
-  const now = new Date().getTime();
-  const difference = now - postTime;
-
+  const difference = Date.now() - timestamp.toDate();
   if (difference < 60000) {
     return "Just now";
   } else if (difference < 3600000) {
@@ -226,7 +226,7 @@ onMounted(() => {
       return data;
     }).filter((notification) => {
     
-      return notification.for === "alumni" && notification.authorId === userId.value;
+      return notification.for === "alumni" && (notification.authorId === alumniId.value);
     });
 
     // Update the reactive variables
@@ -246,6 +246,17 @@ onMounted(() => {
   // Return the unsubscribe function to stop listening to snapshot changes when the component is unmounted
   return unsubscribe;
 });
+
+const redirectToPost = (postId) => {
+  console.log("Redirecting to post with ID:", postId);
+  router.push({ path: "/alumniDashboard", query: { postId: postId, userId: userId.value, alumniId: alumniId.value } });
+  
+}
+
+const redirectToMemento = (mementoId) => {
+  console.log("Redirecting to memento with ID:", mementoId);
+  router.push({ path: "/memento", query: { mementoId: mementoId, userId: userId.value, alumniId: alumniId.value } });
+}
 </script>
 
 <style>

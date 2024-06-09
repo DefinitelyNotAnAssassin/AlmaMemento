@@ -20,7 +20,7 @@
         Add Folder
       </button>
     </div>
-    <div class="folders">
+    <div class="folders flex-wrap">
       <div
         class="folder m-2"
         v-for="(folder, index) in filteredFolders"
@@ -270,7 +270,7 @@ const cancelDeleteFolder = () => {
 const filteredFolders = computed(() => {
   return folders.value.filter((folder) =>
     folder.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+  ).sort((a, b) => a.name.localeCompare(b.name));
 });
 </script>
 

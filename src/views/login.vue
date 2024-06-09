@@ -81,6 +81,7 @@ import {
   where,
 } from "firebase/firestore";
 import Loading from "./loading.vue";
+import CryptoJS from "crypto-js";
 
 const alumniID = ref("");
 const password = ref("");
@@ -93,12 +94,21 @@ const router = useRouter();
 const signin = async () => {
   isLoading.value = true;
   try {
+    const hashedPassword = CryptoJS.SHA256(password.value).toString();
     const q = query(
+      collection(db, "users"),
+      where("alumnaID", "==", alumniID.value),
+      where("alumna_password", "==", hashedPassword)
+    );
+
+
+    const w = query(
       collection(db, "users"),
       where("alumnaID", "==", alumniID.value),
       where("alumna_password", "==", password.value)
     );
     const querySnapshot = await getDocs(q);
+    const querySnapshot2 = await getDocs(w);
     const user = querySnapshot.docs[0];
 
     if (user) {
@@ -127,10 +137,36 @@ const signin = async () => {
         errMsg.value = "Your account has been deactivated";
       }
     } else {
-      isLoading.value = false;
-      errMsg.value =
-        "Invalid ID Number or Password";  
+      const user2 = querySnapshot2.docs[0];
+      if (user2) {
+      if (user2.data().status === "active") {
+        await updateDoc(doc(db, "users", user2.id), { loggedIn: true });
+
+        localStorage.setItem("userId", user2.id);
+        localStorage.setItem("userlevel", user2.data().userlevel);
+
+        if (
+          user2.data().userlevel === "administrator" ||
+          user2.data().userlevel === "moderator"
+        ) {
+          router.replace({
+            name: "adminDashboard",
+            query: { userId: user2.id },
+          });
+        } else if (user2.data().userlevel === "alumni") {
+          router.replace({
+            name: "alumniDashboard",
+            query: { userId: user2.id, alumniId: user2.data().alumnaID },
+          });
+        }
+      }
+    
     }
+    else{
+      isLoading.value = false;
+      errMsg.value = "Invalid ID Number or Password";  
+    }  
+      }
   } catch (error) {
     isLoading.value = false;
     console.error("Error:", error);

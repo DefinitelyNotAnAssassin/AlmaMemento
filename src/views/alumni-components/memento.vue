@@ -201,6 +201,7 @@
               style="width: 500px; overflow-y: auto; "
               v-for="post in approvedPosts"
               :key="post.id"
+              :id = "post.id"
               class="container card p-3 background-color-brown text-light mt-2"
             >
               <h3>{{ post.name }}</h3>
@@ -404,6 +405,28 @@ fetchUserData();
 
 // Edited End
 
+
+router.afterEach((to, from) => {
+  setTimeout(() => {
+    if (to.path === '/memento' && to.query.mementoId) {
+    console.log("Triggered")
+    selectedStatus.value = "Rejected";
+    console.log(selectedStatus.value);
+      
+    setTimeout(() => {
+      const element = document.getElementById(to.query.mementoId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    else{ 
+      console.log("Element not found")
+    }
+    }, 2500);
+   
+}}, 2500);
+     
+    });
+
 function showPostModal() {
   showModal.value = true;
   if (showModal.value) {
@@ -527,11 +550,9 @@ const approvedPosts = computed(() => {
         post.userIdOrig === userId.value
     )
     .sort((a, b) => {
-      const aLatestTime = a.history.reduce(
-        (latest, entry) => (entry?.time > latest ? entry?.time : latest),
-        a.history[0]?.time
-      );
-      return new Date(aLatestTime);
+
+      return b.time - a.time;
+      
     });
 });
 

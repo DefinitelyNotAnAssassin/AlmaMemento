@@ -1,7 +1,7 @@
 <template>
   <div class="components-page-main-container p-3">
     <h3 class="text-center">Contact Support</h3>
-    <div class="convo-container p-5" style="background: #E5E4E2;">
+    <div class="convo-container p-5" style="background: #E5E4E2; overflow-y: scroll;">
       
       <div class="d-flex justify-content-between">
         <button class="btn btn-sm btn-dark mx-1" @click="backToMain">
@@ -42,7 +42,7 @@
         </div> 
         </div>
       </div>
-      <div class="mt-2" v-if="showReply">
+      <div class="mt-2">
         <textarea
           class="form-control"
           v-model="replyMessage"
@@ -54,11 +54,7 @@
           Send
         </button>
       </div>
-      <button class="btn btn-sm btn-dark mt-2" v-else @click="showReply = true"
-        v-if="documentData.status !== 'closed'"
-      >
-        Reply
-      </button>
+    
     </div>
   </div>
 </template>
@@ -92,6 +88,13 @@ const backToMain = () => {
 };
 
 const sendReply = async () => {
+  // check if the reply message is empty
+
+  if (replyMessage.value === "") {
+    alert("Please enter a message")
+    return;
+  }
+
   const userDoc = await getUserDoc(userId);
   const name = `${userDoc.data().lName} ${userDoc.data().fName}`;
   const docRef = doc(db, "concerns", props.id);

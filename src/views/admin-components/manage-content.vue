@@ -320,6 +320,7 @@ async function approvePost(item, index) {
     status: "unread",
     type: "newpost",
     action: "approved",
+    postId: item.id,
     userId: userId
   });
 
@@ -345,7 +346,12 @@ async function rejectPost(item, index) {
   const adminName = await userIdToName(adminId);
   const approvalTime = new Date();
   const userId = item.userId;
-  const authorId = item.userIdOrig
+  const authorId = item.userId;
+
+  // delete the images from storage 
+  console.log("item", item) 
+  
+
   if (adminName) {
     const postRef = doc(db, "posts", item.id);
     await updateDoc(postRef, {
@@ -364,11 +370,14 @@ async function rejectPost(item, index) {
     for: "alumni",
     name: adminName,
     status: "unread",
+    from: "admin",
     time: approvalTime,
     date: new Date().toLocaleDateString(),
     reason: otherReason.value || reason.value,
     type: "newpost",
+    caption: item.caption,
     action: "rejected",
+    postId: item.id,
     userId: userId,
     authorId: authorId
   });

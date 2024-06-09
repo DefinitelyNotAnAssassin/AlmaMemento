@@ -12,6 +12,10 @@
         </span>
         <span v-if="unreadPostsCount > 0" class="notif-badge badge rounded-pill bg-danger">{{ unreadPostsCount }}</span>
       </a>
+
+      <button @click="logout" class=" btn text-light">
+        <i class="fas fa-power-off"></i> 
+      </button>
     </div>
     <div v-if="notificationsVisible" class="notification-panel">
       <button class="btn btn-sm btn-light mx-1" @click="filterBy('All')">All</button>
@@ -21,6 +25,7 @@
           v-for="post in filteredPosts"
           :key="post.id"
           @click="viewPost(post)"
+          style = "cursor: pointer"
           :class="{ unread: post.status === 'unread', clickable: post.type === 'concern' }"
         >
           <span style="color: black">{{ post.name }} added a {{ post.type }}</span>
@@ -87,12 +92,12 @@ const timeDifference = (timestamp) => {
 const emit = defineEmits(["update:currentPage"]);
 
 const viewPost = async (post) => {
-  const currentPage = ref('');
+  console.log("Viewing post: ", post)
   if (post.type === "concern") {
-    currentPage.value = "Contact";
     emit("update:currentPage", "Contact");
+    currentPage.value = "Contact";
   } else {
-    console.log("New post notification:", post);
+    emit("update:currentPage", "Manage Content");
   }
 
   if (post.status === "unread") {
@@ -120,6 +125,44 @@ const filterBy = (status) => {
   filteredPosts.value.sort((a, b) => b.time.toDate() - a.time.toDate());
 };
 
+
+const logout = async () => {
+  try {
+ 
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+
+    const q = collection(db, "users");
+    const querySnapshot = await getDocs(q);
+    const userId = router.currentRoute.value.query.userId;
+ 
+
+    const user = querySnapshot.docs.find(
+      (doc) => doc.id === userId && doc.data().loggedIn === true
+    );
+
+    if (user) {
+      await updateDoc(doc(db, "users", user.id), {
+        loggedIn: false,
+      });
+
+
+      console.log("Logout successful. Redirecting to login page...");
+      console.log("Current URL:", window.location.href);
+    } else {
+      console.log("No logged in user found");
+    }
+    localStorage.clear()
+    router.push({ name: "login" });
+  } catch (error) {
+    console.error("Error:", error.message);
+  } finally {
+    setTimeout(() => {
+   
+    }, 500);
+  }
+};
 onMounted(() => {
   const notificationsCollection = collection(db, "notifications");
   onSnapshot(notificationsCollection, (snapshot) => {

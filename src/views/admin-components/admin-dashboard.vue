@@ -1,4 +1,4 @@
-<template>
+<template >
   <h4 class="dashboard-title">Welcome Admin!</h4>
     <div class="cards-container">
         <div class="card-one">

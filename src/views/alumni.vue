@@ -198,6 +198,8 @@
               style="width: 550px;"
               v-for="post in approvedPosts.slice()"
               :key="post.id"
+
+              :id="post.id"
               class="container card p-3 background-color-brown text-light my-2"
             >
               <div
@@ -315,7 +317,7 @@
               <div class="d-flex align-items-center mt-2">
                 <a
                   href="#"
-                  @click="toggleLike(post)"
+                  @click.prevent="toggleLike(post)"
                   class="text-light"
                   style="text-decoration: none !important"
                 >
@@ -432,7 +434,7 @@
 
 <script setup>
 import Loading from "./loading.vue";
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch, nextTick } from "vue";
 import NavBar from "./alumni-components/alumni-navbar.vue";
 import SideBar from "./alumni-components/alumni-sidebar.vue";
 import { db, storage } from "../firebase/index.js";
@@ -451,7 +453,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
@@ -467,8 +469,10 @@ const message = ref("");
 const selectedFiles = ref([]);
 const progressBars = ref([]);
 const router = useRouter();
+const route = useRoute();
 const userId = computed(() => router.currentRoute.value.query.userId);
 const alumniId = computed(() => router.currentRoute.value.query.alumniId);
+const postId = computed(() => router.currentRoute.value.query.postId);
 // const isImageSelected = computed(() => selectedFiles.value.length > 0);
 const showAllImages = ref(false);
 const posts = ref([]);
@@ -485,6 +489,12 @@ const editCommentText = ref("");
 const currentComment = ref(null);
 const currentPost = ref(null);
 import { v4 as uuidv4 } from "uuid";
+
+
+
+
+
+
 const userData = ref({
   name: "",
   full_name: "",
@@ -496,6 +506,18 @@ const userData = ref({
   photoURL: "",
 });
 
+router.afterEach((to, from) => {
+  setTimeout(() => {
+    if (to.path === '/alumniDashboard' && to.query.postId) {
+    console.log("Triggered")
+    const element = document.getElementById(to.query.postId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+
+}}, 2500);
+     
+    });
 const deleteFile = (index) => {
   selectedFiles.value.splice(index, 1);
 };
@@ -533,6 +555,7 @@ const CustomDialog = (title, message) => {
 };
 
 const ConfirmDeleteDialog = (post) => {
+  toggleEdit(post);
   $q.dialog({
     title: "Confirmation",
     message: "Are you sure you want to delete this post?",
@@ -552,8 +575,11 @@ const ConfirmDeleteDialog = (post) => {
 
 const DeletePost = async (post) => {
   try {
+    console.log("Deleting post: ", post)
     const postRef = doc(db, "posts", post.id);
-    await deleteDoc(postRef);
+
+    // also delete the images from storage
+    
     posts.value = posts.value.filter((p) => p.id !== post.id); // Remove locally for immediate UI feedback
     CustomDialog("Success", "Post has been deleted successfully.");
   } catch (error) {
@@ -692,10 +718,14 @@ function closeImageModal() {
   isEdit.value = false;
   isEditPostId.value = "";
 }
+
+import imageCompression from 'browser-image-compression';
+
+
 const uploadFiles = async (event) => {
   const maxFiles = 10;
   const files = event.target.files;
-
+  var uploadTask = null;
   if (selectedFiles.value.length + files.length > maxFiles) {
     $q.dialog({title: "Errors", message: "You can upload a maximum of 10 files."})
     selectedFiles.value = []
@@ -711,11 +741,29 @@ const uploadFiles = async (event) => {
         $q.dialog({title: "Errors", message: "Video length should not exceed 25 seconds."})
         return;
       }
+
+      const storageReference = storageRef(storage, `files/${file.name}`);
+      uploadTask = uploadBytesResumable(storageReference, file);
     }
 
-    const storageReference = storageRef(storage, `files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageReference, file);
+    else if (file.type.startsWith('image/')) {
+          try {
+            const compressedFile = await imageCompression(file, {
+              maxSizeMB: 3, // Maximum size in MB
+              maxWidthOrHeight: 1920, // Maximum width or height in pixels
+              useWebWorker: true
+            });
 
+            const storageReference = storageRef(storage, `files/${compressedFile.name}`);
+            uploadTask = uploadBytesResumable(storageReference, compressedFile);
+           
+          } catch (error) {
+          
+            $q.dialog({ title: "Error", message: "There was an error processing the image. " + error });
+          }
+        }
+     
+   
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -907,7 +955,7 @@ async function saveStory() {
 }
 
 const EditPostDialog = (post) => {
-  isEdit.value = true;
+  toggleEdit(post);
   showPostModal();
   selectedSchoolYear.value = post.schoolYear;
   selectedEvent.value = post.event;
@@ -991,6 +1039,20 @@ watch(approvedPosts, (newPosts, oldPosts) => {
 });
 
 onMounted(async () => {
+
+    
+  watch(postId, (newPostId, oldPostId) => {
+  
+
+    const postLocation = document.getElementById(newPostId); 
+    if (postLocation) {
+      postLocation.scrollIntoView({ behavior: "smooth" });
+    }
+    else{ 
+      console.log("Post not found")
+    }
+  });
+
   const coursesSnapshot = await getDocs(collection(db, "folders"));
   schoolYears.value = coursesSnapshot.docs.map((doc) => ({
     id: doc.id,
@@ -1032,6 +1094,9 @@ onMounted(async () => {
     post.commentsLoaded = false;
     post.newComment = "";
   });
+
+
+  
 });
 
 const toggleLike = async (post) => {
@@ -1051,8 +1116,9 @@ const toggleLike = async (post) => {
   const notification = {
     userId: alumniId.value,
     postId: postId,
-    authorId: post.userIdOrig,
+    authorId: post.userId,
     name: userName,
+    postCaption: post.caption,
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",
@@ -1123,8 +1189,9 @@ async function addComment(post) {
   const notification = {
     userId: alumniId.value,
     postId: postId,
+    postCaption: post.caption,
     name: userName,
-    authorId: post.userIdOrig,
+    authorId: post.userId,
     time: new Date(),
     date: new Date().toLocaleDateString(),
     status: "unread",

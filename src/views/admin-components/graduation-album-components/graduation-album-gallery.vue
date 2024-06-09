@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="image-container d-flex flex-wrap mt-2">
+    <div class="image-container  mt-2">
       <div v-for="image in images">
         <img
         class="m-1"

@@ -1,5 +1,5 @@
 <template>
-  <div class="components-page-main-container p-3">
+  <div class="">
     <div class="d-flex justify-content-between align-items-center">
       <div class="flex-column">
         <h3 class="text-center">Contact Support</h3>
@@ -41,7 +41,7 @@
               />
             </div>
             <div
-              class="mx-2"
+              class="mx-2 w-25"
               style="cursor: pointer"
             >
               {{ message.name }}
@@ -51,19 +51,20 @@
           @click="openMessageDialog(message.id)" 
             style="
               cursor: pointer;
-              max-width: 400px;
+        
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
             "
+            class = "w-25 "
           >
             {{ message.subject }}
-            <span class="text-secondary">
+            <span class="text-secondary w-25">
               
               {{ message.message }}
             </span>
           </div>
-          <div>
+          <div class = "w-25">
             {{ message.date }}
           </div>
           <div >
@@ -149,6 +150,11 @@ const confirmDelete = async () => {
       await deleteDoc(docRef);
     }
     selectedMessages.value = [];
+
+    // remove the deleted messages from the list
+
+    fetchMessages();
+    
   }
 };
 

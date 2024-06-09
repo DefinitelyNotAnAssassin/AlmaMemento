@@ -7,7 +7,7 @@
     <button class="btn btn-sm btn-dark mx-1 mt-5 mb-2" @click="closeConversation" v-if="documentData.status !== 'closed'">
       Close this Conversation
     </button> -->
-    <div class="convo-container" style="background: #E5E4E2; padding-left: 150px; padding-right: 150px; padding-top: 30px">
+    <div class="convo-container" style="background: #E5E4E2; padding-left: 150px; padding-right: 150px; padding-top: 30px; overflow-y: scroll;">
       <div class="d-flex justify-content-between">
         <button class="btn btn-sm btn-dark mx-1" @click="closeMessageModal">
           <i class="bi bi-arrow-return-left"></i>
@@ -48,23 +48,20 @@
         </div> 
         </div>
       </div>
-      <div class="mt-2" v-if="showReply">
+      <div class="mt-2">
         <textarea
           class="form-control"
           v-model="replyMessage"
           rows="5"
           cols="50"
           placeholder="Enter your reply"
+          required = "true"
         ></textarea>
         <button class="btn btn-sm btn-success mt-2" @click="sendReply">
           Send
         </button>
       </div>
-      <button class="btn btn-sm btn-dark mt-2" v-else @click="showReply = true"
-        v-if="documentData.status !== 'closed'"
-      >
-        Reply
-      </button>
+  
     </div>
   </div>
 </template>
@@ -93,6 +90,12 @@ const emit = defineEmits(['update:showMessage']);
 let unsubscribe;  // Variable to store the unsubscribe function
 
 const sendReply = async () => {
+  // check if the reply message is empty
+
+  if (replyMessage.value === "") {
+    alert("Please enter a message");
+    return;
+  }
   const userDoc = await getUserDoc(userId);
   const name = `${userDoc.data().lName} ${userDoc.data().fName}`;
   const docRef = doc(db, "concerns", props.id);

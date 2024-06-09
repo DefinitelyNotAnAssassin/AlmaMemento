@@ -861,8 +861,8 @@ const importUsers = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
       const data = new Uint8Array(e.target.result);
       const workbook = read(data, { type: "array" });
       const sheetName = workbook.SheetNames[0];
@@ -886,7 +886,7 @@ const importUsers = (event) => {
         if (alumnaIDs.has(ID_Number)) {
         
           $q.dialog({ title: "Error", message: "Duplicate alumnaIDs found " + ID_Number });
-          continue;
+          return;
         }
         
         alumnaIDs.add(ID_Number);

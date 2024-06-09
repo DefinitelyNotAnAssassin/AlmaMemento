@@ -113,6 +113,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/index.js";
 import { useQuasar } from "quasar";
+import CryptoJS from 'crypto-js';
+
 const $q = useQuasar();
 const props = defineProps(["id"]);
 const router = useRouter();
@@ -180,7 +182,7 @@ const registration = async () => {
         fName: firstName.value,
         lName: lastName.value,
         phone: phoneNumber.value,
-        alumna_password: newPass.value,
+        alumna_password: CryptoJS.SHA256(newPass.value).toString(),
         classYear: classYear.value,
         pab: programBlock.value,
       });

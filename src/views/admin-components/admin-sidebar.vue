@@ -38,9 +38,7 @@
       </li>
     </ul>
     <div class="logout-button-container">
-      <button @click="logout" class="logout-button btn text-light">
-        <i class="fas fa-power-off"></i> Logout
-      </button>
+     
     </div>
   </aside>
 </template>
@@ -155,46 +153,7 @@ const isItemDisabled = (item) => {
   );
 };
 
-const logout = async () => {
-  try {
-    isLoading.value = true;
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    loadingProgress.value = 25;
-
-    const q = collection(db, "users");
-    const querySnapshot = await getDocs(q);
-    const userId = router.currentRoute.value.query.userId;
-    loadingProgress.value = 50;
-
-    const user = querySnapshot.docs.find(
-      (doc) => doc.id === userId && doc.data().loggedIn === true
-    );
-
-    if (user) {
-      await updateDoc(doc(db, "users", user.id), {
-        loggedIn: false,
-      });
-
-      loadingProgress.value = 75;
-
-     
-      console.log("Logout successful. Redirecting to login page...");
-      console.log("Current URL:", window.location.href);
-    } else {
-      console.log("No logged in user found");
-    }
-    localStorage.clear()
-    router.push({ name: "login" });
-  } catch (error) {
-    console.error("Error:", error.message);
-  } finally {
-    setTimeout(() => {
-      isLoading.value = false;
-      loadingProgress.value = 100;
-    }, 500);
-  }
-};
 
 const dropdownItemsVisibility = computed(() => {
   const visibility = {};
