@@ -15,7 +15,7 @@
                 <img
                   :src="
                     userData.profilePicture ||
-                    'https://i.ibb.co/G00VTpP/defaultprofile.png'
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg2WnUIHC9h-YDMdULjrK55IN9EFKqSRznTVQxaxnww&s'
                   "
                   style="
                     height: 40px !important;
