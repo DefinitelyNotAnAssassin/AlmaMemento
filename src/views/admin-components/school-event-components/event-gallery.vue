@@ -1,7 +1,7 @@
 <template>
   <div
     class="components-page-main-container p-3"
-    style="width: 100vw !important"
+    style="width: 100% !important"
   >
     <div class="text-center">
       <h4>{{ props.subfolderName }}</h4>

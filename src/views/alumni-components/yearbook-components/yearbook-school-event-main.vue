@@ -1,7 +1,7 @@
 <template>
   <div
     class="components-page-main-container p-3 photo-album"
-    style="width: 100vw !important"
+    style="width: 100% !important"
   >
     <div class="text-center">
       <h4>School Academic Year</h4>
