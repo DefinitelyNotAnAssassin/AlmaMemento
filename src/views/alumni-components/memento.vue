@@ -73,7 +73,7 @@
               style="
                 position: relative;
                 top: -5rem;
-                z-index: 100;
+                z-index: 0;
                 height: min-content;
               "
               v-if="isCurrentUser"
