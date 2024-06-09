@@ -753,8 +753,8 @@ const uploadFiles = async (event) => {
   const files = event.target.files;
 
   if (selectedFiles.value.length + files.length > maxFiles) {
-    $q.dialog({title: "Errors", message: "You can upload a maximum of 10 files."})
-    selectedFiles.value = []
+    $q.dialog({title: "Errors", message: "You can upload a maximum of 10 files. File Name: " + files.name})
+    selectedFiles.value = [] 
     return;
   }
 
@@ -765,6 +765,18 @@ const uploadFiles = async (event) => {
       if (duration > 25) {
         selectedFiles.value = []
         $q.dialog({title: "Errors", message: "Video length should not exceed 25 seconds."})
+        return;
+      }
+    }
+
+    if (file.type.startsWith('image/')){
+
+      // limit image for 2mb, if lower alert and return 
+
+      if(file.size > 2000000){
+        $q.dialog({title: "Errors", message: "Image size should not exceed 2MB. File Name: " + file.name})
+        selectedFiles.value = []
+
         return;
       }
     }

@@ -101,6 +101,9 @@ onSnapshot(
     where("status", "==", "approved"),
   ),
   (snapshot) => {
+    console.log("Folder Name: ", props.folderName);
+    console.log("Subfolder Name: ", props.subfolderName);
+    
     const imagePromises = snapshot.docs.map(async (docSnapshot) => {
       const data = docSnapshot.data();
       const userDocRef = doc(db, "users", data.userIdOrig); // Correctly create a reference to the user's document
