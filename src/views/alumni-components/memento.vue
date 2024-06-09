@@ -419,7 +419,7 @@
 <script setup>
 import Loading from "../loading.vue";
 import { useQuasar } from "quasar";
-import { ref, onMounted, computed, watch, defineProps } from "vue";
+import { ref, onMounted, computed, watch, defineProps, nextTick } from "vue";
 import NavBar from "./alumni-navbar.vue";
 import SideBar from "./alumni-sidebar.vue";
 import MementoSideBar from "./memento-sidebar.vue";
@@ -950,25 +950,23 @@ fetchUserData();
 // Edited End
 
 
-router.afterEach((to, from) => {
-  setTimeout(() => {
-    if (to.path === '/memento' && to.query.mementoId) {
-    console.log("Triggered")
-    selectedStatus.value = "Rejected";
-    console.log(selectedStatus.value);
-      
-    setTimeout(() => {
-      const element = document.getElementById(to.query.mementoId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    else{ 
-      console.log("Element not found")
-    }
-    }, 2500);
+
+router.afterEach(async (to, from) => {
+      if (to.path === '/memento' && to.query.mementoId) {
+        console.log("Triggered");
+        
+        await nextTick();    
+        selectedStatus.value = "Rejected";
+        console.log(selectedStatus.value);
+
    
-}}, 2500);
-     
+        const element = document.getElementById(to.query.mementoId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        } else { 
+          console.log("Element not found");
+        }
+      }
     });
 
 function showPostModal() {
